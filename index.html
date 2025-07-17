@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Information</title>
+    <style>
+        /* Basic Reset and Font */
+        body {
+            margin: 0;
+            padding: 0;
+            /* Prioritize SF Pro Display for headings and SF Pro Text for body */
+            font-family: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            background-color: #1a202c; /* Very Dark Blue-Gray background */
+            color: #ffffff; /* White text for general content */
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 0; /* Vertical padding */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+
+        /* Main Heading */
+        h1 {
+            font-size: 2.25rem; /* Equivalent to text-4xl */
+            font-weight: bold;
+            margin-bottom: 2.5rem; /* Equivalent to mb-10 */
+            color: #63b3ed; /* Lighter blue color for heading */
+            text-align: center;
+            font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif; /* Use Display for headings */
+        }
+
+        /* Vehicle Container */
+        #vehicle-container {
+            display: flex;
+            flex-wrap: wrap; /* Allow cards to wrap to the next line */
+            justify-content: center; /* Center cards horizontally */
+            gap: 1.5rem; /* Space between cards, equivalent to gap-6 */
+            max-width: 80rem; /* Max width for the container, equivalent to max-w-7xl */
+            margin-left: auto; /* Center the container */
+            margin-right: auto; /* Center the container */
+            padding: 0 1rem; /* Horizontal padding, equivalent to px-4 */
+        }
+
+        /* Individual Vehicle Card Styling */
+        .vehicle-card {
+            background-color: #2d3748; /* Dark Slate Gray for cards */
+            border-radius: 0.75rem; /* More rounded corners, closer to image */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Shadow for floating effect */
+            padding: 1.5rem; /* Padding inside the card */
+            width: 20rem; /* Fixed width for cards */
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem; /* Space between main sections */
+            color: #ffffff; /* White text inside cards */
+            transition: transform 0.2s ease-in-out; /* Smooth hover effect */
+            border: 1px solid #63b3ed; /* Light blue border around each card */
+        }
+
+        .vehicle-card:hover {
+            transform: translateY(-5px); /* Lift card on hover */
+        }
+
+        /* Card Title (Vehicle Name) */
+        .vehicle-card h2 {
+            font-size: 1.75rem; /* Larger for main vehicle name */
+            font-weight: bold;
+            color: #63b3ed; /* Lighter blue for vehicle name */
+            margin-bottom: 0.5rem; /* Space below name */
+            text-align: center; /* Center the vehicle name */
+            font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif; /* Use Display for headings */
+        }
+
+        /* Value Blocks (Current Value, Duped Value) */
+        .value-block {
+            background-color: #4a5568; /* Slightly lighter blue-gray for value blocks */
+            border-radius: 0.5rem; /* Rounded corners for value blocks */
+            padding: 0.75rem 1rem; /* Padding inside value blocks */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .value-block-label {
+            font-size: 1rem; /* Label size */
+            font-weight: 600;
+            color: #cbd5e0; /* Light gray for labels */
+        }
+
+        .value-block-amount {
+            font-size: 1.25rem; /* Big for values */
+            font-weight: bold; /* Changed back to bold as requested */
+            color: #ffffff; /* White for amounts */
+            /* Using a font stack that prioritizes SF Pro Display for numbers */
+            font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+        }
+
+        /* Demand Section */
+        .demand-block {
+            background-color: #4a5568; /* Slightly lighter blue-gray for demand block */
+            border-radius: 0.5rem; /* Rounded corners for demand block */
+            padding: 0.75rem 1rem; /* Padding inside demand block */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .demand-label {
+            font-size: 1rem; /* Label size */
+            font-weight: 600;
+            color: #cbd5e0; /* Light gray for label */
+        }
+
+        .demand-level-pill {
+            font-size: 0.9rem;
+            font-weight: bold;
+            padding: 0.3rem 0.7rem;
+            border-radius: 9999px; /* Pill shape */
+            color: #1a202c; /* Dark text for the pill */
+        }
+
+        /* Specific Demand Level Colors */
+        .demand-level-very-high,
+        .demand-level-high {
+            background-color: #4CAF50; /* Green for Very High/High demand */
+        }
+        .demand-level-medium,
+        .demand-level-decent { /* Added decent for completeness if it appears */
+            background-color: #2196F3; /* Blue for Medium/Decent demand */
+        }
+        .demand-level-low {
+            background-color: #F44336; /* Red for Low demand */
+        }
+        /* Add more as needed for other levels */
+
+        /* Separator Line */
+        .separator {
+            border-top: 1px solid #4a5568; /* Subtle line */
+            margin: 1rem 0; /* Space around the line */
+        }
+
+        /* Condensed Details Section */
+        .details-section {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Two columns */
+            gap: 0.3rem 0.75rem; /* Reduced row and column gap for tighter fit */
+            font-size: 0.75rem; /* Smaller font for details */
+            color: #e2e8f0; /* Slightly off-white */
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #cbd5e0;
+            margin-right: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .detail-value {
+            text-align: right;
+            word-break: break-word;
+            font-weight: normal; /* Labels remain normal, values are now bold */
+            font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif; /* Ensure consistent font */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.75rem;
+                margin-bottom: 1.5rem;
+            }
+            .vehicle-card {
+                width: 90%;
+                max-width: 20rem;
+            }
+            .value-block-amount {
+                font-size: 1.1rem;
+            }
+            .demand-level-pill {
+                font-size: 0.8rem;
+                padding: 0.25rem 0.6rem;
+            }
+            .details-section {
+                grid-template-columns: 1fr; /* Single column on small screens */
+                gap: 0.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Vehicle Collection</h1>
+
+    <div id="vehicle-container">
+        <!-- Vehicle cards will be injected here by JavaScript -->
+    </div>
+
+    <script>
+        // Array containing all vehicle data
+        const vehicles = [
+            {
+                name: "Torpedo",
+                currentValue: "$48,000,000",
+                dupedValue: "$42,000,000",
+                demand: "8.05",
+                demandLevel: "Very High",
+                originalPrice: "$750,000",
+                seasonReward: "OG S1/S2",
+                distribution: "1,584",
+                trades: "12,753",
+                topSpeed: "395 MPH",
+                hp: "75",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Javelin",
+                currentValue: "$44,000,000",
+                dupedValue: "$42,000,000",
+                demand: "4.03",
+                demandLevel: "Medium",
+                originalPrice: "$929,929",
+                seasonReward: "—",
+                distribution: "2,964",
+                trades: "11,934",
+                topSpeed: "390 MPH",
+                hp: "75",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Beignet",
+                currentValue: "$38,000,000",
+                dupedValue: "$35,500,000",
+                demand: "4.98",
+                demandLevel: "Medium",
+                originalPrice: "—",
+                seasonReward: "Level 10 in S6",
+                distribution: "2,483",
+                trades: "12,728",
+                topSpeed: "305 MPH",
+                hp: "75",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Celsior",
+                currentValue: "$30,000,000",
+                dupedValue: "$28,000,000",
+                demand: "5.48",
+                demandLevel: "High",
+                originalPrice: "—",
+                seasonReward: "Level 10 in S8",
+                distribution: "1,503",
+                trades: "8,242",
+                topSpeed: "115 MPH",
+                hp: "50",
+                repairTime: "15 s"
+            },
+            {
+                name: "Proto-08",
+                currentValue: "$30,000,000",
+                dupedValue: "$28,000,000",
+                demand: "5.21",
+                demandLevel: "High",
+                originalPrice: "—",
+                seasonReward: "Level 10 in S14",
+                distribution: "2,347",
+                trades: "10,791",
+                topSpeed: "210 MPH",
+                hp: "75",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Arachnid",
+                currentValue: "$24,000,000",
+                dupedValue: "$21,500,000",
+                demand: "4.41",
+                demandLevel: "Medium",
+                originalPrice: "$750,000",
+                seasonReward: "OG S1/S2",
+                distribution: "881",
+                trades: "4,542",
+                topSpeed: "235 MPH",
+                hp: "125",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Beam Hybrid",
+                currentValue: "$18,500,000",
+                dupedValue: "$16,500,000",
+                demand: "5.86",
+                demandLevel: "High",
+                originalPrice: "—",
+                seasonReward: "Level 10 in S16",
+                distribution: "217",
+                trades: "7,157",
+                topSpeed: "210 MPH",
+                hp: "100",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Icebreaker",
+                currentValue: "$17,500,000",
+                dupedValue: "$15,000,000",
+                demand: "5.74",
+                demandLevel: "High",
+                originalPrice: "—",
+                seasonReward: "Level 10 in S7",
+                distribution: "770",
+                trades: "6,721",
+                topSpeed: "200 MPH",
+                hp: "100",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Banana Car",
+                currentValue: "$17,000,000",
+                dupedValue: "$16,000,000",
+                demand: "4.11",
+                demandLevel: "Medium",
+                originalPrice: "—",
+                seasonReward: "Level 10 in S5",
+                distribution: "881",
+                trades: "5,055",
+                topSpeed: "230 MPH",
+                hp: "100",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Power-1",
+                currentValue: "$15,000,000",
+                dupedValue: "$13,000,000",
+                demand: "5.09",
+                demandLevel: "High",
+                originalPrice: "—",
+                seasonReward: "Level 10 in S17",
+                distribution: "3,581",
+                trades: "18,220",
+                topSpeed: "245 MPH",
+                hp: "75",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Crew Capsule",
+                currentValue: "$14,000,000",
+                dupedValue: "$13,500,000",
+                demand: "3.75",
+                demandLevel: "Medium",
+                originalPrice: "—",
+                seasonReward: "Level 10 in S2",
+                distribution: "648",
+                trades: "2,428",
+                topSpeed: "90 MPH",
+                hp: "50",
+                repairTime: "15 s"
+            },
+            {
+                name: "Molten M12",
+                currentValue: "$13,500,000",
+                dupedValue: "$12,500,000",
+                demand: "5.37",
+                demandLevel: "High",
+                originalPrice: "$599,000",
+                seasonReward: "—",
+                distribution: "4,064",
+                trades: "21,804",
+                topSpeed: "260 MPH",
+                hp: "75",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Raptor",
+                currentValue: "$13,500,000",
+                dupedValue: "$12,250,000",
+                demand: "2.80",
+                demandLevel: "Low", /* Changed to Low for demonstration */
+                originalPrice: "$150,000",
+                seasonReward: "OG S3",
+                distribution: "699",
+                trades: "2,514",
+                topSpeed: "170 MPH",
+                hp: "125",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Volt 4x4",
+                currentValue: "$11,000,000",
+                dupedValue: "$10,750,000",
+                demand: "5.02",
+                demandLevel: "High",
+                originalPrice: "—",
+                seasonReward: "Level 10 in S3",
+                distribution: "1,484",
+                trades: "7,456",
+                topSpeed: "250 MPH",
+                hp: "125",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Parisian",
+                currentValue: "$8,000,000",
+                dupedValue: "$7,500,000",
+                demand: "5.04",
+                demandLevel: "High",
+                originalPrice: "$720,000",
+                seasonReward: "—",
+                distribution: "4,465",
+                trades: "22,523",
+                topSpeed: "320 MPH",
+                hp: "75",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Aperture",
+                currentValue: "$7,500,000",
+                dupedValue: "$7,250,000",
+                demand: "4.74",
+                demandLevel: "Medium",
+                originalPrice: "$899,000",
+                seasonReward: "—",
+                distribution: "8,048",
+                trades: "38,173",
+                topSpeed: "280 MPH",
+                hp: "75",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Goliath",
+                currentValue: "$6,500,000",
+                dupedValue: "$6,250,000",
+                demand: "3.35",
+                demandLevel: "Medium",
+                originalPrice: "—",
+                seasonReward: "Level 10 in S12",
+                distribution: "1,132",
+                trades: "3,794",
+                topSpeed: "200 MPH",
+                hp: "200",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Shogun",
+                currentValue: "$6,500,000",
+                dupedValue: "$6,000,000",
+                demand: "4.51",
+                demandLevel: "Medium",
+                originalPrice: "—",
+                seasonReward: "Level 10 in S15",
+                distribution: "2,323",
+                trades: "10,467",
+                topSpeed: "220 MPH",
+                hp: "100",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Scorpion",
+                currentValue: "$6,000,000",
+                dupedValue: "$5,500,000",
+                demand: "4.88",
+                demandLevel: "Medium",
+                originalPrice: "$2,000,000",
+                seasonReward: "—",
+                distribution: "7,486",
+                trades: "36,517",
+                topSpeed: "425 MPH",
+                hp: "75",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Carbonara",
+                currentValue: "$5,500,000",
+                dupedValue: "$5,000,000",
+                demand: "5.34",
+                demandLevel: "High",
+                originalPrice: "$800,000",
+                seasonReward: "—",
+                distribution: "5,901",
+                trades: "31,501",
+                topSpeed: "320 MPH",
+                hp: "75",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Macaron",
+                currentValue: "$5,500,000",
+                dupedValue: "$5,000,000",
+                demand: "5.15",
+                demandLevel: "High",
+                originalPrice: "—",
+                seasonReward: "Level 10 in S10",
+                distribution: "2,366",
+                trades: "12,195",
+                topSpeed: "315 MPH",
+                hp: "75",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Bandit",
+                currentValue: "$5,000,000",
+                dupedValue: "$4,500,000",
+                demand: "4.29",
+                demandLevel: "Medium",
+                originalPrice: "—",
+                seasonReward: "Level 10 in S13",
+                distribution: "1,007",
+                trades: "4,322",
+                topSpeed: "200 MPH",
+                hp: "100",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "JB8",
+                currentValue: "$4,500,000",
+                dupedValue: "$4,250,000",
+                demand: "4.81",
+                demandLevel: "Medium",
+                originalPrice: "$200,000",
+                seasonReward: "OG S3",
+                distribution: "1,770",
+                trades: "8,507",
+                topSpeed: "200 MPH",
+                hp: "100",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Cobra",
+                currentValue: "$4,000,000",
+                dupedValue: "$3,500,000",
+                demand: "5.32",
+                demandLevel: "High",
+                originalPrice: "—",
+                seasonReward: "Level 10 in S2",
+                distribution: "67",
+                trades: "7,719",
+                topSpeed: "250 MPH",
+                hp: "100",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Rattler",
+                currentValue: "$4,000", /* Changed to demonstrate low value */
+                dupedValue: "$3,750", /* Changed to demonstrate low value */
+                demand: "4.27",
+                demandLevel: "Low", /* Changed to Low for demonstration */
+                originalPrice: "—",
+                seasonReward: "Level 10 in S4",
+                distribution: "920",
+                trades: "3,929",
+                topSpeed: "205 MPH",
+                hp: "100",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Snake",
+                currentValue: "$3,500,000",
+                dupedValue: "$3,250,000",
+                demand: "5.14",
+                demandLevel: "High",
+                originalPrice: "$649,000",
+                seasonReward: "—",
+                distribution: "6,511",
+                trades: "33,443",
+                topSpeed: "240 MPH",
+                hp: "75",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Torero",
+                currentValue: "$3,500,000",
+                dupedValue: "$3,000,000",
+                demand: "4.13",
+                demandLevel: "Medium",
+                originalPrice: "$599,000",
+                seasonReward: "—",
+                distribution: "1,571",
+                trades: "6,488",
+                topSpeed: "210 MPH",
+                hp: "100",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Brulee",
+                currentValue: "$3,000,000",
+                dupedValue: "$2,750,000",
+                demand: "5.69",
+                demandLevel: "High",
+                originalPrice: "$500,000",
+                seasonReward: "—",
+                distribution: "6,726",
+                trades: "38,300",
+                topSpeed: "415 MPH",
+                hp: "75",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Iceborn",
+                currentValue: "$3,000,000",
+                dupedValue: "$2,750,000",
+                demand: "4.94",
+                demandLevel: "Medium",
+                originalPrice: "$675,000",
+                seasonReward: "—",
+                distribution: "10,795",
+                trades: "53,338",
+                topSpeed: "330 MPH",
+                hp: "75",
+                repairTime: "7.5 s"
+            },
+            {
+                name: "Orion",
+                currentValue: "$3,000,000",
+                dupedValue: "$2,750,000",
+                demand: "—",
+                demandLevel: "Low", /* Changed to Low for demonstration */
+                originalPrice: "$999,999",
+                seasonReward: "—",
+                distribution: "—",
+                trades: "—",
+                topSpeed: "—",
+                hp: "—",
+                repairTime: "—"
+            }
+        ];
+
+        // Get the container element where cards will be added
+        const vehicleContainer = document.getElementById('vehicle-container');
+
+        // Function to create a single vehicle card
+        function createVehicleCard(vehicle) {
+            const card = document.createElement('div');
+            card.classList.add('vehicle-card');
+
+            // Add vehicle name as a heading
+            const name = document.createElement('h2');
+            name.textContent = vehicle.name;
+            card.appendChild(name);
+
+            // Current Value Block
+            const currentValueBlock = document.createElement('div');
+            currentValueBlock.classList.add('value-block');
+            currentValueBlock.innerHTML = `
+                <span class="value-block-label">Current Value</span>
+                <span class="value-block-amount">${vehicle.currentValue}</span>
+            `;
+            card.appendChild(currentValueBlock);
+
+            // Duped Value Block
+            const dupedValueBlock = document.createElement('div');
+            dupedValueBlock.classList.add('value-block');
+            dupedValueBlock.innerHTML = `
+                <span class="value-block-label">Duped Value</span>
+                <span class="value-block-amount">${vehicle.dupedValue}</span>
+            `;
+            card.appendChild(dupedValueBlock);
+
+            // Demand Block
+            const demandBlock = document.createElement('div');
+            demandBlock.classList.add('demand-block');
+            // Normalize demand level for CSS class (e.g., "Very High" -> "very-high")
+            const demandLevelClass = vehicle.demandLevel ? vehicle.demandLevel.toLowerCase().replace(/\s/g, '-') : 'unknown';
+            demandBlock.innerHTML = `
+                <span class="demand-label">Demand</span>
+                <span class="demand-level-pill demand-level-${demandLevelClass}">${vehicle.demandLevel}</span>
+            `;
+            card.appendChild(demandBlock);
+
+            // Separator
+            const separator = document.createElement('div');
+            separator.classList.add('separator');
+            card.appendChild(separator);
+
+            // Condensed Details Section
+            const detailsSection = document.createElement('div');
+            detailsSection.classList.add('details-section');
+
+            // Function to create a detail item
+            const createDetailItem = (label, value) => {
+                const item = document.createElement('div');
+                item.classList.add('detail-item');
+                item.innerHTML = `
+                    <span class="detail-label">${label}:</span>
+                    <span class="detail-value">${value}</span>
+                `;
+                return item;
+            };
+
+            detailsSection.appendChild(createDetailItem("Original Price", vehicle.originalPrice));
+            detailsSection.appendChild(createDetailItem("Season Reward", vehicle.seasonReward));
+            detailsSection.appendChild(createDetailItem("Distribution", vehicle.distribution));
+            detailsSection.appendChild(createDetailItem("Trades", vehicle.trades));
+            detailsSection.appendChild(createDetailItem("Top Speed", vehicle.topSpeed));
+            detailsSection.appendChild(createDetailItem("HP", vehicle.hp));
+            detailsSection.appendChild(createDetailItem("Repair Time", vehicle.repairTime));
+            card.appendChild(detailsSection);
+
+            return card;
+        }
+
+        // Loop through the vehicles array and add each card to the container
+        vehicles.forEach(vehicle => {
+            const card = createVehicleCard(vehicle);
+            vehicleContainer.appendChild(card);
+        });
+    </script>
+</body>
+</html>
