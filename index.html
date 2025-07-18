@@ -76,6 +76,8 @@
             margin-bottom: 1.5rem;
             display: flex;
             gap: 1rem;
+            flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
+            justify-content: center; /* Center buttons when wrapped */
         }
 
         .category-button {
@@ -87,6 +89,7 @@
             font-weight: bold;
             cursor: pointer;
             transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            white-space: nowrap; /* Prevent button text from wrapping */
         }
 
         .category-button:hover {
@@ -384,6 +387,7 @@
     <!-- Navigation Buttons -->
     <div id="category-buttons">
         <button id="home-button" class="category-button active">Home</button>
+        <button id="all-button" class="category-button">All</button>
         <button id="vehicles-button" class="category-button">Vehicles</button>
         <button id="textures-button" class="category-button">Textures</button>
         <button id="rims-button" class="category-button">Rims</button>
@@ -413,7 +417,7 @@
     </div>
 
     <script>
-        // Data arrays for different categories (kept as is)
+        // Data arrays for different categories
         const vehiclesData = [
             {
                 name: "Torpedo",
@@ -4015,17 +4019,44 @@
             }
         ];
 
+        // Combine all data into a single array and add a 'category' property for identification
+        const allData = [
+            ...vehiclesData.map(item => ({ ...item, category: "Vehicle" })),
+            ...texturesData.map(item => ({ ...item, category: "Texture" })),
+            ...rimsData.map(item => ({ ...item, category: "Rim" })),
+            ...spoilersData.map(item => ({ ...item, category: "Spoiler" })),
+            ...hyperchromesData.map(item => ({ ...item, category: "Hyperchrome" }))
+        ];
+
+        // Helper function to parse currency strings into numbers for sorting
+        function parseCurrencyToNumber(currencyString) {
+            if (!currencyString || currencyString === "N/A" || currencyString === "Unavailable" || currencyString === "—") {
+                return 0; // Treat N/A or unavailable as 0 for sorting purposes (will appear at the bottom)
+            }
+            // Remove '$' and commas, then parse as integer
+            return parseInt(currencyString.replace(/[$,]/g, ''), 10);
+        }
+
+        // Sort allData from most expensive to cheapest
+        allData.sort((a, b) => {
+            const valueA = parseCurrencyToNumber(a.currentValue);
+            const valueB = parseCurrencyToNumber(b.currentValue);
+            return valueB - valueA; // Descending order
+        });
+
+
         // Get DOM elements
-        const homeAboutSection = document.getElementById('home-about-section'); // Updated ID
+        const homeAboutSection = document.getElementById('home-about-section');
         const tradingContentSection = document.getElementById('trading-content-section');
 
         const itemContainer = document.getElementById('item-container');
         const searchBar = document.getElementById('search-bar');
         const categoryTitle = document.getElementById('category-title');
         const homeButton = document.getElementById('home-button');
+        const allButton = document.getElementById('all-button'); // New All button
         const vehiclesButton = document.getElementById('vehicles-button');
         const texturesButton = document.getElementById('textures-button');
-        const rimsButton = document.getElementById('rims-button'); // Ensure rimsButton is defined
+        const rimsButton = document.getElementById('rims-button');
         const spoilersButton = document.getElementById('spoilers-button');
         const hyperchromesButton = document.getElementById('hyperchromes-button');
 
@@ -4068,8 +4099,14 @@
             name.textContent = item.name;
             card.appendChild(name);
 
-            // Current Value / Cash Value Block
-            const currentValueLabel = (currentCategoryName === "Hyperchrome" || currentCategoryName === "Rim" || currentCategoryName === "Spoiler") ? "Cash Value" : "Current Value";
+            // Determine the correct label for current value based on the item's category
+            let currentValueLabel;
+            if (item.category === "Hyperchrome" || item.category === "Rim" || item.category === "Spoiler") {
+                currentValueLabel = "Cash Value";
+            } else {
+                currentValueLabel = "Current Value";
+            }
+
             const currentValueBlock = document.createElement('div');
             currentValueBlock.classList.add('value-block');
             currentValueBlock.innerHTML = `
@@ -4098,7 +4135,8 @@
             card.appendChild(demandBlock);
 
             // Only add separator and details section if not a Hyperchrome
-            if (currentCategoryName !== "Hyperchrome") {
+            // This logic now correctly uses item.category to determine if it's a Hyperchrome
+            if (item.category !== "Hyperchrome") {
                 const separator = document.createElement('div');
                 separator.classList.add('separator');
                 card.appendChild(separator);
@@ -4188,27 +4226,31 @@
         // Function to filter items based on search term
         function filterItems(searchTerm) {
             const lowerCaseSearchTerm = searchTerm.toLowerCase();
-            return currentActiveData.filter(item =>
+            const dataToFilter = (currentCategoryName === "All") ? allData : currentActiveData; // Filter from allData if "All" is active
+
+            return dataToFilter.filter(item =>
                 item.name.toLowerCase().includes(lowerCaseSearchTerm) ||
                 (item.demandLevel && item.demandLevel.toLowerCase().includes(lowerCaseSearchTerm)) ||
                 (item.currentValue && item.currentValue.toLowerCase().includes(lowerCaseSearchTerm)) ||
                 (item.dupedValue && item.dupedValue.toLowerCase().includes(lowerCaseSearchTerm)) ||
                 (item.avoided && item.avoided.toLowerCase().includes(lowerCaseSearchTerm)) ||
-                (currentCategoryName !== "Hyperchrome" && item.originalPrice && item.originalPrice.toLowerCase().includes(lowerCaseSearchTerm)) ||
-                (currentCategoryName !== "Hyperchrome" && item.seasonReward && item.seasonReward.toLowerCase().includes(lowerCaseSearchTerm)) ||
-                (currentCategoryName !== "Hyperchrome" && item.testingAccess && item.testingAccess.toLowerCase().includes(lowerCaseSearchTerm)) ||
-                (currentCategoryName !== "Hyperchrome" && item.obtainablePrice && item.obtainablePrice.toLowerCase().includes(lowerCaseSearchTerm)) ||
-                (currentCategoryName !== "Hyperchrome" && item.vaultReward && item.vaultReward.toLowerCase().includes(lowerCaseSearchTerm)) ||
-                (currentCategoryName !== "Hyperchrome" && item.requirement && item.requirement.toLowerCase().includes(lowerCaseSearchTerm)) ||
-                (currentCategoryName !== "Hyperchrome" && item.seasonPass && item.seasonPass.toLowerCase().includes(lowerCaseSearchTerm)) ||
-                (currentCategoryName !== "Hyperchrome" && item.collectorRarity && item.collectorRarity.toLowerCase().includes(lowerCaseSearchTerm)) ||
-                (currentCategoryName !== "Hyperchrome" && item.soccerGoal && item.soccerGoal.toLowerCase().includes(lowerCaseSearchTerm))
+                (item.originalPrice && item.originalPrice.toLowerCase().includes(lowerCaseSearchTerm)) || // These apply to all non-hyperchromes
+                (item.seasonReward && item.seasonReward.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                (item.testingAccess && item.testingAccess.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                (item.obtainablePrice && item.obtainablePrice.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                (item.vaultReward && item.vaultReward.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                (item.requirement && item.requirement.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                (item.seasonPass && item.seasonPass.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                (item.collectorRarity && item.collectorRarity.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                (item.soccerGoal && item.soccerGoal.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                (item.category && item.category.toLowerCase().includes(lowerCaseSearchTerm)) // Allow searching by category name
             );
         }
 
         // Function to set active button
         function setActiveButton(activeButton) {
             homeButton.classList.remove('active');
+            allButton.classList.remove('active'); // Remove active from All button
             vehiclesButton.classList.remove('active');
             texturesButton.classList.remove('active');
             rimsButton.classList.remove('active');
@@ -4227,6 +4269,17 @@
         homeButton.addEventListener('click', () => {
             showSection('home-about-section'); // Show combined section
             setActiveButton(homeButton);
+        });
+
+        // Event listener for All button
+        allButton.addEventListener('click', () => {
+            currentActiveData = allData; // Use the combined and sorted data
+            currentCategoryName = "All";
+            categoryTitle.textContent = "All Items (Most Expensive First)";
+            searchBar.value = ''; // Clear search bar
+            renderItems(currentActiveData);
+            showSection('trading-content-section');
+            setActiveButton(allButton);
         });
 
         // Event listener for Vehicles button
