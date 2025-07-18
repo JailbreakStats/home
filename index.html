@@ -20,6 +20,60 @@
             box-sizing: border-box; /* Include padding in element's total width and height */
         }
 
+        /* Home Page Section */
+        #home-page {
+            display: flex; /* Hidden by default, shown by JS */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            max-width: 60rem;
+            width: 90%;
+            background-color: #2d3748;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            margin-top: 2rem; /* Added margin-top to separate from buttons */
+            border: 1px solid #63b3ed;
+            margin-bottom: 2rem; /* Space below this section */
+        }
+
+        #home-page h1 {
+            font-size: 3.5rem; /* Larger for home page title */
+            color: #63b3ed;
+            margin-bottom: 1.5rem;
+            text-shadow: 0px 0px 10px rgba(99, 179, 237, 0.8);
+        }
+
+        #home-page p {
+            font-size: 0.95rem; /* Adjusted to match about section for balance */
+            line-height: 1.6; /* Adjusted for better readability with smaller font */
+            color: #e2e8f0;
+            margin-bottom: 0.5rem; /* Reduced space between paragraphs in welcome section */
+        }
+        #home-page p:last-of-type {
+            margin-bottom: 2rem; /* Keep space before button */
+        }
+
+
+        #home-page .get-started-button {
+            background-color: #f97316; /* Orange button */
+            color: #1a202c;
+            padding: 1rem 2rem;
+            border-radius: 0.75rem;
+            border: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        #home-page .get-started-button:hover {
+            background-color: #ea580c; /* Darker orange on hover */
+            transform: translateY(-3px);
+        }
+
         /* Category Buttons Container */
         #category-buttons {
             margin-bottom: 1.5rem;
@@ -75,8 +129,8 @@
             box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5); /* Focus ring */
         }
 
-        /* Main Heading */
-        h1 {
+        /* Main Heading for Categories */
+        .category-heading { /* Renamed from h1 to avoid conflict with home page h1 */
             font-size: 3rem; /* Made bigger */
             font-weight: bold;
             margin-bottom: 2.5rem; /* Equivalent to mb-10 */
@@ -157,7 +211,7 @@
         .demand-block {
             background-color: #4a5568; /* Slightly lighter blue-gray for demand block */
             border-radius: 0.5rem; /* Rounded corners for demand block */
-            padding: 0.75rem 1rem; /* Padding inside demand block */
+            padding: 0.75rem 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -311,7 +365,7 @@
             border-radius: 0.75rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             padding: 2rem;
-            margin-top: 3rem; /* Space above about section */
+            margin-top: 2rem; /* Space above about section to separate it from home-page */
             max-width: 60rem; /* Max width for readability */
             width: 90%; /* Responsive width */
             text-align: center;
@@ -329,16 +383,24 @@
         #about-section p {
             font-size: 0.95rem;
             line-height: 1.6;
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem; /* Reduced space between paragraphs in about section */
         }
 
         #about-section p:last-child {
             margin-bottom: 0;
         }
 
+        /* Sections to be toggled */
+        .trading-content-section {
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
-            h1 {
+            .category-heading {
                 font-size: 2.25rem; /* Adjusted for mobile to be bigger but not too big */
                 margin-bottom: 1.5rem;
             }
@@ -365,31 +427,59 @@
                 height: 2rem; /* Slightly smaller banner on mobile */
                 font-size: 0.8rem;
             }
+            #home-page h1 {
+                font-size: 2.5rem;
+            }
+            #home-page p {
+                font-size: 0.95rem; /* Keep consistent with about section */
+            }
+            #home-page .get-started-button {
+                font-size: 1rem;
+                padding: 0.75rem 1.5rem;
+            }
+            #category-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
         }
     </style>
 </head>
 <body>
 
+    <!-- Navigation Buttons -->
     <div id="category-buttons">
-        <button id="vehicles-button" class="category-button active">Vehicles</button>
+        <button id="home-button" class="category-button active">Home</button>
+        <button id="vehicles-button" class="category-button">Vehicles</button>
         <button id="textures-button" class="category-button">Textures</button>
         <button id="rims-button" class="category-button">Rims</button>
         <button id="spoilers-button" class="category-button">Spoilers</button>
         <button id="hyperchromes-button" class="category-button">Hyperchromes</button>
     </div>
 
-    <input type="text" id="search-bar" placeholder="Search items...">
-    <h1 id="category-title">Vehicle Collection</h1>
-
-    <div id="item-container">
-        <!-- Item cards will be injected here by JavaScript -->
+    <!-- Home Page Section -->
+    <div id="home-page">
+        <h1>Welcome to Jailbreak Stats!</h1>
+        <p>Your ultimate resource for up-to-date values, demand levels, and detailed information on all tradable items in Jailbreak.</p>
+        <p>Navigate through different categories to find what you need, or use the search bar to quickly locate specific items.</p>
+        <button class="get-started-button" id="get-started-button">Get Started</button>
     </div>
 
+    <!-- About Section - Now a separate section below home-page -->
     <div id="about-section">
         <h2>About This Information</h2>
         <p>This is a combination of values from Jailbreak Trade Network, Jailbreak Changelogs, Jailbreak Values, and Jailbreak Trade Core.</p>
         <p>We purposefully did not include any forms of pictures or media to keep it easily accessible even with low/no internet connections for your own ease of access.</p>
         <p>Always being updated by our professionals, however we do take community opinion largely into consideration when we change any values.</p>
+    </div>
+
+    <!-- Trading Content Section (initially hidden) -->
+    <div id="trading-content-section" class="trading-content-section">
+        <input type="text" id="search-bar" placeholder="Search items...">
+        <h1 id="category-title" class="category-heading">Vehicle Collection</h1>
+
+        <div id="item-container">
+            <!-- Item cards will be injected here by JavaScript -->
+        </div>
     </div>
 
     <script>
@@ -995,7 +1085,7 @@
             },
             {
                 name: "Striker",
-                currentValue: "$1,250,000",
+                currentValue: "$1,250,002",
                 dupedValue: "N/A",
                 demandLevel: "Close to none",
                 originalPrice: "—",
@@ -3998,17 +4088,36 @@
         ];
 
         // Get DOM elements
+        const homePage = document.getElementById('home-page');
+        const tradingContentSection = document.getElementById('trading-content-section');
+        const getStartedButton = document.getElementById('get-started-button');
+
         const itemContainer = document.getElementById('item-container');
         const searchBar = document.getElementById('search-bar');
         const categoryTitle = document.getElementById('category-title');
+        const homeButton = document.getElementById('home-button');
         const vehiclesButton = document.getElementById('vehicles-button');
         const texturesButton = document.getElementById('textures-button');
-        const rimsButton = document.getElementById('rims-button');
+        rimsButton = document.getElementById('rims-button'); // Ensure rimsButton is defined
         const spoilersButton = document.getElementById('spoilers-button');
         const hyperchromesButton = document.getElementById('hyperchromes-button');
 
         let currentActiveData = vehiclesData; // Default to vehicles
         let currentCategoryName = "Vehicle"; // Default category title
+
+        // Function to show a specific section and hide others
+        function showSection(sectionId) {
+            homePage.style.display = 'none';
+            document.getElementById('about-section').style.display = 'none'; // Hide about section by default
+            tradingContentSection.style.display = 'none';
+
+            if (sectionId === 'home-page') {
+                homePage.style.display = 'flex';
+                document.getElementById('about-section').style.display = 'flex'; // Show about section with home page
+            } else if (sectionId === 'trading-content-section') {
+                tradingContentSection.style.display = 'flex';
+            }
+        }
 
         // Function to create a single item card (can be vehicle or texture or hyperchrome or rim or spoiler)
         function createItemCard(item) {
@@ -4175,6 +4284,7 @@
 
         // Function to set active button
         function setActiveButton(activeButton) {
+            homeButton.classList.remove('active');
             vehiclesButton.classList.remove('active');
             texturesButton.classList.remove('active');
             rimsButton.classList.remove('active');
@@ -4189,6 +4299,17 @@
             renderItems(filteredItems);
         });
 
+        // Event listener for Home button
+        homeButton.addEventListener('click', () => {
+            showSection('home-page');
+            setActiveButton(homeButton);
+        });
+
+        // Event listener for Get Started button on home page
+        getStartedButton.addEventListener('click', () => {
+            vehiclesButton.click(); // Simulate click on Vehicles to go to trading section
+        });
+
         // Event listener for Vehicles button
         vehiclesButton.addEventListener('click', () => {
             currentActiveData = vehiclesData;
@@ -4196,6 +4317,7 @@
             categoryTitle.textContent = "Vehicle Collection";
             searchBar.value = ''; // Clear search bar
             renderItems(currentActiveData);
+            showSection('trading-content-section');
             setActiveButton(vehiclesButton);
         });
 
@@ -4206,6 +4328,7 @@
             categoryTitle.textContent = "Texture Collection";
             searchBar.value = ''; // Clear search bar
             renderItems(currentActiveData);
+            showSection('trading-content-section');
             setActiveButton(texturesButton);
         });
 
@@ -4216,6 +4339,7 @@
             categoryTitle.textContent = "Rim Collection";
             searchBar.value = ''; // Clear search bar
             renderItems(currentActiveData);
+            showSection('trading-content-section');
             setActiveButton(rimsButton);
         });
 
@@ -4226,6 +4350,7 @@
             categoryTitle.textContent = "Spoiler Collection";
             searchBar.value = ''; // Clear search bar
             renderItems(currentActiveData);
+            showSection('trading-content-section');
             setActiveButton(spoilersButton);
         });
 
@@ -4236,12 +4361,14 @@
             categoryTitle.textContent = "Hyperchrome Collection";
             searchBar.value = ''; // Clear search bar
             renderItems(currentActiveData);
+            showSection('trading-content-section');
             setActiveButton(hyperchromesButton);
         });
 
-        // Initial render of cards when the page loads (default to vehicles)
+        // Initial render: show home page by default
         document.addEventListener('DOMContentLoaded', () => {
-            renderItems(currentActiveData);
+            showSection('home-page');
+            setActiveButton(homeButton);
         });
     </script>
 </body>
