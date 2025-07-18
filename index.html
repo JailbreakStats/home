@@ -20,9 +20,9 @@
             box-sizing: border-box; /* Include padding in element's total width and height */
         }
 
-        /* Home Page Section */
-        #home-page {
-            display: flex; /* Hidden by default, shown by JS */
+        /* Combined Home/About Section */
+        #home-about-section { /* Renamed ID to reflect combined nature */
+            display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -38,40 +38,37 @@
             margin-bottom: 2rem; /* Space below this section */
         }
 
-        #home-page h1 {
+        #home-about-section h1 { /* Welcome title */
             font-size: 3.5rem; /* Larger for home page title */
             color: #63b3ed;
             margin-bottom: 1.5rem;
             text-shadow: 0px 0px 10px rgba(99, 179, 237, 0.8);
         }
 
-        #home-page p {
-            font-size: 0.95rem; /* Adjusted to match about section for balance */
-            line-height: 1.6; /* Adjusted for better readability with smaller font */
+        #home-about-section .welcome-text { /* Specific class for welcome paragraphs */
+            font-size: 0.95rem;
+            line-height: 1.6;
             color: #e2e8f0;
-            margin-bottom: 0.5rem; /* Reduced space between paragraphs in welcome section */
-        }
-        #home-page p:last-of-type {
-            margin-bottom: 2rem; /* Keep space before button */
+            margin-bottom: 1.5rem; /* Space after welcome text before about header */
         }
 
-
-        #home-page .get-started-button {
-            background-color: #f97316; /* Orange button */
-            color: #1a202c;
-            padding: 1rem 2rem;
-            border-radius: 0.75rem;
-            border: none;
+        #home-about-section h2 { /* About title */
+            font-size: 1.75rem;
             font-weight: bold;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            color: #63b3ed;
+            margin-top: 1.5rem; /* Space above about header */
+            margin-bottom: 1rem;
         }
 
-        #home-page .get-started-button:hover {
-            background-color: #ea580c; /* Darker orange on hover */
-            transform: translateY(-3px);
+        #home-about-section .about-text { /* Specific class for about paragraphs */
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+            margin-bottom: 0.5rem; /* Reduced space between paragraphs in about section */
+        }
+
+        #home-about-section .about-text:last-child {
+            margin-bottom: 0;
         }
 
         /* Category Buttons Container */
@@ -130,87 +127,86 @@
         }
 
         /* Main Heading for Categories */
-        .category-heading { /* Renamed from h1 to avoid conflict with home page h1 */
-            font-size: 3rem; /* Made bigger */
+        .category-heading {
+            font-size: 3rem;
             font-weight: bold;
-            margin-bottom: 2.5rem; /* Equivalent to mb-10 */
-            color: #63b3ed; /* Lighter blue color for heading */
+            margin-bottom: 2.5rem;
+            color: #63b3ed;
             text-align: center;
-            font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif; /* Use Display for headings */
-            text-shadow: 0px 0px 8px rgba(99, 179, 237, 0.7); /* Subtle light blue glow highlight */
+            font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            text-shadow: 0px 0px 8px rgba(99, 179, 237, 0.7);
         }
 
-        /* Item Container (formerly Vehicle Container) */
+        /* Item Container */
         #item-container {
             display: flex;
-            flex-wrap: wrap; /* Allow cards to wrap to the next line */
-            justify-content: center; /* Center cards horizontally */
-            gap: 1.5rem; /* Space between cards, equivalent to gap-6 */
-            max-width: 80rem; /* Max width for the container, equivalent to max-w-7xl */
-            margin-left: auto; /* Center the container */
-            margin-right: auto; /* Center the container */
-            padding: 0 1rem; /* Horizontal padding, equivalent to px-4 */
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            max-width: 80rem;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 0 1rem;
         }
 
         /* Individual Item Card Styling */
-        .item-card { /* Renamed from .vehicle-card */
-            background-color: #2d3748; /* Dark Slate Gray for cards */
-            border-radius: 0.75rem; /* More rounded corners, closer to image */
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Shadow for floating effect */
-            padding: 1.5rem; /* Padding inside the card */
-            width: 20rem; /* Fixed width for cards */
+        .item-card {
+            background-color: #2d3748;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            width: 20rem;
             display: flex;
             flex-direction: column;
-            gap: 0.75rem; /* Space between main sections */
-            color: #ffffff; /* White text inside cards */
-            transition: transform 0.2s ease-in-out; /* Smooth hover effect */
-            border: 1px solid #63b3ed; /* Light blue border around each card */
-            position: relative; /* Needed for absolute positioning of asterisk/banner */
-            overflow: hidden; /* Hide overflowing banner initially */
+            gap: 0.75rem;
+            color: #ffffff;
+            transition: transform 0.2s ease-in-out;
+            border: 1px solid #63b3ed;
+            position: relative;
+            overflow: hidden;
         }
 
         .item-card:hover {
-            transform: translateY(-5px); /* Lift card on hover */
+            transform: translateY(-5px);
         }
 
         /* Card Title (Item Name) */
         .item-card h2 {
-            font-size: 1.75rem; /* Larger for main item name */
+            font-size: 1.75rem;
             font-weight: bold;
-            color: #63b3ed; /* Lighter blue for item name */
-            margin-bottom: 0.5rem; /* Space below name */
-            text-align: center; /* Center the item name */
-            font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif; /* Use Display for headings */
+            color: #63b3ed;
+            margin-bottom: 0.5rem;
+            text-align: center;
+            font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
         }
 
         /* Value Blocks (Current Value, Duped Value) */
         .value-block {
-            background-color: #4a5568; /* Slightly lighter blue-gray for value blocks */
-            border-radius: 0.5rem; /* Rounded corners for value blocks */
-            padding: 0.75rem 1rem; /* Padding inside value blocks */
+            background-color: #4a5568;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .value-block-label {
-            font-size: 1rem; /* Label size */
+            font-size: 1rem;
             font-weight: 600;
-            color: #cbd5e0; /* Light gray for labels */
+            color: #cbd5e0;
         }
 
         .value-block-amount {
-            font-size: 1.25rem; /* Big for values */
-            font-weight: bold; /* Bold as requested */
-            color: #ffffff; /* White for amounts */
-            /* Using a font stack that prioritizes SF Pro Display for numbers */
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #ffffff;
             font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
         }
 
         /* Demand Section */
         .demand-block {
-            background-color: #4a5568; /* Slightly lighter blue-gray for demand block */
-            border-radius: 0.5rem; /* Rounded corners for demand block */
+            background-color: #4a5568;
+            border-radius: 0.5rem;
             padding: 0.75rem 1rem;
             display: flex;
             justify-content: space-between;
@@ -218,62 +214,43 @@
         }
 
         .demand-label {
-            font-size: 1rem; /* Label size */
+            font-size: 1rem;
             font-weight: 600;
-            color: #cbd5e0; /* Light gray for label */
+            color: #cbd5e0;
         }
 
         .demand-level-pill {
             font-size: 0.9rem;
             font-weight: bold;
             padding: 0.3rem 0.7rem;
-            border-radius: 9999px; /* Pill shape */
-            color: #1a202c; /* Dark text for the pill */
+            border-radius: 9999px;
+            color: #1a202c;
         }
 
-        /* Specific Demand Level Colors based on the provided image */
-        .demand-level-close-to-none {
-            background-color: #6B7280; /* Gray */
-        }
-        .demand-level-very-low {
-            background-color: #EF4444; /* Red-500 */
-        }
-        .demand-level-low {
-            background-color: #F97316; /* Orange-500 */
-        }
-        .demand-level-medium {
-            background-color: #F59E0B; /* Amber-500 (Yellow) */
-        }
-        .demand-level-decent {
-            background-color: #22C55E; /* Green-500 */
-        }
-        .demand-level-high {
-            background-color: #3B82F6; /* Blue-500 */
-        }
-        .demand-level-very-high {
-            background-color: #8B5CF6; /* Violet-500 (Purple) */
-        }
-        .demand-level-extremely-high {
-            background-color: #EC4899; /* Pink-500 */
-        }
-        /* Fallback for unknown demand levels */
-        .demand-level-unknown {
-            background-color: #6B7280; /* Default to gray for unknown */
-        }
+        /* Specific Demand Level Colors */
+        .demand-level-close-to-none { background-color: #6B7280; }
+        .demand-level-very-low { background-color: #EF4444; }
+        .demand-level-low { background-color: #F97316; }
+        .demand-level-medium { background-color: #F59E0B; }
+        .demand-level-decent { background-color: #22C55E; }
+        .demand-level-high { background-color: #3B82F6; }
+        .demand-level-very-high { background-color: #8B5CF6; }
+        .demand-level-extremely-high { background-color: #EC4899; }
+        .demand-level-unknown { background-color: #6B7280; }
 
         /* Separator Line */
         .separator {
-            border-top: 1px solid #4a5568; /* Subtle line */
-            margin: 1rem 0; /* Space around the line */
+            border-top: 1px solid #4a5568;
+            margin: 1rem 0;
         }
 
         /* Condensed Details Section */
         .details-section {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* Two columns */
-            gap: 0.3rem 0.75rem; /* Reduced row and column gap for tighter fit */
-            font-size: 0.75rem; /* Smaller font for details */
-            color: #e2e8f0; /* Slightly off-white */
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.3rem 0.75rem;
+            font-size: 0.75rem;
+            color: #e2e8f0;
         }
 
         .detail-item {
@@ -292,8 +269,8 @@
         .detail-value {
             text-align: right;
             word-break: break-word;
-            font-weight: normal; /* Labels remain normal, values are now bold */
-            font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif; /* Ensure consistent font */
+            font-weight: normal;
+            font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
         }
 
         /* Avoided Indicator */
@@ -303,94 +280,55 @@
             right: 0.5rem;
             font-size: 1.5rem;
             font-weight: bold;
-            cursor: help; /* Indicates interactivity */
-            z-index: 10; /* Ensure it's above other content */
-            line-height: 1; /* Prevent extra space around asterisk */
-            padding: 0.2rem; /* Small padding for touch target */
-            border-radius: 50%; /* Make it circular */
-            width: 1.5em; /* Fixed width for the asterisk circle */
-            height: 1.5em; /* Fixed height for the asterisk circle */
+            cursor: help;
+            z-index: 10;
+            line-height: 1;
+            padding: 0.2rem;
+            border-radius: 50%;
+            width: 1.5em;
+            height: 1.5em;
             display: flex;
             align-items: center;
             justify-content: center;
-            /* Removed transitions for instant switch as requested */
-            white-space: nowrap; /* Prevent text wrapping */
-            overflow: hidden; /* Hide overflow when collapsed */
-            box-sizing: border-box; /* Include padding in dimensions */
-            color: #1a202c; /* Dark text for the banner */
+            white-space: nowrap;
+            overflow: hidden;
+            box-sizing: border-box;
+            color: #1a202c;
             text-align: center;
         }
 
-        .avoided-indicator.avoided-true {
-            background-color: #ef4444; /* Red for true */
-        }
-
-        .avoided-indicator.avoided-slightly {
-            background-color: #f97316; /* Orange for slightly */
-        }
+        .avoided-indicator.avoided-true { background-color: #ef4444; }
+        .avoided-indicator.avoided-slightly { background-color: #f97316; }
 
         .avoided-indicator::before {
-            content: '✱'; /* Changed to a more centered asterisk symbol */
-            /* Removed positioning properties; flexbox on parent handles centering */
-            font-size: 1.2em; /* Adjust asterisk size */
-            color: #1a202c; /* Dark text for asterisk */
+            content: '✱';
+            font-size: 1.2em;
+            color: #1a202c;
         }
 
         .avoided-indicator:hover {
-            width: 100%; /* Expand to full width of the card */
+            width: 100%;
             left: 0;
             right: 0;
             top: 0;
-            border-radius: 0.75rem 0.75rem 0 0; /* Match card top corners, flat bottom */
-            height: 2.5rem; /* Height of the banner */
+            border-radius: 0.75rem 0.75rem 0 0;
+            height: 2.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            transform: none; /* Reset transform on hover */
-            padding: 0 0.5rem; /* Add some horizontal padding */
-            font-size: 0.9rem; /* Adjust font size for banner text */
+            transform: none;
+            padding: 0 0.5rem;
+            font-size: 0.9rem;
             font-weight: bold;
-            text-overflow: ellipsis; /* Add ellipsis for overflow text */
+            text-overflow: ellipsis;
         }
 
         .avoided-indicator:hover::before {
-            content: attr(data-text); /* Show text on hover */
-            /* Removed positioning properties; flexbox on parent handles centering */
-            color: #1a202c; /* Dark text for banner */
+            content: attr(data-text);
+            color: #1a202c;
         }
 
-        /* About Section */
-        #about-section {
-            background-color: #2d3748; /* Dark Slate Gray */
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            padding: 2rem;
-            margin-top: 2rem; /* Space above about section to separate it from home-page */
-            max-width: 60rem; /* Max width for readability */
-            width: 90%; /* Responsive width */
-            text-align: center;
-            color: #e2e8f0; /* Light gray text */
-            border: 1px solid #63b3ed; /* Light blue border */
-        }
-
-        #about-section h2 {
-            font-size: 1.75rem;
-            font-weight: bold;
-            color: #63b3ed;
-            margin-bottom: 1rem;
-        }
-
-        #about-section p {
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 0.5rem; /* Reduced space between paragraphs in about section */
-        }
-
-        #about-section p:last-child {
-            margin-bottom: 0;
-        }
-
-        /* Sections to be toggled */
+        /* Trading Content Section (initially hidden) */
         .trading-content-section {
             display: none; /* Hidden by default */
             flex-direction: column;
@@ -401,7 +339,7 @@
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .category-heading {
-                font-size: 2.25rem; /* Adjusted for mobile to be bigger but not too big */
+                font-size: 2.25rem;
                 margin-bottom: 1.5rem;
             }
             #search-bar {
@@ -420,22 +358,19 @@
                 padding: 0.25rem 0.6rem;
             }
             .details-section {
-                grid-template-columns: 1fr; /* Single column on small screens */
+                grid-template-columns: 1fr;
                 gap: 0.3rem;
             }
             .avoided-indicator:hover {
-                height: 2rem; /* Slightly smaller banner on mobile */
+                height: 2rem;
                 font-size: 0.8rem;
             }
-            #home-page h1 {
+            #home-about-section h1 {
                 font-size: 2.5rem;
             }
-            #home-page p {
-                font-size: 0.95rem; /* Keep consistent with about section */
-            }
-            #home-page .get-started-button {
-                font-size: 1rem;
-                padding: 0.75rem 1.5rem;
+            #home-about-section .welcome-text,
+            #home-about-section .about-text {
+                font-size: 0.95rem;
             }
             #category-buttons {
                 flex-wrap: wrap;
@@ -456,20 +391,15 @@
         <button id="hyperchromes-button" class="category-button">Hyperchromes</button>
     </div>
 
-    <!-- Home Page Section -->
-    <div id="home-page">
+    <!-- Combined Home and About Section -->
+    <div id="home-about-section">
         <h1>Welcome to Jailbreak Stats!</h1>
-        <p>Your ultimate resource for up-to-date values, demand levels, and detailed information on all tradable items in Jailbreak.</p>
-        <p>Navigate through different categories to find what you need, or use the search bar to quickly locate specific items.</p>
-        <button class="get-started-button" id="get-started-button">Get Started</button>
-    </div>
+        <p class="welcome-text">Your ultimate resource for up-to-date values, demand levels, and detailed information on all tradable items in Jailbreak. Navigate through different categories to find what you need, or use the search bar to quickly locate specific items.</p>
 
-    <!-- About Section - Now a separate section below home-page -->
-    <div id="about-section">
         <h2>About This Information</h2>
-        <p>This is a combination of values from Jailbreak Trade Network, Jailbreak Changelogs, Jailbreak Values, and Jailbreak Trade Core.</p>
-        <p>We purposefully did not include any forms of pictures or media to keep it easily accessible even with low/no internet connections for your own ease of access.</p>
-        <p>Always being updated by our professionals, however we do take community opinion largely into consideration when we change any values.</p>
+        <p class="about-text">This is a combination of values from Jailbreak Trade Network, Jailbreak Changelogs, Jailbreak Values, and Jailbreak Trade Core.</p>
+        <p class="about-text">We purposefully did not include any forms of pictures or media to keep it easily accessible even with low/no internet connections for your own ease of access.</p>
+        <p class="about-text">Always being updated by our professionals, however we do take community opinion largely into consideration when we change any values.</p>
     </div>
 
     <!-- Trading Content Section (initially hidden) -->
@@ -483,7 +413,7 @@
     </div>
 
     <script>
-        // Data arrays for different categories
+        // Data arrays for different categories (kept as is)
         const vehiclesData = [
             {
                 name: "Torpedo",
@@ -522,7 +452,7 @@
                 trades: "12,728",
                 topSpeed: "305 MPH",
                 hp: "75",
-                avoided: "slightly" // Set to slightly avoided
+                avoided: "slightly"
             },
             {
                 name: "Celsior",
@@ -665,7 +595,7 @@
                 trades: "7,456",
                 topSpeed: "250 MPH",
                 hp: "125",
-                avoided: "true" // Set to avoided
+                avoided: "true"
             },
             {
                 name: "Parisian",
@@ -915,7 +845,7 @@
                 avoided: "false"
             },
             {
-                name: "Jack Rabbit", /* Retained original name for consistency with existing data structure */
+                name: "Jack Rabbit",
                 currentValue: "$2,500,000",
                 dupedValue: "N/A",
                 demandLevel: "Medium",
@@ -1006,7 +936,7 @@
                 avoided: "false"
             },
             {
-                name: "Longhorn", /* Retained original name for consistency with existing data structure */
+                name: "Longhorn",
                 currentValue: "$1,500,000",
                 dupedValue: "N/A",
                 demandLevel: "Very Low",
@@ -1149,7 +1079,7 @@
                 avoided: "false"
             },
             {
-                name: "Trailblazer", /* Retained original name for consistency with existing data structure */
+                name: "Trailblazer",
                 currentValue: "$1,000,000",
                 dupedValue: "N/A",
                 demandLevel: "Close to none",
@@ -1162,7 +1092,7 @@
                 avoided: "false"
             },
             {
-                name: "Volt Bike", /* Retained original name for consistency with existing data structure */
+                name: "Volt Bike",
                 currentValue: "$1,000,000",
                 dupedValue: "N/A",
                 demandLevel: "Low",
@@ -1188,7 +1118,7 @@
                 avoided: "false"
             },
             {
-                name: "Jet Fighter", /* Retained original name for consistency with existing data structure */
+                name: "Jet Fighter",
                 currentValue: "$1,000,000",
                 dupedValue: "N/A",
                 demandLevel: "Very Low",
@@ -1266,7 +1196,7 @@
                 avoided: "false"
             },
             {
-                name: "NASCAR 75th", /* Retained original name for consistency with existing data structure */
+                name: "NASCAR 75th",
                 currentValue: "$600,000",
                 dupedValue: "N/A",
                 demandLevel: "Close to none",
@@ -1370,7 +1300,7 @@
                 avoided: "false"
             },
             {
-                name: "Hammerhead", /* Retained original name for consistency with existing data structure */
+                name: "Hammerhead",
                 currentValue: "$300,000",
                 dupedValue: "N/A",
                 demandLevel: "Close to none",
@@ -1383,7 +1313,7 @@
                 avoided: "false"
             },
             {
-                name: "Stunt Plane", /* Retained original name for consistency with existing data structure */
+                name: "Stunt Plane",
                 currentValue: "$300,000",
                 dupedValue: "N/A",
                 demandLevel: "Unknown",
@@ -1409,7 +1339,7 @@
                 avoided: "false"
             },
             {
-                name: "OG Matador", /* Retained original name for consistency with existing data structure */
+                name: "OG Matador",
                 currentValue: "$250,000",
                 dupedValue: "N/A",
                 demandLevel: "Close to none",
@@ -1695,7 +1625,7 @@
                 avoided: "false"
             },
             {
-                name: "Galactic", /* Kept original name for consistency */
+                name: "Galactic",
                 currentValue: "$4,000,000",
                 dupedValue: "N/A",
                 demandLevel: "Low",
@@ -1767,7 +1697,7 @@
                 avoided: "false"
             },
             {
-                name: "Old Town", /* Kept original name for consistency */
+                name: "Old Town",
                 currentValue: "$2,000,000",
                 dupedValue: "N/A",
                 demandLevel: "Low",
@@ -1875,7 +1805,7 @@
                 avoided: "false"
             },
             {
-                name: "Confetti", /* Kept original name for consistency */
+                name: "Confetti",
                 currentValue: "$1,000,000",
                 dupedValue: "N/A",
                 demandLevel: "Close to none",
@@ -1959,7 +1889,7 @@
                 avoided: "false"
             },
             {
-                name: "Yellow Glow", /* Kept original name for consistency */
+                name: "Yellow Glow",
                 currentValue: "$750,000",
                 dupedValue: "N/A",
                 demandLevel: "Close to none",
@@ -2151,7 +2081,7 @@
                 avoided: "false"
             },
             {
-                name: "Star Spangled", /* Kept original name for consistency */
+                name: "Star Spangled",
                 currentValue: "$250,000",
                 dupedValue: "N/A",
                 demandLevel: "Close to none",
@@ -2492,7 +2422,7 @@
                 avoided: "false"
             },
             {
-                name: "Engraved", /* Renamed to match the new input for "Diamond Engrave" */
+                name: "Engraved",
                 currentValue: "$1,500,000",
                 dupedValue: "N/A",
                 demandLevel: "Low",
@@ -2732,7 +2662,7 @@
                 avoided: "false"
             },
             {
-                name: "Tumbleweed", /* Kept original name for consistency */
+                name: "Tumbleweed",
                 currentValue: "$1,000,000",
                 dupedValue: "N/A",
                 demandLevel: "Close to none",
@@ -2792,7 +2722,7 @@
                 avoided: "false"
             },
             {
-                name: "Cloverleaf", /* Kept original name for consistency */
+                name: "Cloverleaf",
                 currentValue: "$750,000",
                 dupedValue: "N/A",
                 demandLevel: "Close to none",
@@ -2828,7 +2758,7 @@
                 avoided: "false"
             },
             {
-                name: "Hatch Voids", /* Kept original name for consistency */
+                name: "Hatch Voids",
                 currentValue: "$750,000",
                 dupedValue: "N/A",
                 demandLevel: "Close to none",
@@ -2924,7 +2854,7 @@
                 avoided: "false"
             },
             {
-                name: "Sawblade", /* Kept original name for consistency */
+                name: "Sawblade",
                 currentValue: "$500,000",
                 dupedValue: "N/A",
                 demandLevel: "Close to none",
@@ -2948,7 +2878,7 @@
                 avoided: "false"
             },
             {
-                name: "Boom Speaker", /* Kept original name for consistency */
+                name: "Boom Speaker",
                 currentValue: "$250,000",
                 dupedValue: "N/A",
                 demandLevel: "Close to none",
@@ -3008,7 +2938,7 @@
                 avoided: "false"
             },
             {
-                name: "Ice Crystal", /* Kept original name for consistency */
+                name: "Ice Crystal",
                 currentValue: "$250,000",
                 dupedValue: "N/A",
                 demandLevel: "Close to none",
@@ -3130,7 +3060,7 @@
                 avoided: "false"
             },
             {
-                name: "Evil Eye", /* Added from previous data, as it was missed in the initial rimsData construction */
+                name: "Evil Eye",
                 currentValue: "$250,000",
                 dupedValue: "$100,000",
                 demandLevel: "Very Low",
@@ -3142,7 +3072,7 @@
                 avoided: "false"
             },
             {
-                name: "EXP-1", /* Added from previous data, as it was missed in the initial rimsData construction */
+                name: "EXP-1",
                 currentValue: "$250,000",
                 dupedValue: "$100,000",
                 demandLevel: "Very Low",
@@ -3401,11 +3331,11 @@
                 currentValue: "$1,250,000",
                 dupedValue: "N/A",
                 demandLevel: "Low",
-                seasonReward: "Level 7 in S12", // From first dataset
-                distribution: "165 Copies", // From first dataset
-                trades: "293 Trades", // From first dataset
-                seasonPass: "Pass Exclusive", // From first dataset
-                collectorRarity: "367/500 Score", // From first dataset
+                seasonReward: "Level 7 in S12",
+                distribution: "165 Copies",
+                trades: "293 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "367/500 Score",
                 avoided: "false"
             },
             {
@@ -3557,11 +3487,11 @@
                 currentValue: "$750,000",
                 dupedValue: "N/A",
                 demandLevel: "Close to none",
-                seasonReward: "Level 3 in S16", // From first dataset
-                distribution: "149 Copies", // From first dataset
-                trades: "206 Trades", // From first dataset
-                seasonPass: "Pass Exclusive", // From first dataset
-                collectorRarity: "383/500 Score", // From first dataset
+                seasonReward: "Level 3 in S16",
+                distribution: "149 Copies",
+                trades: "206 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "383/500 Score",
                 avoided: "false"
             },
             {
@@ -3600,11 +3530,11 @@
                 currentValue: "$500,000",
                 dupedValue: "N/A",
                 demandLevel: "Close to none",
-                seasonReward: "Level 5 in S18", // From first dataset (Bull Horns)
-                distribution: "94 Copies", // From first dataset (Bull Horns)
-                trades: "163 Trades", // From first dataset (Bull Horns)
-                seasonPass: "Pass Exclusive", // From first dataset (Bull Horns)
-                collectorRarity: "381/500 Score", // From first dataset (Bull Horns)
+                seasonReward: "Level 5 in S18",
+                distribution: "94 Copies",
+                trades: "163 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "381/500 Score",
                 avoided: "false"
             },
             {
@@ -3903,15 +3833,13 @@
             {
                 name: "King",
                 currentValue: "$150,000",
-                dupedValue: "N/A",
-                demandLevel: "Unknown",
+                dupedValue: "Unknown",
                 avoided: "false"
             },
             {
                 name: "Spares",
                 currentValue: "$150,000",
-                dupedValue: "N/A",
-                demandLevel: "Unknown",
+                dupedValue: "Unknown",
                 avoided: "false"
             }
         ];
@@ -4088,9 +4016,8 @@
         ];
 
         // Get DOM elements
-        const homePage = document.getElementById('home-page');
+        const homeAboutSection = document.getElementById('home-about-section'); // Updated ID
         const tradingContentSection = document.getElementById('trading-content-section');
-        const getStartedButton = document.getElementById('get-started-button');
 
         const itemContainer = document.getElementById('item-container');
         const searchBar = document.getElementById('search-bar');
@@ -4098,7 +4025,7 @@
         const homeButton = document.getElementById('home-button');
         const vehiclesButton = document.getElementById('vehicles-button');
         const texturesButton = document.getElementById('textures-button');
-        rimsButton = document.getElementById('rims-button'); // Ensure rimsButton is defined
+        const rimsButton = document.getElementById('rims-button'); // Ensure rimsButton is defined
         const spoilersButton = document.getElementById('spoilers-button');
         const hyperchromesButton = document.getElementById('hyperchromes-button');
 
@@ -4107,13 +4034,11 @@
 
         // Function to show a specific section and hide others
         function showSection(sectionId) {
-            homePage.style.display = 'none';
-            document.getElementById('about-section').style.display = 'none'; // Hide about section by default
+            homeAboutSection.style.display = 'none'; // Hide combined section
             tradingContentSection.style.display = 'none';
 
-            if (sectionId === 'home-page') {
-                homePage.style.display = 'flex';
-                document.getElementById('about-section').style.display = 'flex'; // Show about section with home page
+            if (sectionId === 'home-about-section') {
+                homeAboutSection.style.display = 'flex';
             } else if (sectionId === 'trading-content-section') {
                 tradingContentSection.style.display = 'flex';
             }
@@ -4268,8 +4193,7 @@
                 (item.demandLevel && item.demandLevel.toLowerCase().includes(lowerCaseSearchTerm)) ||
                 (item.currentValue && item.currentValue.toLowerCase().includes(lowerCaseSearchTerm)) ||
                 (item.dupedValue && item.dupedValue.toLowerCase().includes(lowerCaseSearchTerm)) ||
-                (item.avoided && item.avoided.toLowerCase().includes(lowerCaseSearchTerm)) || // Include avoided in search
-                // Include other fields for filtering only if they exist for the current item type
+                (item.avoided && item.avoided.toLowerCase().includes(lowerCaseSearchTerm)) ||
                 (currentCategoryName !== "Hyperchrome" && item.originalPrice && item.originalPrice.toLowerCase().includes(lowerCaseSearchTerm)) ||
                 (currentCategoryName !== "Hyperchrome" && item.seasonReward && item.seasonReward.toLowerCase().includes(lowerCaseSearchTerm)) ||
                 (currentCategoryName !== "Hyperchrome" && item.testingAccess && item.testingAccess.toLowerCase().includes(lowerCaseSearchTerm)) ||
@@ -4301,13 +4225,8 @@
 
         // Event listener for Home button
         homeButton.addEventListener('click', () => {
-            showSection('home-page');
+            showSection('home-about-section'); // Show combined section
             setActiveButton(homeButton);
-        });
-
-        // Event listener for Get Started button on home page
-        getStartedButton.addEventListener('click', () => {
-            vehiclesButton.click(); // Simulate click on Vehicles to go to trading section
         });
 
         // Event listener for Vehicles button
@@ -4367,7 +4286,7 @@
 
         // Initial render: show home page by default
         document.addEventListener('DOMContentLoaded', () => {
-            showSection('home-page');
+            showSection('home-about-section'); // Show combined section by default
             setActiveButton(homeButton);
         });
     </script>
