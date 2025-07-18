@@ -111,6 +111,8 @@
             color: #ffffff; /* White text inside cards */
             transition: transform 0.2s ease-in-out; /* Smooth hover effect */
             border: 1px solid #63b3ed; /* Light blue border around each card */
+            position: relative; /* Needed for absolute positioning of asterisk/banner */
+            overflow: hidden; /* Hide overflowing banner initially */
         }
 
         .item-card:hover {
@@ -240,6 +242,100 @@
             font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif; /* Ensure consistent font */
         }
 
+        /* Avoided Indicator */
+        .avoided-indicator {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: help; /* Indicates interactivity */
+            z-index: 10; /* Ensure it's above other content */
+            line-height: 1; /* Prevent extra space around asterisk */
+            padding: 0.2rem; /* Small padding for touch target */
+            border-radius: 50%; /* Make it circular */
+            width: 1.5em; /* Fixed width for the asterisk circle */
+            height: 1.5em; /* Fixed height for the asterisk circle */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Removed transitions for instant switch as requested */
+            white-space: nowrap; /* Prevent text wrapping */
+            overflow: hidden; /* Hide overflow when collapsed */
+            box-sizing: border-box; /* Include padding in dimensions */
+            color: #1a202c; /* Dark text for the banner */
+            text-align: center;
+        }
+
+        .avoided-indicator.avoided-true {
+            background-color: #ef4444; /* Red for true */
+        }
+
+        .avoided-indicator.avoided-slightly {
+            background-color: #f97316; /* Orange for slightly */
+        }
+
+        .avoided-indicator::before {
+            content: '✱'; /* Changed to a more centered asterisk symbol */
+            /* Removed positioning properties; flexbox on parent handles centering */
+            font-size: 1.2em; /* Adjust asterisk size */
+            color: #1a202c; /* Dark text for asterisk */
+        }
+
+        .avoided-indicator:hover {
+            width: 100%; /* Expand to full width of the card */
+            left: 0;
+            right: 0;
+            top: 0;
+            border-radius: 0.75rem 0.75rem 0 0; /* Match card top corners, flat bottom */
+            height: 2.5rem; /* Height of the banner */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: none; /* Reset transform on hover */
+            padding: 0 0.5rem; /* Add some horizontal padding */
+            font-size: 0.9rem; /* Adjust font size for banner text */
+            font-weight: bold;
+            text-overflow: ellipsis; /* Add ellipsis for overflow text */
+        }
+
+        .avoided-indicator:hover::before {
+            content: attr(data-text); /* Show text on hover */
+            /* Removed positioning properties; flexbox on parent handles centering */
+            color: #1a202c; /* Dark text for banner */
+        }
+
+        /* About Section */
+        #about-section {
+            background-color: #2d3748; /* Dark Slate Gray */
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 2rem;
+            margin-top: 3rem; /* Space above about section */
+            max-width: 60rem; /* Max width for readability */
+            width: 90%; /* Responsive width */
+            text-align: center;
+            color: #e2e8f0; /* Light gray text */
+            border: 1px solid #63b3ed; /* Light blue border */
+        }
+
+        #about-section h2 {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #63b3ed;
+            margin-bottom: 1rem;
+        }
+
+        #about-section p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        #about-section p:last-child {
+            margin-bottom: 0;
+        }
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             h1 {
@@ -265,6 +361,10 @@
                 grid-template-columns: 1fr; /* Single column on small screens */
                 gap: 0.3rem;
             }
+            .avoided-indicator:hover {
+                height: 2rem; /* Slightly smaller banner on mobile */
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
@@ -274,7 +374,7 @@
         <button id="vehicles-button" class="category-button active">Vehicles</button>
         <button id="textures-button" class="category-button">Textures</button>
         <button id="rims-button" class="category-button">Rims</button>
-        <button id="spoilers-button" class="category-button">Spoilers</button> <!-- New button for Spoilers -->
+        <button id="spoilers-button" class="category-button">Spoilers</button>
         <button id="hyperchromes-button" class="category-button">Hyperchromes</button>
     </div>
 
@@ -283,6 +383,13 @@
 
     <div id="item-container">
         <!-- Item cards will be injected here by JavaScript -->
+    </div>
+
+    <div id="about-section">
+        <h2>About This Information</h2>
+        <p>This is a combination of values from Jailbreak Trade Network, Jailbreak Changelogs, Jailbreak Values, and Jailbreak Trade Core.</p>
+        <p>We purposefully did not include any forms of pictures or media to keep it easily accessible even with low/no internet connections for your own ease of access.</p>
+        <p>Always being updated by our professionals, however we do take community opinion largely into consideration when we change any values.</p>
     </div>
 
     <script>
@@ -298,7 +405,8 @@
                 distribution: "1,584",
                 trades: "12,753",
                 topSpeed: "395 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Javelin",
@@ -310,7 +418,8 @@
                 distribution: "2,964",
                 trades: "11,934",
                 topSpeed: "390 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Beignet",
@@ -322,7 +431,8 @@
                 distribution: "2,483",
                 trades: "12,728",
                 topSpeed: "305 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "slightly" // Set to slightly avoided
             },
             {
                 name: "Celsior",
@@ -334,7 +444,8 @@
                 distribution: "1,503",
                 trades: "8,242",
                 topSpeed: "115 MPH",
-                hp: "50"
+                hp: "50",
+                avoided: "false"
             },
             {
                 name: "Proto-08",
@@ -346,7 +457,8 @@
                 distribution: "2,347",
                 trades: "10,791",
                 topSpeed: "210 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Arachnid",
@@ -358,7 +470,8 @@
                 distribution: "881",
                 trades: "4,542",
                 topSpeed: "235 MPH",
-                hp: "125"
+                hp: "125",
+                avoided: "false"
             },
             {
                 name: "Icebreaker",
@@ -370,7 +483,8 @@
                 distribution: "770",
                 trades: "6,721",
                 topSpeed: "200 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Beam Hybrid",
@@ -382,7 +496,8 @@
                 distribution: "217",
                 trades: "7,157",
                 topSpeed: "210 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Banana Car",
@@ -394,7 +509,8 @@
                 distribution: "881",
                 trades: "5,055",
                 topSpeed: "230 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Power-1",
@@ -406,7 +522,8 @@
                 distribution: "3,581",
                 trades: "18,220",
                 topSpeed: "245 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Crew Capsule",
@@ -418,7 +535,8 @@
                 distribution: "648",
                 trades: "2,428",
                 topSpeed: "90 MPH",
-                hp: "50"
+                hp: "50",
+                avoided: "false"
             },
             {
                 name: "Raptor",
@@ -430,7 +548,8 @@
                 distribution: "699",
                 trades: "2,514",
                 topSpeed: "170 MPH",
-                hp: "125"
+                hp: "125",
+                avoided: "false"
             },
             {
                 name: "Molten M12",
@@ -442,7 +561,8 @@
                 distribution: "4,064",
                 trades: "21,804",
                 topSpeed: "260 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Volt 4x4",
@@ -454,7 +574,8 @@
                 distribution: "1,484",
                 trades: "7,456",
                 topSpeed: "250 MPH",
-                hp: "125"
+                hp: "125",
+                avoided: "true" // Set to avoided
             },
             {
                 name: "Parisian",
@@ -466,7 +587,8 @@
                 distribution: "4,465",
                 trades: "22,523",
                 topSpeed: "320 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Aperture",
@@ -478,7 +600,8 @@
                 distribution: "8,048",
                 trades: "38,173",
                 topSpeed: "280 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Goliath",
@@ -490,7 +613,8 @@
                 distribution: "1,132",
                 trades: "3,794",
                 topSpeed: "200 MPH",
-                hp: "200"
+                hp: "200",
+                avoided: "false"
             },
             {
                 name: "Shogun",
@@ -502,7 +626,8 @@
                 distribution: "2,323",
                 trades: "10,467",
                 topSpeed: "220 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Scorpion",
@@ -514,7 +639,8 @@
                 distribution: "7,486",
                 trades: "36,517",
                 topSpeed: "425 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Carbonara",
@@ -526,7 +652,8 @@
                 distribution: "5,901",
                 trades: "31,501",
                 topSpeed: "320 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Macaron",
@@ -538,7 +665,8 @@
                 distribution: "2,366",
                 trades: "12,195",
                 topSpeed: "315 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Bandit",
@@ -550,7 +678,8 @@
                 distribution: "1,007",
                 trades: "4,322",
                 topSpeed: "200 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "JB8",
@@ -562,7 +691,8 @@
                 distribution: "1,770",
                 trades: "8,507",
                 topSpeed: "200 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Rattler",
@@ -574,7 +704,8 @@
                 distribution: "920",
                 trades: "3,929",
                 topSpeed: "205 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Snake",
@@ -586,7 +717,8 @@
                 distribution: "6,511",
                 trades: "33,443",
                 topSpeed: "240 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Torero",
@@ -598,7 +730,8 @@
                 distribution: "1,571",
                 trades: "6,488",
                 topSpeed: "210 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Cobra",
@@ -610,7 +743,8 @@
                 distribution: "67",
                 trades: "7,719",
                 topSpeed: "250 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Brulee",
@@ -622,7 +756,8 @@
                 distribution: "6,726",
                 trades: "38,300",
                 topSpeed: "415 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Tiny Toy",
@@ -634,7 +769,8 @@
                 distribution: "3,262",
                 trades: "15,243",
                 topSpeed: "~ 130 MPH",
-                hp: "50"
+                hp: "50",
+                avoided: "false"
             },
             {
                 name: "Iceborn",
@@ -646,7 +782,8 @@
                 distribution: "10,795",
                 trades: "53,338",
                 topSpeed: "330 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Orion",
@@ -658,7 +795,8 @@
                 distribution: "—",
                 trades: "—",
                 topSpeed: "—",
-                hp: "—"
+                hp: "—",
+                avoided: "false"
             },
             {
                 name: "Bloxy",
@@ -670,7 +808,8 @@
                 distribution: "1,476",
                 trades: "5,161",
                 topSpeed: "~ 205 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Concept",
@@ -682,7 +821,8 @@
                 distribution: "16,507",
                 trades: "78,979",
                 topSpeed: "~ 315 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Jack Rabbit", /* Retained original name for consistency with existing data structure */
@@ -694,7 +834,8 @@
                 distribution: "968",
                 trades: "3,060",
                 topSpeed: "~ 170 MPH",
-                hp: "125"
+                hp: "125",
+                avoided: "false"
             },
             {
                 name: "Shell Classic",
@@ -706,7 +847,8 @@
                 distribution: "1,186",
                 trades: "3,203",
                 topSpeed: "~ 185 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Wedge",
@@ -718,7 +860,8 @@
                 distribution: "6,821",
                 trades: "31,390",
                 topSpeed: "~ 300 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Agent",
@@ -730,7 +873,8 @@
                 distribution: "1,309",
                 trades: "4,970",
                 topSpeed: "~ 200 MPH",
-                hp: "125"
+                hp: "125",
+                avoided: "false"
             },
             {
                 name: "Airtail",
@@ -742,7 +886,8 @@
                 distribution: "5,617",
                 trades: "29,423",
                 topSpeed: "~ 250 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Poseidon",
@@ -754,7 +899,8 @@
                 distribution: "1,738",
                 trades: "8,536",
                 topSpeed: "~ 235 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Stormrider",
@@ -766,7 +912,8 @@
                 distribution: "4,155",
                 trades: "17,199",
                 topSpeed: "~ 200 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Longhorn", /* Retained original name for consistency with existing data structure */
@@ -778,7 +925,8 @@
                 distribution: "1,833",
                 trades: "7,912",
                 topSpeed: "~ 190 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Manta",
@@ -790,7 +938,8 @@
                 distribution: "12,906",
                 trades: "58,488",
                 topSpeed: "~ 230 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "OG Monster",
@@ -802,7 +951,8 @@
                 distribution: "2,163",
                 trades: "8,340",
                 topSpeed: "~ 180 MPH",
-                hp: "150"
+                hp: "150",
+                avoided: "false"
             },
             {
                 name: "Revox",
@@ -814,7 +964,8 @@
                 distribution: "4,671",
                 trades: "24,119",
                 topSpeed: "~ 195 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Frost Crawler",
@@ -826,7 +977,8 @@
                 distribution: "1,785",
                 trades: "7,558",
                 topSpeed: "~ 140 MPH",
-                hp: "175"
+                hp: "175",
+                avoided: "false"
             },
             {
                 name: "Megalodon",
@@ -838,7 +990,8 @@
                 distribution: "2,959",
                 trades: "12,701",
                 topSpeed: "~ 220 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Striker",
@@ -850,7 +1003,8 @@
                 distribution: "2,734",
                 trades: "12,989",
                 topSpeed: "~ 170 MPH",
-                hp: "125"
+                hp: "125",
+                avoided: "false"
             },
             {
                 name: "Maverick",
@@ -862,7 +1016,8 @@
                 distribution: "5,015",
                 trades: "24,110",
                 topSpeed: "~ 200 MPH",
-                hp: "125"
+                hp: "125",
+                avoided: "false"
             },
             {
                 name: "Monster",
@@ -874,7 +1029,8 @@
                 distribution: "4,183",
                 trades: "17,946",
                 topSpeed: "~ 200 MPH",
-                hp: "150"
+                hp: "150",
+                avoided: "false"
             },
             {
                 name: "Sloop",
@@ -886,7 +1042,8 @@
                 distribution: "704",
                 trades: "1,899",
                 topSpeed: "~ 60 MPH",
-                hp: "300"
+                hp: "300",
+                avoided: "false"
             },
             {
                 name: "Tank",
@@ -898,7 +1055,8 @@
                 distribution: "2,052",
                 trades: "7,789",
                 topSpeed: "~ 75 MPH",
-                hp: "200"
+                hp: "200",
+                avoided: "false"
             },
             {
                 name: "Trailblazer", /* Retained original name for consistency with existing data structure */
@@ -910,7 +1068,8 @@
                 distribution: "3,973",
                 trades: "16,397",
                 topSpeed: "~ 250 MPH",
-                hp: "125"
+                hp: "125",
+                avoided: "false"
             },
             {
                 name: "Volt Bike", /* Retained original name for consistency with existing data structure */
@@ -922,7 +1081,8 @@
                 distribution: "43,084",
                 trades: "181,219",
                 topSpeed: "~ 215 MPH",
-                hp: "40"
+                hp: "40",
+                avoided: "false"
             },
             {
                 name: "Black Hawk",
@@ -934,7 +1094,8 @@
                 distribution: "18,111",
                 trades: "70,435",
                 topSpeed: "~ 130 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Jet Fighter", /* Retained original name for consistency with existing data structure */
@@ -946,7 +1107,8 @@
                 distribution: "8,051",
                 trades: "31,344",
                 topSpeed: "~ 210 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Drone",
@@ -958,7 +1120,8 @@
                 distribution: "18,538",
                 trades: "82,854",
                 topSpeed: "~ 140 MPH",
-                hp: "50"
+                hp: "50",
+                avoided: "false"
             },
             {
                 name: "Crown",
@@ -970,7 +1133,8 @@
                 distribution: "1,183",
                 trades: "3,737",
                 topSpeed: "~ 250 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Venom",
@@ -982,7 +1146,8 @@
                 distribution: "6,223",
                 trades: "21,026",
                 topSpeed: "~ 235 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Successor",
@@ -994,7 +1159,8 @@
                 distribution: "10,581",
                 trades: "38,234",
                 topSpeed: "~ 265 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Eclaire",
@@ -1006,7 +1172,8 @@
                 distribution: "23,522",
                 trades: "87,172",
                 topSpeed: "~ 320 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "NASCAR 75th", /* Retained original name for consistency with existing data structure */
@@ -1018,7 +1185,8 @@
                 distribution: "3,144",
                 trades: "8,837",
                 topSpeed: "~ 150 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Roadster",
@@ -1030,7 +1198,8 @@
                 distribution: "28,220",
                 trades: "99,628",
                 topSpeed: "~ 215 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Classic",
@@ -1042,7 +1211,8 @@
                 distribution: "2,517",
                 trades: "5,584",
                 topSpeed: "~ 130 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Mighty",
@@ -1054,7 +1224,8 @@
                 distribution: "2,057",
                 trades: "4,567",
                 topSpeed: "~ 135 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Posh",
@@ -1066,7 +1237,8 @@
                 distribution: "3,350",
                 trades: "8,441",
                 topSpeed: "~ 165 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "SUV",
@@ -1078,7 +1250,8 @@
                 distribution: "2,592",
                 trades: "5,698",
                 topSpeed: "~ 145 MPH",
-                hp: "125"
+                hp: "125",
+                avoided: "false"
             },
             {
                 name: "Steed",
@@ -1090,7 +1263,8 @@
                 distribution: "1,561",
                 trades: "3,463",
                 topSpeed: "~ 150 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "UFO",
@@ -1102,7 +1276,8 @@
                 distribution: "4,965",
                 trades: "17,634",
                 topSpeed: "~ 100 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Hammerhead", /* Retained original name for consistency with existing data structure */
@@ -1114,7 +1289,8 @@
                 distribution: "10,010",
                 trades: "31,013",
                 topSpeed: "~ 200 MPH",
-                hp: "125"
+                hp: "125",
+                avoided: "false"
             },
             {
                 name: "Stunt Plane", /* Retained original name for consistency with existing data structure */
@@ -1126,7 +1302,8 @@
                 distribution: "6,191",
                 trades: "17,892",
                 topSpeed: "~ 170 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "XRK",
@@ -1138,7 +1315,8 @@
                 distribution: "11,277",
                 trades: "35,710",
                 topSpeed: "~ 230 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "OG Matador", /* Retained original name for consistency with existing data structure */
@@ -1150,7 +1328,8 @@
                 distribution: "4,305",
                 trades: "12,678",
                 topSpeed: "~ 215 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Expeditioner",
@@ -1162,7 +1341,8 @@
                 distribution: "9,877",
                 trades: "22,293",
                 topSpeed: "~ 140 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Fiasco",
@@ -1174,7 +1354,8 @@
                 distribution: "9,978",
                 trades: "23,345",
                 topSpeed: "~ 130 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Laviolette",
@@ -1186,7 +1367,8 @@
                 distribution: "16,559",
                 trades: "40,226",
                 topSpeed: "~ 170 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Sentinel",
@@ -1198,7 +1380,8 @@
                 distribution: "3,276",
                 trades: "9,798",
                 topSpeed: "~ 200 MPH",
-                hp: "175"
+                hp: "175",
+                avoided: "false"
             },
             {
                 name: "Speed Yacht",
@@ -1210,7 +1393,8 @@
                 distribution: "2,739",
                 trades: "6,293",
                 topSpeed: "~ 220 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Crawler",
@@ -1222,7 +1406,8 @@
                 distribution: "7,053",
                 trades: "21,994",
                 topSpeed: "~ 230 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "Stallion",
@@ -1234,7 +1419,8 @@
                 distribution: "12,743",
                 trades: "41,962",
                 topSpeed: "~ 250 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Ray 9",
@@ -1246,7 +1432,8 @@
                 distribution: "8,872",
                 trades: "27,418",
                 topSpeed: "~ 215 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Little Bird",
@@ -1258,7 +1445,8 @@
                 distribution: "13,831",
                 trades: "38,187",
                 topSpeed: "~ 110 MPH",
-                hp: "75"
+                hp: "75",
+                avoided: "false"
             },
             {
                 name: "DeLorean",
@@ -1270,7 +1458,8 @@
                 distribution: "5,376",
                 trades: "14,501",
                 topSpeed: "~ 190 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Firetruck",
@@ -1282,7 +1471,8 @@
                 distribution: "1,747",
                 trades: "3,989",
                 topSpeed: "~ 215 MPH",
-                hp: "150"
+                hp: "150",
+                avoided: "false"
             },
             {
                 name: "Falcon S",
@@ -1294,7 +1484,8 @@
                 distribution: "9,347",
                 trades: "24,803",
                 topSpeed: "~ 180 MPH",
-                hp: "50"
+                hp: "50",
+                avoided: "false"
             },
             {
                 name: "Prison Bus",
@@ -1306,7 +1497,8 @@
                 distribution: "2,506",
                 trades: "6,307",
                 topSpeed: "~ 175 MPH",
-                hp: "150"
+                hp: "150",
+                avoided: "false"
             },
             {
                 name: "Surus",
@@ -1318,7 +1510,8 @@
                 distribution: "6,972",
                 trades: "19,221",
                 topSpeed: "~ 200 MPH",
-                hp: "125"
+                hp: "125",
+                avoided: "false"
             },
             {
                 name: "Cybertruck",
@@ -1330,7 +1523,8 @@
                 distribution: "14,535",
                 trades: "40,731",
                 topSpeed: "~ 160 MPH",
-                hp: "125"
+                hp: "125",
+                avoided: "false"
             },
             {
                 name: "Escape Bot",
@@ -1342,7 +1536,8 @@
                 distribution: "40,036",
                 trades: "107,340",
                 topSpeed: "~ 100 MPH",
-                hp: "50"
+                hp: "50",
+                avoided: "false"
             },
             {
                 name: "La Matador",
@@ -1354,7 +1549,8 @@
                 distribution: "44,451",
                 trades: "134,479",
                 topSpeed: "~ 185 MPH",
-                hp: "100"
+                hp: "100",
+                avoided: "false"
             },
             {
                 name: "Semi Truck",
@@ -1366,7 +1562,8 @@
                 distribution: "5,470",
                 trades: "12,876",
                 topSpeed: "~ 150 MPH",
-                hp: "200"
+                hp: "200",
+                avoided: "false"
             }
         ];
 
@@ -1380,7 +1577,8 @@
                 distribution: "718 Copies",
                 trades: "2,912 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "233/500 Score"
+                collectorRarity: "233/500 Score",
+                avoided: "false"
             },
             {
                 name: "Drip",
@@ -1391,7 +1589,8 @@
                 distribution: "1,144 Copies",
                 trades: "4,316 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "344/500 Score"
+                collectorRarity: "344/500 Score",
+                avoided: "false"
             },
             {
                 name: "Snowstorm",
@@ -1402,7 +1601,8 @@
                 distribution: "231 Copies",
                 trades: "543 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "370/500 Score"
+                collectorRarity: "370/500 Score",
+                avoided: "false"
             },
             {
                 name: "Galactic", /* Kept original name for consistency */
@@ -1413,7 +1613,8 @@
                 distribution: "617 Copies",
                 trades: "1,708 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "395/500 Score"
+                collectorRarity: "395/500 Score",
+                avoided: "false"
             },
             {
                 name: "Fire",
@@ -1424,7 +1625,8 @@
                 distribution: "430 Copies",
                 trades: "1,249 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "353/500 Score"
+                collectorRarity: "353/500 Score",
+                avoided: "false"
             },
             {
                 name: "Blue Pixel",
@@ -1435,7 +1637,8 @@
                 distribution: "567 Copies",
                 trades: "1,517 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "348/500 Score"
+                collectorRarity: "348/500 Score",
+                avoided: "false"
             },
             {
                 name: "Winter Camo",
@@ -1446,7 +1649,8 @@
                 distribution: "444 Copies",
                 trades: "1,238 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "352/500 Score"
+                collectorRarity: "352/500 Score",
+                avoided: "false"
             },
             {
                 name: "Black Ice",
@@ -1457,7 +1661,8 @@
                 distribution: "273 Copies",
                 trades: "610 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "361/500 Score"
+                collectorRarity: "361/500 Score",
+                avoided: "false"
             },
             {
                 name: "Earthquake",
@@ -1468,7 +1673,8 @@
                 distribution: "146 Copies",
                 trades: "289 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "373/500 Score"
+                collectorRarity: "373/500 Score",
+                avoided: "false"
             },
             {
                 name: "Old Town", /* Kept original name for consistency */
@@ -1479,7 +1685,8 @@
                 distribution: "124 Copies",
                 trades: "205 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "388/500 Score"
+                collectorRarity: "388/500 Score",
+                avoided: "false"
             },
             {
                 name: "Armor",
@@ -1490,7 +1697,8 @@
                 distribution: "307 Copies",
                 trades: "612 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "359/500 Score"
+                collectorRarity: "359/500 Score",
+                avoided: "false"
             },
             {
                 name: "Manga",
@@ -1501,7 +1709,8 @@
                 distribution: "1,868 Copies",
                 trades: "5,204 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "325/500 Score"
+                collectorRarity: "325/500 Score",
+                avoided: "false"
             },
             {
                 name: "Orange Pixel",
@@ -1512,7 +1721,8 @@
                 distribution: "802 Copies",
                 trades: "2,491 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "337/500 Score"
+                collectorRarity: "337/500 Score",
+                avoided: "false"
             },
             {
                 name: "Tiger",
@@ -1523,7 +1733,8 @@
                 distribution: "1,290 Copies",
                 trades: "3,647 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "329/500 Score"
+                collectorRarity: "329/500 Score",
+                avoided: "false"
             },
             {
                 name: "Pixel",
@@ -1534,7 +1745,8 @@
                 distribution: "5,436 Copies",
                 trades: "19,225 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "179/500 Score"
+                collectorRarity: "179/500 Score",
+                avoided: "false"
             },
             {
                 name: "Berlin Graffiti",
@@ -1545,7 +1757,8 @@
                 distribution: "1,479 Copies",
                 trades: "3,191 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "327/500 Score"
+                collectorRarity: "327/500 Score",
+                avoided: "false"
             },
             {
                 name: "Circuits",
@@ -1556,7 +1769,8 @@
                 distribution: "383 Copies",
                 trades: "791 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "352/500 Score"
+                collectorRarity: "352/500 Score",
+                avoided: "false"
             },
             {
                 name: "Crimson Racer",
@@ -1567,7 +1781,8 @@
                 distribution: "649 Copies",
                 trades: "1,351 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "343/500 Score"
+                collectorRarity: "343/500 Score",
+                avoided: "false"
             },
             {
                 name: "Confetti", /* Kept original name for consistency */
@@ -1578,7 +1793,8 @@
                 distribution: "1,068 Copies",
                 trades: "2,359 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "383/500 Score"
+                collectorRarity: "383/500 Score",
+                avoided: "false"
             },
             {
                 name: "Earth",
@@ -1589,7 +1805,8 @@
                 distribution: "219 Copies",
                 trades: "379 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "363/500 Score"
+                collectorRarity: "363/500 Score",
+                avoided: "false"
             },
             {
                 name: "Lightning",
@@ -1600,7 +1817,8 @@
                 distribution: "150 Copies",
                 trades: "250 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "369/500 Score"
+                collectorRarity: "369/500 Score",
+                avoided: "false"
             },
             {
                 name: "White Marble",
@@ -1611,7 +1829,8 @@
                 distribution: "1,005 Copies",
                 trades: "2,399 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "334/500 Score"
+                collectorRarity: "334/500 Score",
+                avoided: "false"
             },
             {
                 name: "Bacon",
@@ -1622,7 +1841,8 @@
                 distribution: "697 Copies",
                 trades: "1,223 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "341/500 Score"
+                collectorRarity: "341/500 Score",
+                avoided: "false"
             },
             {
                 name: "Field",
@@ -1633,7 +1853,8 @@
                 distribution: "239 Copies",
                 trades: "365 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "360/500 Score"
+                collectorRarity: "360/500 Score",
+                avoided: "false"
             },
             {
                 name: "Flaming",
@@ -1644,7 +1865,8 @@
                 distribution: "989 Copies",
                 trades: "2,259 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "333/500 Score"
+                collectorRarity: "333/500 Score",
+                avoided: "false"
             },
             {
                 name: "Yellow Glow", /* Kept original name for consistency */
@@ -1655,7 +1877,8 @@
                 distribution: "235 Copies",
                 trades: "339 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "383/500 Score"
+                collectorRarity: "383/500 Score",
+                avoided: "false"
             },
             {
                 name: "Hotdog",
@@ -1666,7 +1889,8 @@
                 distribution: "190 Copies",
                 trades: "323 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "363/500 Score"
+                collectorRarity: "363/500 Score",
+                avoided: "false"
             },
             {
                 name: "Money",
@@ -1677,7 +1901,8 @@
                 distribution: "296 Copies",
                 trades: "487 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "356/500 Score"
+                collectorRarity: "356/500 Score",
+                avoided: "false"
             },
             {
                 name: "Wavy",
@@ -1688,7 +1913,8 @@
                 distribution: "353 Copies",
                 trades: "562 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "354/500 Score"
+                collectorRarity: "354/500 Score",
+                avoided: "false"
             },
             {
                 name: "Aquatic",
@@ -1699,7 +1925,8 @@
                 distribution: "2,374 Copies",
                 trades: "5,544 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "315/500 Score"
+                collectorRarity: "315/500 Score",
+                avoided: "false"
             },
             {
                 name: "Bandana",
@@ -1710,7 +1937,8 @@
                 distribution: "983 Copies",
                 trades: "1,857 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "332/500 Score"
+                collectorRarity: "332/500 Score",
+                avoided: "false"
             },
             {
                 name: "Camo Radar",
@@ -1721,7 +1949,8 @@
                 distribution: "257 Copies",
                 trades: "445 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "351/500 Score"
+                collectorRarity: "351/500 Score",
+                avoided: "false"
             },
             {
                 name: "Gulf",
@@ -1732,7 +1961,8 @@
                 distribution: "1,396 Copies",
                 trades: "3,078 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "325/500 Score"
+                collectorRarity: "325/500 Score",
+                avoided: "false"
             },
             {
                 name: "Lava",
@@ -1743,7 +1973,8 @@
                 distribution: "462 Copies",
                 trades: "934 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "344/500 Score"
+                collectorRarity: "344/500 Score",
+                avoided: "false"
             },
             {
                 name: "Superstar",
@@ -1754,7 +1985,8 @@
                 distribution: "1,013 Copies",
                 trades: "1,935 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "327/500 Score"
+                collectorRarity: "327/500 Score",
+                avoided: "false"
             },
             {
                 name: "Carbon Fire",
@@ -1765,7 +1997,8 @@
                 distribution: "1,434 Copies",
                 trades: "2,323 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "194/500 Score"
+                collectorRarity: "194/500 Score",
+                avoided: "false"
             },
             {
                 name: "Aurora",
@@ -1776,7 +2009,8 @@
                 distribution: "782 Copies",
                 trades: "1,591 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "331/500 Score"
+                collectorRarity: "331/500 Score",
+                avoided: "false"
             },
             {
                 name: "Comic Convict",
@@ -1787,7 +2021,8 @@
                 distribution: "501 Copies",
                 trades: "724 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "213/500 Score"
+                collectorRarity: "213/500 Score",
+                avoided: "false"
             },
             {
                 name: "Ogre 2017",
@@ -1798,7 +2033,8 @@
                 distribution: "930 Copies",
                 trades: "1,778 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "333/500 Score"
+                collectorRarity: "333/500 Score",
+                avoided: "false"
             },
             {
                 name: "Retrowave",
@@ -1809,7 +2045,8 @@
                 distribution: "1,623 Copies",
                 trades: "2,966 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "320/500 Score"
+                collectorRarity: "320/500 Score",
+                avoided: "false"
             },
             {
                 name: "Road Hazard",
@@ -1820,7 +2057,8 @@
                 distribution: "790 Copies",
                 trades: "1,375 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "332/500 Score"
+                collectorRarity: "332/500 Score",
+                avoided: "false"
             },
             {
                 name: "Star Spangled", /* Kept original name for consistency */
@@ -1831,7 +2069,8 @@
                 distribution: "1,973 Copies",
                 trades: "3,548 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "321/500 Score"
+                collectorRarity: "321/500 Score",
+                avoided: "false"
             },
             {
                 name: "Touchdown",
@@ -1842,7 +2081,8 @@
                 distribution: "1,297 Copies",
                 trades: "2,264 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "324/500 Score"
+                collectorRarity: "324/500 Score",
+                avoided: "false"
             },
             {
                 name: "Wooden Toy",
@@ -1853,7 +2093,8 @@
                 distribution: "854 Copies",
                 trades: "1,525 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "331/500 Score"
+                collectorRarity: "331/500 Score",
+                avoided: "false"
             },
             {
                 name: "Alpine Racer",
@@ -1864,19 +2105,22 @@
                 distribution: "2,296 Copies",
                 trades: "3,929 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "314/500 Score"
+                collectorRarity: "314/500 Score",
+                avoided: "false"
             },
             {
                 name: "Snake Skin",
                 currentValue: "250",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Blue Pixel Racer",
                 currentValue: "200,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Dragon Scales",
@@ -1887,7 +2131,8 @@
                 distribution: "214 Copies",
                 trades: "275 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "210/500 Score"
+                collectorRarity: "210/500 Score",
+                avoided: "false"
             },
             {
                 name: "Road Warrior",
@@ -1898,7 +2143,8 @@
                 distribution: "336 Copies",
                 trades: "461 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "223/500 Score"
+                collectorRarity: "223/500 Score",
+                avoided: "false"
             },
             {
                 name: "Purple Flame",
@@ -1909,7 +2155,8 @@
                 distribution: "1,492 Copies",
                 trades: "2,270 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "232/500 Score"
+                collectorRarity: "232/500 Score",
+                avoided: "false"
             },
             {
                 name: "ClassicVar1",
@@ -1920,7 +2167,8 @@
                 distribution: "2,239 Copies",
                 trades: "3,065 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "188/500 Score"
+                collectorRarity: "188/500 Score",
+                avoided: "false"
             },
             {
                 name: "ClassicVar3",
@@ -1931,7 +2179,8 @@
                 distribution: "1,074 Copies",
                 trades: "1,374 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "201/500 Score"
+                collectorRarity: "201/500 Score",
+                avoided: "false"
             },
             {
                 name: "Ladybug",
@@ -1942,7 +2191,8 @@
                 distribution: "1,793 Copies",
                 trades: "2,522 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "192/500 Score"
+                collectorRarity: "192/500 Score",
+                avoided: "false"
             },
             {
                 name: "Peach",
@@ -1953,7 +2203,8 @@
                 distribution: "1,645 Copies",
                 trades: "2,286 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "193/500 Score"
+                collectorRarity: "193/500 Score",
+                avoided: "false"
             },
             {
                 name: "SWAT Graffiti",
@@ -1964,7 +2215,8 @@
                 distribution: "❓ Not Available",
                 trades: "❓ Not Available",
                 seasonPass: "Not Applicable",
-                collectorRarity: "248/500 Score"
+                collectorRarity: "248/500 Score",
+                avoided: "false"
             }
         ];
 
@@ -1978,7 +2230,8 @@
                 distribution: "187 Copies",
                 trades: "853 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "375/500 Score"
+                collectorRarity: "375/500 Score",
+                avoided: "false"
             },
             {
                 name: "Laser Cannon",
@@ -1989,7 +2242,8 @@
                 distribution: "623 Copies",
                 trades: "2,038 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "359/500 Score"
+                collectorRarity: "359/500 Score",
+                avoided: "false"
             },
             {
                 name: "Spinner",
@@ -2000,7 +2254,8 @@
                 distribution: "184 Copies",
                 trades: "748 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "250/500 Score"
+                collectorRarity: "250/500 Score",
+                avoided: "false"
             },
             {
                 name: "RTX",
@@ -2011,7 +2266,8 @@
                 distribution: "169 Copies",
                 trades: "506 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "378/500 Score"
+                collectorRarity: "378/500 Score",
+                avoided: "false"
             },
             {
                 name: "Snow Face",
@@ -2022,7 +2278,8 @@
                 distribution: "74 Copies",
                 trades: "115 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "391/500 Score"
+                collectorRarity: "391/500 Score",
+                avoided: "false"
             },
             {
                 name: "Icicle",
@@ -2033,7 +2290,8 @@
                 distribution: "136 Copies",
                 trades: "292 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "377/500 Score"
+                collectorRarity: "377/500 Score",
+                avoided: "false"
             },
             {
                 name: "Ionize",
@@ -2044,7 +2302,8 @@
                 distribution: "227 Copies",
                 trades: "411 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "368/500 Score"
+                collectorRarity: "368/500 Score",
+                avoided: "false"
             },
             {
                 name: "Hypno",
@@ -2055,7 +2314,8 @@
                 distribution: "296 Copies",
                 trades: "721 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "239/500 Score"
+                collectorRarity: "239/500 Score",
+                avoided: "false"
             },
             {
                 name: "Snowflake",
@@ -2066,7 +2326,8 @@
                 distribution: "150 Copies",
                 trades: "313 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "252/500 Score"
+                collectorRarity: "252/500 Score",
+                avoided: "false"
             },
             {
                 name: "Brickset",
@@ -2077,7 +2338,8 @@
                 distribution: "164 Copies",
                 trades: "393 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "231/500 Score"
+                collectorRarity: "231/500 Score",
+                avoided: "false"
             },
             {
                 name: "Planetary",
@@ -2088,7 +2350,8 @@
                 distribution: "203 Copies",
                 trades: "396 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "369/500 Score"
+                collectorRarity: "369/500 Score",
+                avoided: "false"
             },
             {
                 name: "Blue Eyes",
@@ -2099,7 +2362,8 @@
                 distribution: "97 Copies",
                 trades: "177 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "381/500 Score"
+                collectorRarity: "381/500 Score",
+                avoided: "false"
             },
             {
                 name: "Track Toy",
@@ -2110,7 +2374,8 @@
                 distribution: "757 Copies",
                 trades: "1,660 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "344/500 Score"
+                collectorRarity: "344/500 Score",
+                avoided: "false"
             },
             {
                 name: "Iron Rock",
@@ -2121,7 +2386,8 @@
                 distribution: "101 Copies",
                 trades: "157 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "379/500 Score"
+                collectorRarity: "379/500 Score",
+                avoided: "false"
             },
             {
                 name: "Center Lock",
@@ -2132,7 +2398,8 @@
                 distribution: "101 Copies",
                 trades: "152 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "380/500 Score"
+                collectorRarity: "380/500 Score",
+                avoided: "false"
             },
             {
                 name: "Engraved", /* Renamed to match the new input for "Diamond Engrave" */
@@ -2143,7 +2410,8 @@
                 distribution: "230 Copies",
                 trades: "407 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "388/500 Score"
+                collectorRarity: "388/500 Score",
+                avoided: "false"
             },
             {
                 name: "Radar",
@@ -2154,7 +2422,8 @@
                 distribution: "114 Copies",
                 trades: "195 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "377/500 Score"
+                collectorRarity: "377/500 Score",
+                avoided: "false"
             },
             {
                 name: "Sakura",
@@ -2165,7 +2434,8 @@
                 distribution: "183 Copies",
                 trades: "335 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "365/500 Score"
+                collectorRarity: "365/500 Score",
+                avoided: "false"
             },
             {
                 name: "Stance",
@@ -2176,7 +2446,8 @@
                 distribution: "288 Copies",
                 trades: "540 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "360/500 Score"
+                collectorRarity: "360/500 Score",
+                avoided: "false"
             },
             {
                 name: "Wagon Wheel",
@@ -2187,7 +2458,8 @@
                 distribution: "120 Copies",
                 trades: "185 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "374/500 Score"
+                collectorRarity: "374/500 Score",
+                avoided: "false"
             },
             {
                 name: "Blue Portal",
@@ -2198,7 +2470,8 @@
                 distribution: "2,246 Copies",
                 trades: "5,850 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "197/500 Score"
+                collectorRarity: "197/500 Score",
+                avoided: "false"
             },
             {
                 name: "Bull",
@@ -2209,7 +2482,8 @@
                 distribution: "388 Copies",
                 trades: "708 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "353/500 Score"
+                collectorRarity: "353/500 Score",
+                avoided: "false"
             },
             {
                 name: "Frostburn",
@@ -2220,7 +2494,8 @@
                 distribution: "146 Copies",
                 trades: "228 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "370/500 Score"
+                collectorRarity: "370/500 Score",
+                avoided: "false"
             },
             {
                 name: "Red Eyes",
@@ -2231,7 +2506,8 @@
                 distribution: "133 Copies",
                 trades: "209 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "373/500 Score"
+                collectorRarity: "373/500 Score",
+                avoided: "false"
             },
             {
                 name: "Spider Leg",
@@ -2242,7 +2518,8 @@
                 distribution: "128 Copies",
                 trades: "227 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "373/500 Score"
+                collectorRarity: "373/500 Score",
+                avoided: "false"
             },
             {
                 name: "Star Badge",
@@ -2253,7 +2530,8 @@
                 distribution: "144 Copies",
                 trades: "245 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "371/500 Score"
+                collectorRarity: "371/500 Score",
+                avoided: "false"
             },
             {
                 name: "Daytona",
@@ -2264,7 +2542,8 @@
                 distribution: "111 Copies",
                 trades: "169 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "253/500 Score"
+                collectorRarity: "253/500 Score",
+                avoided: "false"
             },
             {
                 name: "Distorted",
@@ -2275,7 +2554,8 @@
                 distribution: "214 Copies",
                 trades: "393 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "363/500 Score"
+                collectorRarity: "363/500 Score",
+                avoided: "false"
             },
             {
                 name: "Doubloon",
@@ -2286,7 +2566,8 @@
                 distribution: "86 Copies",
                 trades: "122 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "253/500 Score"
+                collectorRarity: "253/500 Score",
+                avoided: "false"
             },
             {
                 name: "Energized",
@@ -2297,7 +2578,8 @@
                 distribution: "429 Copies",
                 trades: "813 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "351/500 Score"
+                collectorRarity: "351/500 Score",
+                avoided: "false"
             },
             {
                 name: "Nemesis",
@@ -2308,7 +2590,8 @@
                 distribution: "260 Copies",
                 trades: "501 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "359/500 Score"
+                collectorRarity: "359/500 Score",
+                avoided: "false"
             },
             {
                 name: "Retrowave",
@@ -2319,7 +2602,8 @@
                 distribution: "296 Copies",
                 trades: "475 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "357/500 Score"
+                collectorRarity: "357/500 Score",
+                avoided: "false"
             },
             {
                 name: "Rubber Ducky",
@@ -2330,7 +2614,8 @@
                 distribution: "206 Copies",
                 trades: "339 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "364/500 Score"
+                collectorRarity: "364/500 Score",
+                avoided: "false"
             },
             {
                 name: "Soccer",
@@ -2341,7 +2626,8 @@
                 distribution: "129 Copies",
                 trades: "213 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "250/500 Score"
+                collectorRarity: "250/500 Score",
+                avoided: "false"
             },
             {
                 name: "Sparkler",
@@ -2352,7 +2638,8 @@
                 distribution: "276 Copies",
                 trades: "450 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "359/500 Score"
+                collectorRarity: "359/500 Score",
+                avoided: "false"
             },
             {
                 name: "Tumbleweed", /* Kept original name for consistency */
@@ -2363,7 +2650,8 @@
                 distribution: "106 Copies",
                 trades: "158 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "372/500 Score"
+                collectorRarity: "372/500 Score",
+                avoided: "false"
             },
             {
                 name: "Pixeltary",
@@ -2374,7 +2662,8 @@
                 distribution: "331 Copies",
                 trades: "585 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "356/500 Score"
+                collectorRarity: "356/500 Score",
+                avoided: "false"
             },
             {
                 name: "Storm",
@@ -2385,7 +2674,8 @@
                 distribution: "691 Copies",
                 trades: "1,171 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "220/500 Score"
+                collectorRarity: "220/500 Score",
+                avoided: "false"
             },
             {
                 name: "Baller",
@@ -2396,7 +2686,8 @@
                 distribution: "152 Copies",
                 trades: "227 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "366/500 Score"
+                collectorRarity: "366/500 Score",
+                avoided: "false"
             },
             {
                 name: "Biohazard",
@@ -2407,7 +2698,8 @@
                 distribution: "160 Copies",
                 trades: "233 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "360/500 Score"
+                collectorRarity: "360/500 Score",
+                avoided: "false"
             },
             {
                 name: "Cloverleaf", /* Kept original name for consistency */
@@ -2418,7 +2710,8 @@
                 distribution: "172 Copies",
                 trades: "257 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "381/500 Score"
+                collectorRarity: "381/500 Score",
+                avoided: "false"
             },
             {
                 name: "Fore",
@@ -2429,7 +2722,8 @@
                 distribution: "139 Copies",
                 trades: "207 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "367/500 Score"
+                collectorRarity: "367/500 Score",
+                avoided: "false"
             },
             {
                 name: "Handcuff",
@@ -2440,7 +2734,8 @@
                 distribution: "191 Copies",
                 trades: "304 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "361/500 Score"
+                collectorRarity: "361/500 Score",
+                avoided: "false"
             },
             {
                 name: "Hatch Voids", /* Kept original name for consistency */
@@ -2451,7 +2746,8 @@
                 distribution: "❓ Not Available",
                 trades: "❓ Not Available",
                 seasonPass: "Not Applicable",
-                collectorRarity: "259/500 Score"
+                collectorRarity: "259/500 Score",
+                avoided: "false"
             },
             {
                 name: "Sled Void",
@@ -2462,7 +2758,8 @@
                 distribution: "511 Copies",
                 trades: "919 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "346/500 Score"
+                collectorRarity: "346/500 Score",
+                avoided: "false"
             },
             {
                 name: "Beadlock",
@@ -2473,7 +2770,8 @@
                 distribution: "254 Copies",
                 trades: "407 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "356/500 Score"
+                collectorRarity: "356/500 Score",
+                avoided: "false"
             },
             {
                 name: "Bonded",
@@ -2484,7 +2782,8 @@
                 distribution: "190 Copies",
                 trades: "226 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "236/500 Score"
+                collectorRarity: "236/500 Score",
+                avoided: "false"
             },
             {
                 name: "Compass",
@@ -2495,7 +2794,8 @@
                 distribution: "210 Copies",
                 trades: "363 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "359/500 Score"
+                collectorRarity: "359/500 Score",
+                avoided: "false"
             },
             {
                 name: "Live 2020",
@@ -2506,7 +2806,8 @@
                 distribution: "435 Copies",
                 trades: "796 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "227/500 Score"
+                collectorRarity: "227/500 Score",
+                avoided: "false"
             },
             {
                 name: "Marshmallow",
@@ -2517,7 +2818,8 @@
                 distribution: "119 Copies",
                 trades: "162 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "366/500 Score"
+                collectorRarity: "366/500 Score",
+                avoided: "false"
             },
             {
                 name: "Roll-X",
@@ -2528,7 +2830,8 @@
                 distribution: "1,086 Copies",
                 trades: "1,881 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "331/500 Score"
+                collectorRarity: "331/500 Score",
+                avoided: "false"
             },
             {
                 name: "Sawblade", /* Kept original name for consistency */
@@ -2539,7 +2842,8 @@
                 distribution: "861 Copies",
                 trades: "1,475 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "335/500 Score"
+                collectorRarity: "335/500 Score",
+                avoided: "false"
             },
             {
                 name: "Forged",
@@ -2550,7 +2854,8 @@
                 distribution: "378 Copies",
                 trades: "517 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "208/500 Score"
+                collectorRarity: "208/500 Score",
+                avoided: "false"
             },
             {
                 name: "Boom Speaker", /* Kept original name for consistency */
@@ -2561,7 +2866,8 @@
                 distribution: "2,382 Copies",
                 trades: "3,334 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "254/500 Score"
+                collectorRarity: "254/500 Score",
+                avoided: "false"
             },
             {
                 name: "Dino",
@@ -2572,7 +2878,8 @@
                 distribution: "143 Copies",
                 trades: "200 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "240/500 Score"
+                collectorRarity: "240/500 Score",
+                avoided: "false"
             },
             {
                 name: "Peppermint",
@@ -2583,7 +2890,8 @@
                 distribution: "747 Copies",
                 trades: "1,174 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "334/500 Score"
+                collectorRarity: "334/500 Score",
+                avoided: "false"
             },
             {
                 name: "Piggy",
@@ -2594,7 +2902,8 @@
                 distribution: "2,630 Copies",
                 trades: "4,246 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "190/500 Score"
+                collectorRarity: "190/500 Score",
+                avoided: "false"
             },
             {
                 name: "Retro Racer",
@@ -2605,7 +2914,8 @@
                 distribution: "1,252 Copies",
                 trades: "1,968 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "325/500 Score"
+                collectorRarity: "325/500 Score",
+                avoided: "false"
             },
             {
                 name: "Ice Crystal", /* Kept original name for consistency */
@@ -2616,7 +2926,8 @@
                 distribution: "7,355 Copies",
                 trades: "12,020 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "295/500 Score"
+                collectorRarity: "295/500 Score",
+                avoided: "false"
             },
             {
                 name: "Abstracts",
@@ -2627,91 +2938,106 @@
                 distribution: "1,492 Copies",
                 trades: "2,270 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "232/500 Score"
+                collectorRarity: "232/500 Score",
+                avoided: "false"
             },
             {
                 name: "Beachball",
                 currentValue: "$500,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Shutter Shade",
                 currentValue: "$750,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Ship Wheel",
                 currentValue: "$500,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "UK Heritage",
                 currentValue: "$500,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Spixel",
                 currentValue: "$500,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Jungle Palm",
                 currentValue: "$500,000",
                 dupedValue: "N/A",
-                demandLevel: "Very Low"
+                demandLevel: "Very Low",
+                avoided: "false"
             },
             {
                 name: "Dragon Chaser",
                 currentValue: "$200,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "RFX",
                 currentValue: "$150,000",
                 dupedValue: "N/A",
-                demandLevel: "Unknown"
+                demandLevel: "Unknown",
+                avoided: "false"
             },
             {
                 name: "Scope",
                 currentValue: "$250,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Spyglass",
                 currentValue: "$250,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Teddy Bear",
                 currentValue: "$250,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Tesseract",
                 currentValue: "$250,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Trion",
                 currentValue: "$250,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Unknown Signal",
                 currentValue: "$250,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Evil Eye", /* Added from previous data, as it was missed in the initial rimsData construction */
@@ -2722,7 +3048,8 @@
                 distribution: "2,688 Copies",
                 trades: "3,957 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "191/500 Score"
+                collectorRarity: "191/500 Score",
+                avoided: "false"
             },
             {
                 name: "EXP-1", /* Added from previous data, as it was missed in the initial rimsData construction */
@@ -2733,7 +3060,8 @@
                 distribution: "996 Copies",
                 trades: "1,377 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "208/500 Score"
+                collectorRarity: "208/500 Score",
+                avoided: "false"
             }
         ];
 
@@ -2747,7 +3075,8 @@
                 distribution: "323 Copies",
                 trades: "1,698 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "361/500 Score"
+                collectorRarity: "361/500 Score",
+                avoided: "false"
             },
             {
                 name: "2 Billion",
@@ -2758,7 +3087,8 @@
                 distribution: "133 Copies",
                 trades: "255 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "260/500 Score"
+                collectorRarity: "260/500 Score",
+                avoided: "false"
             },
             {
                 name: "Snow Shovel",
@@ -2769,7 +3099,8 @@
                 distribution: "92 Copies",
                 trades: "143 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "388/500 Score"
+                collectorRarity: "388/500 Score",
+                avoided: "false"
             },
             {
                 name: "Bicycle Rack",
@@ -2780,7 +3111,8 @@
                 distribution: "97 Copies",
                 trades: "198 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "387/500 Score"
+                collectorRarity: "387/500 Score",
+                avoided: "false"
             },
             {
                 name: "Volt Wing",
@@ -2791,7 +3123,8 @@
                 distribution: "77 Copies",
                 trades: "142 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "388/500 Score"
+                collectorRarity: "388/500 Score",
+                avoided: "false"
             },
             {
                 name: "5 Star",
@@ -2802,7 +3135,8 @@
                 distribution: "118 Copies",
                 trades: "227 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "380/500 Score"
+                collectorRarity: "380/500 Score",
+                avoided: "false"
             },
             {
                 name: "Eight Leg",
@@ -2813,7 +3147,8 @@
                 distribution: "113 Copies",
                 trades: "207 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "382/500 Score"
+                collectorRarity: "382/500 Score",
+                avoided: "false"
             },
             {
                 name: "Velocity",
@@ -2824,7 +3159,8 @@
                 distribution: "125 Copies",
                 trades: "208 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "379/500 Score"
+                collectorRarity: "379/500 Score",
+                avoided: "false"
             },
             {
                 name: "Cash Spitter",
@@ -2835,7 +3171,8 @@
                 distribution: "606 Copies",
                 trades: "1,471 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "349/500 Score"
+                collectorRarity: "349/500 Score",
+                avoided: "false"
             },
             {
                 name: "Clickbait",
@@ -2846,7 +3183,8 @@
                 distribution: "114 Copies",
                 trades: "197 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "381/500 Score"
+                collectorRarity: "381/500 Score",
+                avoided: "false"
             },
             {
                 name: "Glider",
@@ -2857,7 +3195,8 @@
                 distribution: "81 Copies",
                 trades: "126 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "386/500 Score"
+                collectorRarity: "386/500 Score",
+                avoided: "false"
             },
             {
                 name: "Tiki Torch",
@@ -2868,7 +3207,8 @@
                 distribution: "72 Copies",
                 trades: "104 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "389/500 Score"
+                collectorRarity: "389/500 Score",
+                avoided: "false"
             },
             {
                 name: "Brickset",
@@ -2879,7 +3219,8 @@
                 distribution: "145 Copies",
                 trades: "320 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "234/500 Score"
+                collectorRarity: "234/500 Score",
+                avoided: "false"
             },
             {
                 name: "Dual Rockets",
@@ -2890,7 +3231,8 @@
                 distribution: "1,215 Copies",
                 trades: "3,691 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "332/500 Score"
+                collectorRarity: "332/500 Score",
+                avoided: "false"
             },
             {
                 name: "Colors of Italy",
@@ -2901,7 +3243,8 @@
                 distribution: "241 Copies",
                 trades: "428 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "364/500 Score"
+                collectorRarity: "364/500 Score",
+                avoided: "false"
             },
             {
                 name: "Endurance Wing",
@@ -2912,7 +3255,8 @@
                 distribution: "145 Copies",
                 trades: "221 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "390/500 Score"
+                collectorRarity: "390/500 Score",
+                avoided: "false"
             },
             {
                 name: "Flamethrower",
@@ -2923,7 +3267,8 @@
                 distribution: "267 Copies",
                 trades: "530 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "361/500 Score"
+                collectorRarity: "361/500 Score",
+                avoided: "false"
             },
             {
                 name: "Jetpack",
@@ -2934,7 +3279,8 @@
                 distribution: "247 Copies",
                 trades: "507 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "362/500 Score"
+                collectorRarity: "362/500 Score",
+                avoided: "false"
             },
             {
                 name: "Mecha Arm",
@@ -2945,7 +3291,8 @@
                 distribution: "149 Copies",
                 trades: "295 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "372/500 Score"
+                collectorRarity: "372/500 Score",
+                avoided: "false"
             },
             {
                 name: "Water Gun",
@@ -2956,7 +3303,8 @@
                 distribution: "553 Copies",
                 trades: "1,255 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "347/500 Score"
+                collectorRarity: "347/500 Score",
+                avoided: "false"
             },
             {
                 name: "After Burner",
@@ -2967,7 +3315,8 @@
                 distribution: "165 Copies", // From first dataset
                 trades: "293 Trades", // From first dataset
                 seasonPass: "Pass Exclusive", // From first dataset
-                collectorRarity: "367/500 Score" // From first dataset
+                collectorRarity: "367/500 Score", // From first dataset
+                avoided: "false"
             },
             {
                 name: "Blue Chute",
@@ -2978,7 +3327,8 @@
                 distribution: "259 Copies",
                 trades: "583 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "359/500 Score"
+                collectorRarity: "359/500 Score",
+                avoided: "false"
             },
             {
                 name: "Death Ray",
@@ -2989,7 +3339,8 @@
                 distribution: "280 Copies",
                 trades: "555 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "359/500 Score"
+                collectorRarity: "359/500 Score",
+                avoided: "false"
             },
             {
                 name: "Dual Flags",
@@ -3000,7 +3351,8 @@
                 distribution: "262 Copies",
                 trades: "446 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "238/500 Score"
+                collectorRarity: "238/500 Score",
+                avoided: "false"
             },
             {
                 name: "Shell Speaker",
@@ -3011,7 +3363,8 @@
                 distribution: "171 Copies",
                 trades: "315 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "369/500 Score"
+                collectorRarity: "369/500 Score",
+                avoided: "false"
             },
             {
                 name: "UFO",
@@ -3022,7 +3375,8 @@
                 distribution: "735 Copies",
                 trades: "1,812 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "339/500 Score"
+                collectorRarity: "339/500 Score",
+                avoided: "false"
             },
             {
                 name: "JDM",
@@ -3033,7 +3387,8 @@
                 distribution: "728 Copies",
                 trades: "1,337 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "342/500 Score"
+                collectorRarity: "342/500 Score",
+                avoided: "false"
             },
             {
                 name: "Snow Cannon",
@@ -3044,7 +3399,8 @@
                 distribution: "204 Copies",
                 trades: "382 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "361/500 Score"
+                collectorRarity: "361/500 Score",
+                avoided: "false"
             },
             {
                 name: "Spare",
@@ -3055,7 +3411,8 @@
                 distribution: "347 Copies",
                 trades: "671 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "232/500 Score"
+                collectorRarity: "232/500 Score",
+                avoided: "false"
             },
             {
                 name: "Guitar Riff",
@@ -3066,7 +3423,8 @@
                 distribution: "397 Copies",
                 trades: "696 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "351/500 Score"
+                collectorRarity: "351/500 Score",
+                avoided: "false"
             },
             {
                 name: "Orange Chute",
@@ -3077,7 +3435,8 @@
                 distribution: "476 Copies",
                 trades: "1,039 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "346/500 Score"
+                collectorRarity: "346/500 Score",
+                avoided: "false"
             },
             {
                 name: "Overdrive",
@@ -3088,7 +3447,8 @@
                 distribution: "923 Copies",
                 trades: "1,920 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "335/500 Score"
+                collectorRarity: "335/500 Score",
+                avoided: "false"
             },
             {
                 name: "Star Wing",
@@ -3099,7 +3459,8 @@
                 distribution: "636 Copies",
                 trades: "1,168 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "343/500 Score"
+                collectorRarity: "343/500 Score",
+                avoided: "false"
             },
             {
                 name: "Surfboard Rack",
@@ -3110,7 +3471,8 @@
                 distribution: "149 Copies", // From first dataset
                 trades: "206 Trades", // From first dataset
                 seasonPass: "Pass Exclusive", // From first dataset
-                collectorRarity: "383/500 Score" // From first dataset
+                collectorRarity: "383/500 Score", // From first dataset
+                avoided: "false"
             },
             {
                 name: "Triple Fin",
@@ -3121,13 +3483,15 @@
                 distribution: "367 Copies",
                 trades: "620 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "352/500 Score"
+                collectorRarity: "352/500 Score",
+                avoided: "false"
             },
             {
                 name: "Bamboo Shooters",
                 currentValue: "$750,000",
                 dupedValue: "N/A",
-                demandLevel: "Very Low"
+                demandLevel: "Very Low",
+                avoided: "false"
             },
             {
                 name: "3 Billion",
@@ -3138,7 +3502,8 @@
                 distribution: "1,124 Copies",
                 trades: "2,208 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "210/500 Score"
+                collectorRarity: "210/500 Score",
+                avoided: "false"
             },
             {
                 name: "Bull",
@@ -3149,7 +3514,8 @@
                 distribution: "94 Copies", // From first dataset (Bull Horns)
                 trades: "163 Trades", // From first dataset (Bull Horns)
                 seasonPass: "Pass Exclusive", // From first dataset (Bull Horns)
-                collectorRarity: "381/500 Score" // From first dataset (Bull Horns)
+                collectorRarity: "381/500 Score", // From first dataset (Bull Horns)
+                avoided: "false"
             },
             {
                 name: "Death Trap",
@@ -3160,7 +3526,8 @@
                 distribution: "359 Copies",
                 trades: "658 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "349/500 Score"
+                collectorRarity: "349/500 Score",
+                avoided: "false"
             },
             {
                 name: "Glider Shop",
@@ -3171,13 +3538,15 @@
                 distribution: "213 Copies",
                 trades: "345 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "359/500 Score"
+                collectorRarity: "359/500 Score",
+                avoided: "false"
             },
             {
                 name: "Japanese Lantern",
                 currentValue: "$500,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Live Glider",
@@ -3188,7 +3557,8 @@
                 distribution: "476 Copies",
                 trades: "785 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "226/500 Score"
+                collectorRarity: "226/500 Score",
+                avoided: "false"
             },
             {
                 name: "OG Rocket Thrusters",
@@ -3199,7 +3569,8 @@
                 distribution: "5,120 Copies",
                 trades: "11,308 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "381/500 Score"
+                collectorRarity: "381/500 Score",
+                avoided: "false"
             },
             {
                 name: "Robo Wing",
@@ -3210,13 +3581,15 @@
                 distribution: "687 Copies",
                 trades: "1,204 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "339/500 Score"
+                collectorRarity: "339/500 Score",
+                avoided: "false"
             },
             {
                 name: "SawBlade",
                 currentValue: "$500,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Snow Log",
@@ -3227,7 +3600,8 @@
                 distribution: "463 Copies",
                 trades: "774 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "346/500 Score"
+                collectorRarity: "346/500 Score",
+                avoided: "false"
             },
             {
                 name: "Tuner",
@@ -3238,7 +3612,8 @@
                 distribution: "186 Copies",
                 trades: "263 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "363/500 Score"
+                collectorRarity: "363/500 Score",
+                avoided: "false"
             },
             {
                 name: "Turning Key",
@@ -3249,13 +3624,15 @@
                 distribution: "448 Copies",
                 trades: "820 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "346/500 Score"
+                collectorRarity: "346/500 Score",
+                avoided: "false"
             },
             {
                 name: "Waving Flag",
                 currentValue: "$500,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Windmill",
@@ -3266,7 +3643,8 @@
                 distribution: "116 Copies",
                 trades: "193 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "369/500 Score"
+                collectorRarity: "369/500 Score",
+                avoided: "false"
             },
             {
                 name: "Hazards",
@@ -3277,7 +3655,8 @@
                 distribution: "298 Copies",
                 trades: "459 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "354/500 Score"
+                collectorRarity: "354/500 Score",
+                avoided: "false"
             },
             {
                 name: "Arcade Racer",
@@ -3288,7 +3667,8 @@
                 distribution: "256 Copies",
                 trades: "386 Trades",
                 seasonPass: "Pass Exclusive",
-                collectorRarity: "352/500 Score"
+                collectorRarity: "352/500 Score",
+                avoided: "false"
             },
             {
                 name: "5B Flags",
@@ -3299,7 +3679,8 @@
                 distribution: "308 Copies",
                 trades: "471 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "227/500 Score"
+                collectorRarity: "227/500 Score",
+                avoided: "false"
             },
             {
                 name: "6 Billion",
@@ -3310,7 +3691,8 @@
                 distribution: "307 Copies",
                 trades: "422 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "227/500 Score"
+                collectorRarity: "227/500 Score",
+                avoided: "false"
             },
             {
                 name: "DoYouLift",
@@ -3321,13 +3703,15 @@
                 distribution: "474 Copies",
                 trades: "766 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "341/500 Score"
+                collectorRarity: "341/500 Score",
+                avoided: "false"
             },
             {
                 name: "Leaning Wing Of Pisa",
                 currentValue: "$250,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Laser Wire",
@@ -3338,7 +3722,8 @@
                 distribution: "861 Copies",
                 trades: "1,209 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "210/500 Score"
+                collectorRarity: "210/500 Score",
+                avoided: "false"
             },
             {
                 name: "RC Antenna",
@@ -3349,19 +3734,22 @@
                 distribution: "1,001 Copies",
                 trades: "1,613 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "329/500 Score"
+                collectorRarity: "329/500 Score",
+                avoided: "false"
             },
             {
                 name: "Tank Wing",
                 currentValue: "$250,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Torii Gate",
                 currentValue: "$250,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Trade Sail",
@@ -3372,25 +3760,29 @@
                 distribution: "293 Copies",
                 trades: "392 Trades",
                 seasonPass: "Not Applicable",
-                collectorRarity: "233/500 Score"
+                collectorRarity: "233/500 Score",
+                avoided: "false"
             },
             {
                 name: "Travel Case",
                 currentValue: "$250,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Trophy Wings",
                 currentValue: "$250,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Vintage Wings",
                 currentValue: "$250,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Rally Spotlight",
@@ -3401,31 +3793,36 @@
                 distribution: "882 Copies",
                 trades: "1,414 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "336/500 Score"
+                collectorRarity: "336/500 Score",
+                avoided: "false"
             },
             {
                 name: "Snake Guard",
                 currentValue: "$250,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "Skull",
                 currentValue: "$200,000",
                 dupedValue: "N/A",
-                demandLevel: "Close to none"
+                demandLevel: "Close to none",
+                avoided: "false"
             },
             {
                 name: "King",
                 currentValue: "$150,000",
                 dupedValue: "N/A",
-                demandLevel: "Unknown"
+                demandLevel: "Unknown",
+                avoided: "false"
             },
             {
                 name: "Spares",
                 currentValue: "$150,000",
                 dupedValue: "N/A",
-                demandLevel: "Unknown"
+                demandLevel: "Unknown",
+                avoided: "false"
             }
         ];
 
@@ -3434,145 +3831,169 @@
                 name: "HyperShift",
                 currentValue: "$340,000,000",
                 dupedValue: "$305,000,000",
-                demandLevel: "Medium"
+                demandLevel: "Medium",
+                avoided: "false"
             },
             {
                 name: "HyperShift Level 4",
                 currentValue: "$250,000,000",
                 dupedValue: "N/A",
-                demandLevel: "Medium"
+                demandLevel: "Medium",
+                avoided: "false"
             },
             {
                 name: "HyperDiamond Level 5",
                 currentValue: "$70,000,000",
                 dupedValue: "$60,000,000",
-                demandLevel: "Decent"
+                demandLevel: "Decent",
+                avoided: "false"
             },
             {
                 name: "HyperBlue Level 5",
                 currentValue: "$67,500,000",
                 dupedValue: "$50,000,000",
-                demandLevel: "Low"
+                demandLevel: "Low",
+                avoided: "false"
             },
             {
                 name: "HyperBlue Level 4",
                 currentValue: "$60,000,000",
                 dupedValue: "N/A",
-                demandLevel: "Decent"
+                demandLevel: "Decent",
+                avoided: "false"
             },
             {
                 name: "HyperDiamond Level 4",
                 currentValue: "$47,000,000",
                 dupedValue: "N/A",
-                demandLevel: "Decent"
+                demandLevel: "Decent",
+                avoided: "false"
             },
             {
                 name: "HyperPink Level 5",
                 currentValue: "$46,000,000",
                 dupedValue: "$42,000,000",
-                demandLevel: "Decent"
+                demandLevel: "Decent",
+                avoided: "false"
             },
             {
                 name: "HyperRed Level 5",
                 currentValue: "$46,000,000",
                 dupedValue: "$42,000,000",
-                demandLevel: "Decent"
+                demandLevel: "Decent",
+                avoided: "false"
             },
             {
                 name: "HyperPurple Level 5",
                 currentValue: "$40,000,000",
                 dupedValue: "$38,000,000",
-                demandLevel: "Decent"
+                demandLevel: "Decent",
+                avoided: "false"
             },
             {
                 name: "HyperPink Level 4",
                 currentValue: "$36,000,000",
                 dupedValue: "N/A",
-                demandLevel: "Decent"
+                demandLevel: "Decent",
+                avoided: "false"
             },
             {
                 name: "HyperRed Level 4",
                 currentValue: "$35,000,000",
                 dupedValue: "N/A",
-                demandLevel: "Decent"
+                demandLevel: "Decent",
+                avoided: "false"
             },
             {
                 name: "HyperBlue Level 3",
                 currentValue: "$29,000,000",
                 dupedValue: "N/A",
-                demandLevel: "Decent"
+                demandLevel: "Decent",
+                avoided: "false"
             },
             {
                 name: "HyperOrange Level 5",
                 currentValue: "$27,500,000",
                 dupedValue: "$26,500,000",
-                demandLevel: "Decent"
+                demandLevel: "Decent",
+                avoided: "false"
             },
             {
                 name: "HyperPurple Level 4",
                 currentValue: "$27,000,000",
                 dupedValue: "N/A",
-                demandLevel: "Decent"
+                demandLevel: "Decent",
+                avoided: "false"
             },
             {
                 name: "HyperGreen Level 5",
                 currentValue: "$25,000,000",
                 dupedValue: "$22,500,000",
-                demandLevel: "Medium"
+                demandLevel: "Medium",
+                avoided: "false"
             },
             {
                 name: "HyperDiamond Level 3",
                 currentValue: "$22,500,000",
                 dupedValue: "N/A",
-                demandLevel: "Decent"
+                demandLevel: "Decent",
+                avoided: "false"
             },
             {
                 name: "HyperGreen Level 4",
                 currentValue: "$18,500,000",
                 dupedValue: "N/A",
-                demandLevel: "Medium"
+                demandLevel: "Medium",
+                avoided: "false"
             },
             {
                 name: "HyperOrange Level 4",
                 currentValue: "$18,000,000",
                 dupedValue: "N/A",
-                demandLevel: "Decent"
+                demandLevel: "Decent",
+                avoided: "false"
             },
             {
                 name: "HyperYellow Level 5",
                 currentValue: "$17,500,000",
                 dupedValue: "$16,000,000",
-                demandLevel: "Decent"
+                demandLevel: "Decent",
+                avoided: "false"
             },
             {
                 name: "HyperYellow Level 4",
                 currentValue: "$12,500,000",
                 dupedValue: "N/A",
-                demandLevel: "Medium"
+                demandLevel: "Medium",
+                avoided: "false"
             },
             {
                 name: "HyperPink Level 3",
                 currentValue: "$11,500,000",
                 dupedValue: "N/A",
-                demandLevel: "Medium"
+                demandLevel: "Medium",
+                avoided: "false"
             },
             {
                 name: "HyperRed Level 3",
                 currentValue: "$11,000,000",
                 dupedValue: "N/A",
-                demandLevel: "Medium"
+                demandLevel: "Medium",
+                avoided: "false"
             },
             {
                 name: "HyperPurple Level 3",
                 currentValue: "$10,000,000",
                 dupedValue: "N/A",
-                demandLevel: "Medium"
+                demandLevel: "Medium",
+                avoided: "false"
             },
             {
                 name: "HyperGreen Level 3",
                 currentValue: "$8,000,000",
                 dupedValue: "N/A",
-                demandLevel: "Medium"
+                demandLevel: "Medium",
+                avoided: "false"
             }
         ];
 
@@ -3583,7 +4004,7 @@
         const vehiclesButton = document.getElementById('vehicles-button');
         const texturesButton = document.getElementById('textures-button');
         const rimsButton = document.getElementById('rims-button');
-        const spoilersButton = document.getElementById('spoilers-button'); // Get the new button
+        const spoilersButton = document.getElementById('spoilers-button');
         const hyperchromesButton = document.getElementById('hyperchromes-button');
 
         let currentActiveData = vehiclesData; // Default to vehicles
@@ -3594,6 +4015,20 @@
             const card = document.createElement('div');
             card.id = `item-${item.name.replace(/\s/g, '-')}`;
             card.classList.add('item-card');
+
+            // Add avoided indicator if applicable
+            if (item.avoided && item.avoided !== "false") {
+                const avoidedIndicator = document.createElement('div');
+                avoidedIndicator.classList.add('avoided-indicator');
+                if (item.avoided === "true") {
+                    avoidedIndicator.classList.add('avoided-true');
+                    avoidedIndicator.setAttribute('data-text', 'Currently being avoided');
+                } else if (item.avoided === "slightly") {
+                    avoidedIndicator.classList.add('avoided-slightly');
+                    avoidedIndicator.setAttribute('data-text', 'Currently being slightly avoided');
+                }
+                card.appendChild(avoidedIndicator);
+            }
 
             const name = document.createElement('h2');
             name.textContent = item.name;
@@ -3724,6 +4159,7 @@
                 (item.demandLevel && item.demandLevel.toLowerCase().includes(lowerCaseSearchTerm)) ||
                 (item.currentValue && item.currentValue.toLowerCase().includes(lowerCaseSearchTerm)) ||
                 (item.dupedValue && item.dupedValue.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                (item.avoided && item.avoided.toLowerCase().includes(lowerCaseSearchTerm)) || // Include avoided in search
                 // Include other fields for filtering only if they exist for the current item type
                 (currentCategoryName !== "Hyperchrome" && item.originalPrice && item.originalPrice.toLowerCase().includes(lowerCaseSearchTerm)) ||
                 (currentCategoryName !== "Hyperchrome" && item.seasonReward && item.seasonReward.toLowerCase().includes(lowerCaseSearchTerm)) ||
@@ -3742,7 +4178,7 @@
             vehiclesButton.classList.remove('active');
             texturesButton.classList.remove('active');
             rimsButton.classList.remove('active');
-            spoilersButton.classList.remove('active'); // Deactivate new button
+            spoilersButton.classList.remove('active');
             hyperchromesButton.classList.remove('active');
             activeButton.classList.add('active');
         }
