@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jailbreak Trading Information</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://i.imghippo.com/files/rX5378Ok.png">
     <style>
         /* Basic Reset and Font */
         body {
             margin: 0;
             padding: 0;
-            font-family: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            font-family: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacMacSystemFont, "Segoe UI", Roboto, Oxygen, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
             background-color: #1a202c; /* Very Dark Blue-Gray background */
             color: #ffffff; /* White text for general content */
             min-height: 100vh; /* Ensure body takes full viewport height */
@@ -138,6 +140,39 @@
             text-align: center;
             font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
             text-shadow: 0px 0px 8px rgba(99, 179, 237, 0.7);
+        }
+
+        /* Demand Explainer Section */
+        #demand-explainer {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.75rem;
+            background-color: #4a5568; /* Darker background for explainer */
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-top: 2rem; /* Space above explainer */
+            margin-bottom: 2rem;
+            max-width: 60rem;
+            width: 90%;
+            border: 1px solid #63b3ed;
+        }
+
+        .demand-explainer-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            padding: 0.4rem 0.8rem;
+            border-radius: 0.5rem;
+            background-color: #2d3748; /* Lighter background for individual items */
+        }
+
+        .demand-explainer-circle {
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
         }
 
         /* Item Container */
@@ -304,6 +339,37 @@
             width: 100%;
         }
 
+        /* Discord Button (Top Right) */
+        #discord-button-top {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            background-color: #5865F2; /* Discord Brand Color */
+            border: none;
+            border-radius: 50%;
+            width: 3.5rem;
+            height: 3.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+            z-index: 1000; /* Ensure it's on top */
+        }
+
+        #discord-button-top:hover {
+            background-color: #4752C4;
+            transform: translateY(-3px);
+        }
+
+        #discord-button-top img {
+            width: 100%; /* Now fills the entire circle */
+            height: 100%; /* Now fills the entire circle */
+            object-fit: contain; /* Ensures the image scales down to fit without cropping */
+        }
+
+
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .category-heading {
@@ -340,6 +406,21 @@
                 flex-wrap: wrap;
                 justify-content: center;
             }
+            #demand-explainer {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            .demand-explainer-item {
+                width: 100%; /* Make items take full width on mobile */
+                justify-content: center;
+            }
+            #discord-button-top {
+                width: 3rem;
+                height: 3rem;
+                top: 1rem;
+                right: 1rem;
+            }
         }
     </style>
 </head>
@@ -365,6 +446,18 @@
         <p class="about-text">This is a combination of values from Jailbreak Trade Network, Jailbreak Changelogs, Jailbreak Values, and Jailbreak Trade Core.</p>
         <p class="about-text">We purposefully did not include any forms of pictures or media to keep it easily accessible even with low/no internet connections for your own ease of access.</p>
         <p class="about-text">Always being updated by our professionals, however we do take community opinion largely into consideration when we change any values.</p>
+
+        <!-- Demand Color Explainer - Moved to Home Section -->
+        <div id="demand-explainer">
+            <div class="demand-explainer-item"><span class="demand-explainer-circle demand-level-close-to-none"></span> Close to none</div>
+            <div class="demand-explainer-item"><span class="demand-explainer-circle demand-level-very-low"></span> Very Low</div>
+            <div class="demand-explainer-item"><span class="demand-explainer-circle demand-level-low"></span> Low</div>
+            <div class="demand-explainer-item"><span class="demand-explainer-circle demand-level-medium"></span> Medium</div>
+            <div class="demand-explainer-item"><span class="demand-explainer-circle demand-level-decent"></span> Decent</div>
+            <div class="demand-explainer-item"><span class="demand-explainer-circle demand-level-high"></span> High</div>
+            <div class="demand-explainer-item"><span class="demand-explainer-circle demand-level-very-high"></span> Very High</div>
+            <div class="demand-explainer-item"><span class="demand-explainer-circle demand-level-extremely-high"></span> Extremely High</div>
+        </div>
     </div>
 
     <!-- Trading Content Section (initially hidden) -->
@@ -376,6 +469,11 @@
             <!-- Item cards will be injected here by JavaScript -->
         </div>
     </div>
+
+    <!-- Discord Button (Top Right) -->
+    <button id="discord-button-top">
+        <img src="https://static.vecteezy.com/system/resources/previews/018/930/718/non_2x/discord-logo-discord-icon-transparent-free-png.png" alt="Discord Icon">
+    </button>
 
     <script>
         // Data arrays for different categories
@@ -410,7 +508,7 @@
                 name: "Beignet",
                 currentValue: "$38,500,000",
                 dupedValue: "$35,000,000",
-                demandLevel: "Medium",
+                demandLevel: "High",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S6",
                 distribution: "2,483",
@@ -421,8 +519,8 @@
             },
             {
                 name: "Celsior",
-                currentValue: "$31,000,000",
-                dupedValue: "$29,500,000",
+                currentValue: "$32,500,000",
+                dupedValue: "$30,000,000",
                 demandLevel: "Medium",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S8",
@@ -512,7 +610,7 @@
             },
             {
                 name: "Crew Capsule",
-                currentValue: "$16,000,000",
+                currentValue: "$14,000,000",
                 dupedValue: "N/A",
                 demandLevel: "High",
                 originalPrice: "—",
@@ -551,9 +649,9 @@
             },
             {
                 name: "Volt 4x4",
-                currentValue: "$11,000,000",
+                currentValue: "$11,500,000",
                 dupedValue: "N/A",
-                demandLevel: "Low",
+                demandLevel: "Medium",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S3",
                 distribution: "1,484",
@@ -928,7 +1026,7 @@
             },
             {
                 name: "OG Monster",
-                currentValue: "$1,250,000",
+                currentValue: "$1,500,000",
                 dupedValue: "N/A",
                 demandLevel: "Very Low",
                 originalPrice: "—",
@@ -1555,9 +1653,9 @@
         const texturesData = [
             {
                 name: "Checker",
-                currentValue: "$38,500,000",
+                currentValue: "$37,000,000",
                 dupedValue: "$32,000,000",
-                demandLevel: "High",
+                demandLevel: "Decent",
                 testingAccess: "25 Robux",
                 distribution: "718 Copies",
                 trades: "2,912 Trades",
@@ -3835,7 +3933,7 @@
                 name: "HyperBlue Level 5",
                 currentValue: "$67,500,000",
                 dupedValue: "$50,000,000",
-                demandLevel: "Medium",
+                demandLevel: "Low",
                 avoided: "false"
             },
             {
@@ -3855,21 +3953,21 @@
             {
                 name: "HyperPink Level 5",
                 currentValue: "$46,000,000",
-                dupedValue: "$43,000,000",
+                dupedValue: "$42,000,000",
                 demandLevel: "Decent",
                 avoided: "false"
             },
             {
                 name: "HyperRed Level 5",
-                currentValue: "$45,000,000",
-                dupedValue: "$41,000,000",
-                demandLevel: "Medium",
+                currentValue: "$46,000,000",
+                dupedValue: "$42,000,000",
+                demandLevel: "Decent",
                 avoided: "false"
             },
             {
                 name: "HyperPurple Level 5",
-                currentValue: "$46,000,000",
-                dupedValue: "$39,000,000",
+                currentValue: "$40,000,000",
+                dupedValue: "$38,000,000",
                 demandLevel: "Decent",
                 avoided: "false"
             },
@@ -4020,6 +4118,7 @@
         const rimsButton = document.getElementById('rims-button');
         const spoilersButton = document.getElementById('spoilers-button');
         const hyperchromesButton = document.getElementById('hyperchromes-button');
+        const discordButtonTop = document.getElementById('discord-button-top'); // Get the top Discord button
 
         let currentActiveData = vehiclesData; // Default to vehicles
         let currentCategoryName = "Vehicle"; // Default category title
@@ -4294,6 +4393,11 @@
             renderItems(currentActiveData);
             showSection('trading-content-section');
             setActiveButton(hyperchromesButton);
+        });
+
+        // Event listener for the top Discord button
+        discordButtonTop.addEventListener('click', () => {
+            window.open('https://discord.gg/g6mnGDvQ', '_blank');
         });
 
         // Initial render: show home page by default
