@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vehicle Information</title>
+    <title>Jailbreak Trading Information</title>
     <style>
         /* Basic Reset and Font */
         body {
             margin: 0;
             padding: 0;
-            /* Prioritize SF Pro Display for headings and SF Pro Text for body */
             font-family: "SF Pro Text", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
             background-color: #1a202c; /* Very Dark Blue-Gray background */
             color: #ffffff; /* White text for general content */
@@ -19,6 +18,61 @@
             align-items: center;
             padding: 2rem 0; /* Vertical padding */
             box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+
+        /* Category Buttons Container */
+        #category-buttons {
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .category-button {
+            background-color: #63b3ed; /* Light blue button */
+            color: #1a202c; /* Dark text */
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+        }
+
+        .category-button:hover {
+            background-color: #4299e1; /* Darker blue on hover */
+            transform: translateY(-2px);
+        }
+
+        .category-button.active {
+            background-color: #f97316; /* Orange when active */
+            color: #1a202c;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.5); /* Orange focus ring */
+        }
+
+        /* Search Bar Styling */
+        #search-bar {
+            width: 90%; /* Responsive width */
+            max-width: 30rem; /* Max width for larger screens */
+            padding: 0.75rem 1rem;
+            margin-bottom: 2rem; /* Space below the search bar */
+            border-radius: 0.5rem;
+            border: 1px solid #63b3ed; /* Light blue border */
+            background-color: #2d3748; /* Dark Slate Gray background */
+            color: #ffffff; /* White text */
+            font-size: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        #search-bar::placeholder {
+            color: #cbd5e0; /* Lighter placeholder text */
+            opacity: 0.7;
+        }
+
+        #search-bar:focus {
+            outline: none;
+            border-color: #4299e1; /* Darker blue on focus */
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5); /* Focus ring */
         }
 
         /* Main Heading */
@@ -32,8 +86,8 @@
             text-shadow: 0px 0px 8px rgba(99, 179, 237, 0.7); /* Subtle light blue glow highlight */
         }
 
-        /* Vehicle Container */
-        #vehicle-container {
+        /* Item Container (formerly Vehicle Container) */
+        #item-container {
             display: flex;
             flex-wrap: wrap; /* Allow cards to wrap to the next line */
             justify-content: center; /* Center cards horizontally */
@@ -44,8 +98,8 @@
             padding: 0 1rem; /* Horizontal padding, equivalent to px-4 */
         }
 
-        /* Individual Vehicle Card Styling */
-        .vehicle-card {
+        /* Individual Item Card Styling */
+        .item-card { /* Renamed from .vehicle-card */
             background-color: #2d3748; /* Dark Slate Gray for cards */
             border-radius: 0.75rem; /* More rounded corners, closer to image */
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* Shadow for floating effect */
@@ -59,17 +113,17 @@
             border: 1px solid #63b3ed; /* Light blue border around each card */
         }
 
-        .vehicle-card:hover {
+        .item-card:hover {
             transform: translateY(-5px); /* Lift card on hover */
         }
 
-        /* Card Title (Vehicle Name) */
-        .vehicle-card h2 {
-            font-size: 1.75rem; /* Larger for main vehicle name */
+        /* Card Title (Item Name) */
+        .item-card h2 {
+            font-size: 1.75rem; /* Larger for main item name */
             font-weight: bold;
-            color: #63b3ed; /* Lighter blue for vehicle name */
+            color: #63b3ed; /* Lighter blue for item name */
             margin-bottom: 0.5rem; /* Space below name */
-            text-align: center; /* Center the vehicle name */
+            text-align: center; /* Center the item name */
             font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif; /* Use Display for headings */
         }
 
@@ -121,19 +175,35 @@
             color: #1a202c; /* Dark text for the pill */
         }
 
-        /* Specific Demand Level Colors */
-        .demand-level-very-high,
-        .demand-level-high {
-            background-color: #4CAF50; /* Green for Very High/High demand */
+        /* Specific Demand Level Colors based on the provided image */
+        .demand-level-close-to-none {
+            background-color: #6B7280; /* Gray */
         }
-        .demand-level-medium,
-        .demand-level-decent { /* Added decent for completeness if it appears */
-            background-color: #2196F3; /* Blue for Medium/Decent demand */
+        .demand-level-very-low {
+            background-color: #EF4444; /* Red-500 */
         }
         .demand-level-low {
-            background-color: #F44336; /* Red for Low demand */
+            background-color: #F97316; /* Orange-500 */
         }
-        /* Add more as needed for other levels */
+        .demand-level-medium {
+            background-color: #F59E0B; /* Amber-500 (Yellow) */
+        }
+        .demand-level-decent {
+            background-color: #22C55E; /* Green-500 */
+        }
+        .demand-level-high {
+            background-color: #3B82F6; /* Blue-500 */
+        }
+        .demand-level-very-high {
+            background-color: #8B5CF6; /* Violet-500 (Purple) */
+        }
+        .demand-level-extremely-high {
+            background-color: #EC4899; /* Pink-500 */
+        }
+        /* Fallback for unknown demand levels */
+        .demand-level-unknown {
+            background-color: #6B7280; /* Default to gray for unknown */
+        }
 
         /* Separator Line */
         .separator {
@@ -176,7 +246,11 @@
                 font-size: 2.25rem; /* Adjusted for mobile to be bigger but not too big */
                 margin-bottom: 1.5rem;
             }
-            .vehicle-card {
+            #search-bar {
+                width: 90%;
+                margin-bottom: 1.5rem;
+            }
+            .item-card {
                 width: 90%;
                 max-width: 20rem;
             }
@@ -196,21 +270,29 @@
 </head>
 <body>
 
-    <h1>Vehicle Collection</h1>
+    <div id="category-buttons">
+        <button id="vehicles-button" class="category-button active">Vehicles</button>
+        <button id="textures-button" class="category-button">Textures</button>
+        <button id="rims-button" class="category-button">Rims</button>
+        <button id="spoilers-button" class="category-button">Spoilers</button> <!-- New button for Spoilers -->
+        <button id="hyperchromes-button" class="category-button">Hyperchromes</button>
+    </div>
 
-    <div id="vehicle-container">
-        <!-- Vehicle cards will be injected here by JavaScript -->
+    <input type="text" id="search-bar" placeholder="Search items...">
+    <h1 id="category-title">Vehicle Collection</h1>
+
+    <div id="item-container">
+        <!-- Item cards will be injected here by JavaScript -->
     </div>
 
     <script>
-        // Array containing all vehicle data
-        const vehicles = [
+        // Data arrays for different categories
+        const vehiclesData = [
             {
                 name: "Torpedo",
-                currentValue: "$48,000,000",
-                dupedValue: "$42,000,000",
-                demand: "8.05",
-                demandLevel: "Very High",
+                currentValue: "$49,000,000",
+                dupedValue: "$42,500,000",
+                demandLevel: "Decent",
                 originalPrice: "$750,000",
                 seasonReward: "OG S1/S2",
                 distribution: "1,584",
@@ -221,9 +303,8 @@
             {
                 name: "Javelin",
                 currentValue: "$44,000,000",
-                dupedValue: "$42,000,000",
-                demand: "4.03",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
                 originalPrice: "$929,929",
                 seasonReward: "—",
                 distribution: "2,964",
@@ -233,10 +314,9 @@
             },
             {
                 name: "Beignet",
-                currentValue: "$38,000,000",
-                dupedValue: "$35,500,000",
-                demand: "4.98",
-                demandLevel: "Medium",
+                currentValue: "$38,500,000",
+                dupedValue: "$35,000,000",
+                demandLevel: "High",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S6",
                 distribution: "2,483",
@@ -246,10 +326,9 @@
             },
             {
                 name: "Celsior",
-                currentValue: "$30,000,000",
-                dupedValue: "$28,000,000",
-                demand: "5.48",
-                demandLevel: "High",
+                currentValue: "$32,500,000",
+                dupedValue: "$30,000,000",
+                demandLevel: "Medium",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S8",
                 distribution: "1,503",
@@ -260,8 +339,7 @@
             {
                 name: "Proto-08",
                 currentValue: "$30,000,000",
-                dupedValue: "$28,000,000",
-                demand: "5.21",
+                dupedValue: "N/A",
                 demandLevel: "High",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S14",
@@ -272,10 +350,9 @@
             },
             {
                 name: "Arachnid",
-                currentValue: "$24,000,000",
-                dupedValue: "$21,500,000",
-                demand: "4.41",
-                demandLevel: "Medium",
+                currentValue: "$24,500,000",
+                dupedValue: "$20,000,000",
+                demandLevel: "Decent",
                 originalPrice: "$750,000",
                 seasonReward: "OG S1/S2",
                 distribution: "881",
@@ -284,23 +361,9 @@
                 hp: "125"
             },
             {
-                name: "Beam Hybrid",
-                currentValue: "$18,500,000",
-                dupedValue: "$16,500,000",
-                demand: "5.86",
-                demandLevel: "High",
-                originalPrice: "—",
-                seasonReward: "Level 10 in S16",
-                distribution: "217",
-                trades: "7,157",
-                topSpeed: "210 MPH",
-                hp: "100"
-            },
-            {
                 name: "Icebreaker",
-                currentValue: "$17,500,000",
-                dupedValue: "$15,000,000",
-                demand: "5.74",
+                currentValue: "$19,000,000",
+                dupedValue: "$16,000,000",
                 demandLevel: "High",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S7",
@@ -310,11 +373,22 @@
                 hp: "100"
             },
             {
-                name: "Banana Car",
-                currentValue: "$17,000,000",
-                dupedValue: "$16,000,000",
-                demand: "4.11",
+                name: "Beam Hybrid",
+                currentValue: "$18,500,000",
+                dupedValue: "$15,500,000",
                 demandLevel: "Medium",
+                originalPrice: "—",
+                seasonReward: "Level 10 in S16",
+                distribution: "217",
+                trades: "7,157",
+                topSpeed: "210 MPH",
+                hp: "100"
+            },
+            {
+                name: "Banana Car",
+                currentValue: "$16,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S5",
                 distribution: "881",
@@ -324,10 +398,9 @@
             },
             {
                 name: "Power-1",
-                currentValue: "$15,000,000",
-                dupedValue: "$13,000,000",
-                demand: "5.09",
-                demandLevel: "High",
+                currentValue: "$15,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Medium",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S17",
                 distribution: "3,581",
@@ -338,9 +411,8 @@
             {
                 name: "Crew Capsule",
                 currentValue: "$14,000,000",
-                dupedValue: "$13,500,000",
-                demand: "3.75",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "High",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S2",
                 distribution: "648",
@@ -349,24 +421,10 @@
                 hp: "50"
             },
             {
-                name: "Molten M12",
-                currentValue: "$13,500,000",
-                dupedValue: "$12,500,000",
-                demand: "5.37",
-                demandLevel: "High",
-                originalPrice: "$599,000",
-                seasonReward: "—",
-                distribution: "4,064",
-                trades: "21,804",
-                topSpeed: "260 MPH",
-                hp: "75"
-            },
-            {
                 name: "Raptor",
-                currentValue: "$13,500,000",
-                dupedValue: "$12,250,000",
-                demand: "2.80",
-                demandLevel: "Medium",
+                currentValue: "$14,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
                 originalPrice: "$150,000",
                 seasonReward: "OG S3",
                 distribution: "699",
@@ -375,11 +433,22 @@
                 hp: "125"
             },
             {
+                name: "Molten M12",
+                currentValue: "$13,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
+                originalPrice: "$599,000",
+                seasonReward: "—",
+                distribution: "4,064",
+                trades: "21,804",
+                topSpeed: "260 MPH",
+                hp: "75"
+            },
+            {
                 name: "Volt 4x4",
-                currentValue: "$11,000,000",
-                dupedValue: "$10,750,000",
-                demand: "5.02",
-                demandLevel: "High",
+                currentValue: "$11,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Medium",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S3",
                 distribution: "1,484",
@@ -390,9 +459,8 @@
             {
                 name: "Parisian",
                 currentValue: "$8,000,000",
-                dupedValue: "$7,500,000",
-                demand: "5.04",
-                demandLevel: "High",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
                 originalPrice: "$720,000",
                 seasonReward: "—",
                 distribution: "4,465",
@@ -403,9 +471,8 @@
             {
                 name: "Aperture",
                 currentValue: "$7,500,000",
-                dupedValue: "$7,250,000",
-                demand: "4.74",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
                 originalPrice: "$899,000",
                 seasonReward: "—",
                 distribution: "8,048",
@@ -416,8 +483,7 @@
             {
                 name: "Goliath",
                 currentValue: "$6,500,000",
-                dupedValue: "$6,250,000",
-                demand: "3.35",
+                dupedValue: "N/A",
                 demandLevel: "Medium",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S12",
@@ -429,9 +495,8 @@
             {
                 name: "Shogun",
                 currentValue: "$6,500,000",
-                dupedValue: "$6,000,000",
-                demand: "4.51",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S15",
                 distribution: "2,323",
@@ -442,9 +507,8 @@
             {
                 name: "Scorpion",
                 currentValue: "$6,000,000",
-                dupedValue: "$5,500,000",
-                demand: "4.88",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
                 originalPrice: "$2,000,000",
                 seasonReward: "—",
                 distribution: "7,486",
@@ -455,9 +519,8 @@
             {
                 name: "Carbonara",
                 currentValue: "$5,500,000",
-                dupedValue: "$5,000,000",
-                demand: "5.34",
-                demandLevel: "High",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
                 originalPrice: "$800,000",
                 seasonReward: "—",
                 distribution: "5,901",
@@ -468,9 +531,8 @@
             {
                 name: "Macaron",
                 currentValue: "$5,500,000",
-                dupedValue: "$5,000,000",
-                demand: "5.15",
-                demandLevel: "High",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S10",
                 distribution: "2,366",
@@ -480,10 +542,9 @@
             },
             {
                 name: "Bandit",
-                currentValue: "$5,000,000",
-                dupedValue: "$4,500,000",
-                demand: "4.29",
-                demandLevel: "Medium",
+                currentValue: "$4,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S13",
                 distribution: "1,007",
@@ -493,10 +554,9 @@
             },
             {
                 name: "JB8",
-                currentValue: "$4,500,000",
-                dupedValue: "$4,250,000",
-                demand: "4.81",
-                demandLevel: "Medium",
+                currentValue: "$4,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
                 originalPrice: "$200,000",
                 seasonReward: "OG S3",
                 distribution: "1,770",
@@ -505,24 +565,10 @@
                 hp: "100"
             },
             {
-                name: "Cobra",
-                currentValue: "$4,000,000",
-                dupedValue: "$3,500,000",
-                demand: "5.32",
-                demandLevel: "High",
-                originalPrice: "—",
-                seasonReward: "Level 10 in S2",
-                distribution: "67",
-                trades: "7,719",
-                topSpeed: "250 MPH",
-                hp: "100"
-            },
-            {
                 name: "Rattler",
                 currentValue: "$4,000,000",
-                dupedValue: "$3,750,000",
-                demand: "4.27",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Low",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S4",
                 distribution: "920",
@@ -533,9 +579,8 @@
             {
                 name: "Snake",
                 currentValue: "$3,500,000",
-                dupedValue: "$3,250,000",
-                demand: "5.14",
-                demandLevel: "High",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
                 originalPrice: "$649,000",
                 seasonReward: "—",
                 distribution: "6,511",
@@ -546,9 +591,8 @@
             {
                 name: "Torero",
                 currentValue: "$3,500,000",
-                dupedValue: "$3,000,000",
-                demand: "4.13",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
                 originalPrice: "$599,000",
                 seasonReward: "—",
                 distribution: "1,571",
@@ -557,11 +601,22 @@
                 hp: "100"
             },
             {
+                name: "Cobra",
+                currentValue: "$3,250,000",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
+                originalPrice: "—",
+                seasonReward: "Level 10 in S2",
+                distribution: "67",
+                trades: "7,719",
+                topSpeed: "250 MPH",
+                hp: "100"
+            },
+            {
                 name: "Brulee",
                 currentValue: "$3,000,000",
-                dupedValue: "$2,750,000",
-                demand: "5.69",
-                demandLevel: "High",
+                dupedValue: "N/A",
+                demandLevel: "Medium",
                 originalPrice: "$500,000",
                 seasonReward: "—",
                 distribution: "6,726",
@@ -570,11 +625,22 @@
                 hp: "75"
             },
             {
+                name: "Tiny Toy",
+                currentValue: "$3,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
+                originalPrice: "—",
+                seasonReward: "Level 8 in S11",
+                distribution: "3,262",
+                trades: "15,243",
+                topSpeed: "~ 130 MPH",
+                hp: "50"
+            },
+            {
                 name: "Iceborn",
                 currentValue: "$3,000,000",
-                dupedValue: "$2,750,000",
-                demand: "4.94",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Low",
                 originalPrice: "$675,000",
                 seasonReward: "—",
                 distribution: "10,795",
@@ -585,9 +651,8 @@
             {
                 name: "Orion",
                 currentValue: "$3,000,000",
-                dupedValue: "$2,750,000",
-                demand: "—",
-                demandLevel: "Low",
+                dupedValue: "N/A",
+                demandLevel: "Medium",
                 originalPrice: "$999,999",
                 seasonReward: "—",
                 distribution: "—",
@@ -596,24 +661,10 @@
                 hp: "—"
             },
             {
-                name: "Tiny Toy",
-                currentValue: "$3,000,000",
-                dupedValue: "$2,500,000",
-                demand: "4.67",
-                demandLevel: "Medium",
-                originalPrice: "—",
-                seasonReward: "Level 8 in S11",
-                distribution: "3,262",
-                trades: "15,243",
-                topSpeed: "~ 130 MPH",
-                hp: "50"
-            },
-            {
                 name: "Bloxy",
                 currentValue: "$2,500,000",
-                dupedValue: "$2,250,000",
-                demand: "3.50",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S11",
                 distribution: "1,476",
@@ -624,9 +675,8 @@
             {
                 name: "Concept",
                 currentValue: "$2,500,000",
-                dupedValue: "$2,000,000",
-                demand: "4.05",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
                 originalPrice: "$2,500,000",
                 seasonReward: "—",
                 distribution: "16,507",
@@ -635,10 +685,9 @@
                 hp: "75"
             },
             {
-                name: "Jack Rabbit",
+                name: "Jack Rabbit", /* Retained original name for consistency with existing data structure */
                 currentValue: "$2,500,000",
-                dupedValue: "$2,250,000",
-                demand: "3.16",
+                dupedValue: "N/A",
                 demandLevel: "Medium",
                 originalPrice: "—",
                 seasonReward: "Level 8 in S9",
@@ -648,11 +697,22 @@
                 hp: "125"
             },
             {
+                name: "Shell Classic",
+                currentValue: "$2,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
+                originalPrice: "Tier 5 Safes",
+                seasonReward: "—",
+                distribution: "1,186",
+                trades: "3,203",
+                topSpeed: "~ 185 MPH",
+                hp: "100"
+            },
+            {
                 name: "Wedge",
                 currentValue: "$2,500,000",
-                dupedValue: "$2,250,000",
-                demand: "4.60",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S23",
                 distribution: "6,821",
@@ -663,9 +723,8 @@
             {
                 name: "Agent",
                 currentValue: "$2,000,000",
-                dupedValue: "$1,500,000",
-                demand: "3.80",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Low",
                 originalPrice: "$600,000",
                 seasonReward: "—",
                 distribution: "1,309",
@@ -676,9 +735,8 @@
             {
                 name: "Airtail",
                 currentValue: "$2,000,000",
-                dupedValue: "$1,500,000",
-                demand: "5.24",
-                demandLevel: "High",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
                 originalPrice: "$600,000",
                 seasonReward: "—",
                 distribution: "5,617",
@@ -689,9 +747,8 @@
             {
                 name: "Poseidon",
                 currentValue: "$2,000,000",
-                dupedValue: "$1,750,000",
-                demand: "4.91",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Low",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S16",
                 distribution: "1,738",
@@ -700,23 +757,9 @@
                 hp: "100"
             },
             {
-                name: "Shell Classic",
-                currentValue: "$2,000,000",
-                dupedValue: "$1,750,000",
-                demand: "2.70",
-                demandLevel: "Medium",
-                originalPrice: "Tier 5 Safes",
-                seasonReward: "—",
-                distribution: "1,186",
-                trades: "3,203",
-                topSpeed: "~ 185 MPH",
-                hp: "100"
-            },
-            {
                 name: "Stormrider",
                 currentValue: "$1,750,000",
-                dupedValue: "$1,500,000",
-                demand: "4.14",
+                dupedValue: "N/A",
                 demandLevel: "Medium",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S24",
@@ -726,24 +769,10 @@
                 hp: "100"
             },
             {
-                name: "Frost Crawler",
+                name: "Longhorn", /* Retained original name for consistency with existing data structure */
                 currentValue: "$1,500,000",
-                dupedValue: "$1,250,000",
-                demand: "4.23",
-                demandLevel: "Medium",
-                originalPrice: "—",
-                seasonReward: "Level 10 in S19",
-                distribution: "1,785",
-                trades: "7,558",
-                topSpeed: "~ 140 MPH",
-                hp: "175"
-            },
-            {
-                name: "Longhorn",
-                currentValue: "$1,500,000",
-                dupedValue: "$1,250,000",
-                demand: "4.32",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S18",
                 distribution: "1,833",
@@ -754,9 +783,8 @@
             {
                 name: "Manta",
                 currentValue: "$1,500,000",
-                dupedValue: "$1,250,000",
-                demand: "4.53",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
                 originalPrice: "Tier 5 Safes",
                 seasonReward: "—",
                 distribution: "12,906",
@@ -765,50 +793,10 @@
                 hp: "75"
             },
             {
-                name: "Megalodon",
-                currentValue: "$1,500,000",
-                dupedValue: "$1,250,000",
-                demand: "4.29",
-                demandLevel: "Medium",
-                originalPrice: "$300,000",
-                seasonReward: "—",
-                distribution: "2,959",
-                trades: "12,701",
-                topSpeed: "~ 220 MPH",
-                hp: "100"
-            },
-            {
-                name: "Revox",
-                currentValue: "$1,500,000",
-                dupedValue: "$1,000,000",
-                demand: "5.16",
-                demandLevel: "High",
-                originalPrice: "—",
-                seasonReward: "Level 10 in S25",
-                distribution: "4,671",
-                trades: "24,119",
-                topSpeed: "~ 195 MPH",
-                hp: "75"
-            },
-            {
-                name: "Striker",
-                currentValue: "$1,500,000",
-                dupedValue: "$1,250,000",
-                demand: "4.75",
-                demandLevel: "Medium",
-                originalPrice: "—",
-                seasonReward: "Level 10 in S20",
-                distribution: "2,734",
-                trades: "12,989",
-                topSpeed: "~ 170 MPH",
-                hp: "125"
-            },
-            {
                 name: "OG Monster",
-                currentValue: "$1,250,000",
-                dupedValue: "$1,000,000",
-                demand: "3.86",
-                demandLevel: "Medium",
+                currentValue: "$1,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S21",
                 distribution: "2,163",
@@ -817,50 +805,58 @@
                 hp: "150"
             },
             {
-                name: "Black Hawk",
-                currentValue: "$1,000,000",
-                dupedValue: "$750,000",
-                demand: "3.89",
+                name: "Revox",
+                currentValue: "$1,500,000",
+                dupedValue: "N/A",
                 demandLevel: "Medium",
-                originalPrice: "$1,000,000",
-                seasonReward: "—",
-                distribution: "18,111",
-                trades: "70,435",
-                topSpeed: "~ 130 MPH",
+                originalPrice: "—",
+                seasonReward: "Level 10 in S25",
+                distribution: "4,671",
+                trades: "24,119",
+                topSpeed: "~ 195 MPH",
                 hp: "75"
             },
             {
-                name: "Drone",
-                currentValue: "$1,000,000",
-                dupedValue: "$750,000",
-                demand: "4.47",
-                demandLevel: "Medium",
-                originalPrice: "$1,000,000",
-                seasonReward: "—",
-                distribution: "18,538",
-                trades: "82,854",
+                name: "Frost Crawler",
+                currentValue: "$1,250,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                originalPrice: "—",
+                seasonReward: "Level 10 in S19",
+                distribution: "1,785",
+                trades: "7,558",
                 topSpeed: "~ 140 MPH",
-                hp: "50"
+                hp: "175"
             },
             {
-                name: "Jet Fighter",
-                currentValue: "$1,000,000",
-                dupedValue: "$750,000",
-                demand: "3.89",
-                demandLevel: "Medium",
-                originalPrice: "$1,000,000",
+                name: "Megalodon",
+                currentValue: "$1,250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "$300,000",
                 seasonReward: "—",
-                distribution: "8,051",
-                trades: "31,344",
-                topSpeed: "~ 210 MPH",
-                hp: "75"
+                distribution: "2,959",
+                trades: "12,701",
+                topSpeed: "~ 220 MPH",
+                hp: "100"
+            },
+            {
+                name: "Striker",
+                currentValue: "$1,250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "—",
+                seasonReward: "Level 10 in S20",
+                distribution: "2,734",
+                trades: "12,989",
+                topSpeed: "~ 170 MPH",
+                hp: "125"
             },
             {
                 name: "Maverick",
                 currentValue: "$1,000,000",
-                dupedValue: "$750,000",
-                demand: "4.81",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S22",
                 distribution: "5,015",
@@ -871,9 +867,8 @@
             {
                 name: "Monster",
                 currentValue: "$1,000,000",
-                dupedValue: "$750,000",
-                demand: "4.29",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
                 originalPrice: "$1,000,000",
                 seasonReward: "—",
                 distribution: "4,183",
@@ -884,9 +879,8 @@
             {
                 name: "Sloop",
                 currentValue: "$1,000,000",
-                dupedValue: "$750,000",
-                demand: "2.70",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
                 originalPrice: "$1,000,000",
                 seasonReward: "—",
                 distribution: "704",
@@ -897,9 +891,8 @@
             {
                 name: "Tank",
                 currentValue: "$1,000,000",
-                dupedValue: "$750,000",
-                demand: "3.80",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
                 originalPrice: "$1,000,000",
                 seasonReward: "—",
                 distribution: "2,052",
@@ -908,11 +901,10 @@
                 hp: "200"
             },
             {
-                name: "Trailblazer",
+                name: "Trailblazer", /* Retained original name for consistency with existing data structure */
                 currentValue: "$1,000,000",
-                dupedValue: "$750,000",
-                demand: "4.13",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
                 originalPrice: "$1,000,000",
                 seasonReward: "—",
                 distribution: "3,973",
@@ -921,11 +913,10 @@
                 hp: "125"
             },
             {
-                name: "Volt Bike",
+                name: "Volt Bike", /* Retained original name for consistency with existing data structure */
                 currentValue: "$1,000,000",
-                dupedValue: "$750,000",
-                demand: "4.21",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Low",
                 originalPrice: "$1,000,000",
                 seasonReward: "—",
                 distribution: "43,084",
@@ -934,24 +925,46 @@
                 hp: "40"
             },
             {
-                name: "Venom",
-                currentValue: "$750,000",
-                dupedValue: "$500,000",
-                demand: "3.38",
-                demandLevel: "Medium",
-                originalPrice: "Tier 4 Safes",
+                name: "Black Hawk",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                originalPrice: "$1,000,000",
                 seasonReward: "—",
-                distribution: "6,223",
-                trades: "21,026",
-                topSpeed: "~ 235 MPH",
+                distribution: "18,111",
+                trades: "70,435",
+                topSpeed: "~ 130 MPH",
                 hp: "75"
+            },
+            {
+                name: "Jet Fighter", /* Retained original name for consistency with existing data structure */
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                originalPrice: "$1,000,000",
+                seasonReward: "—",
+                distribution: "8,051",
+                trades: "31,344",
+                topSpeed: "~ 210 MPH",
+                hp: "75"
+            },
+            {
+                name: "Drone",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                originalPrice: "$1,000,000",
+                seasonReward: "—",
+                distribution: "18,538",
+                trades: "82,854",
+                topSpeed: "~ 140 MPH",
+                hp: "50"
             },
             {
                 name: "Crown",
                 currentValue: "$666,000",
-                dupedValue: "Unavailable",
-                demand: "3.16",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Unknown",
                 originalPrice: "$666,000",
                 seasonReward: "—",
                 distribution: "1,183",
@@ -960,11 +973,22 @@
                 hp: "100"
             },
             {
+                name: "Venom",
+                currentValue: "$650,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "Tier 4 Safes",
+                seasonReward: "—",
+                distribution: "6,223",
+                trades: "21,026",
+                topSpeed: "~ 235 MPH",
+                hp: "75"
+            },
+            {
                 name: "Successor",
                 currentValue: "$649,000",
-                dupedValue: "Unavailable",
-                demand: "3.61",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Unknown",
                 originalPrice: "$649,000",
                 seasonReward: "—",
                 distribution: "10,581",
@@ -975,9 +999,8 @@
             {
                 name: "Eclaire",
                 currentValue: "$600,000",
-                dupedValue: "Unavailable",
-                demand: "3.71",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Unknown",
                 originalPrice: "$600,000",
                 seasonReward: "—",
                 distribution: "23,522",
@@ -986,11 +1009,22 @@
                 hp: "75"
             },
             {
+                name: "NASCAR 75th", /* Retained original name for consistency with existing data structure */
+                currentValue: "$600,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "NASCAR Event",
+                seasonReward: "—",
+                distribution: "3,144",
+                trades: "8,837",
+                topSpeed: "~ 150 MPH",
+                hp: "100"
+            },
+            {
                 name: "Roadster",
                 currentValue: "$600,000",
-                dupedValue: "Unavailable",
-                demand: "3.53",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Unknown",
                 originalPrice: "$600,000",
                 seasonReward: "—",
                 distribution: "28,220",
@@ -999,24 +1033,22 @@
                 hp: "75"
             },
             {
-                name: "Hammerhead",
+                name: "Classic",
                 currentValue: "$500,000",
-                dupedValue: "$250,000",
-                demand: "3.10",
-                demandLevel: "Medium",
-                originalPrice: "Tier 3 Safes",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "$50,000",
                 seasonReward: "—",
-                distribution: "10,010",
-                trades: "31,013",
-                topSpeed: "~ 200 MPH",
-                hp: "125"
+                distribution: "2,517",
+                trades: "5,584",
+                topSpeed: "~ 130 MPH",
+                hp: "100"
             },
             {
                 name: "Mighty",
                 currentValue: "$500,000",
-                dupedValue: "$350,000",
-                demand: "2.22",
-                demandLevel: "Low",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
                 originalPrice: "$25,000",
                 seasonReward: "—",
                 distribution: "2,057",
@@ -1025,11 +1057,46 @@
                 hp: "100"
             },
             {
+                name: "Posh",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "$70,000",
+                seasonReward: "—",
+                distribution: "3,350",
+                trades: "8,441",
+                topSpeed: "~ 165 MPH",
+                hp: "100"
+            },
+            {
+                name: "SUV",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "$40,000",
+                seasonReward: "—",
+                distribution: "2,592",
+                trades: "5,698",
+                topSpeed: "~ 145 MPH",
+                hp: "125"
+            },
+            {
+                name: "Steed",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "$50,000",
+                seasonReward: "—",
+                distribution: "1,561",
+                trades: "3,463",
+                topSpeed: "~ 150 MPH",
+                hp: "100"
+            },
+            {
                 name: "UFO",
                 currentValue: "$500,000",
-                dupedValue: "Unavailable",
-                demand: "3.55",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Unknown",
                 originalPrice: "$500,000",
                 seasonReward: "—",
                 distribution: "4,965",
@@ -1038,11 +1105,22 @@
                 hp: "100"
             },
             {
-                name: "Stunt Plane",
+                name: "Hammerhead", /* Retained original name for consistency with existing data structure */
                 currentValue: "$300,000",
-                dupedValue: "Unavailable",
-                demand: "2.89",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "Tier 3 Safes",
+                seasonReward: "—",
+                distribution: "10,010",
+                trades: "31,013",
+                topSpeed: "~ 200 MPH",
+                hp: "125"
+            },
+            {
+                name: "Stunt Plane", /* Retained original name for consistency with existing data structure */
+                currentValue: "$300,000",
+                dupedValue: "N/A",
+                demandLevel: "Unknown",
                 originalPrice: "$300,000",
                 seasonReward: "—",
                 distribution: "6,191",
@@ -1053,9 +1131,8 @@
             {
                 name: "XRK",
                 currentValue: "$299,000",
-                dupedValue: "Unavailable",
-                demand: "3.17",
-                demandLevel: "Medium",
+                dupedValue: "N/A",
+                demandLevel: "Unknown",
                 originalPrice: "$299,000",
                 seasonReward: "—",
                 distribution: "11,277",
@@ -1064,23 +1141,21 @@
                 hp: "100"
             },
             {
-                name: "Classic",
+                name: "OG Matador", /* Retained original name for consistency with existing data structure */
                 currentValue: "$250,000",
-                dupedValue: "$100,000",
-                demand: "2.22",
-                demandLevel: "Low",
-                originalPrice: "$50,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "OG Live Event",
                 seasonReward: "—",
-                distribution: "2,517",
-                trades: "5,584",
-                topSpeed: "~ 130 MPH",
+                distribution: "4,305",
+                trades: "12,678",
+                topSpeed: "~ 215 MPH",
                 hp: "100"
             },
             {
                 name: "Expeditioner",
                 currentValue: "$250,000",
                 dupedValue: "$100,000",
-                demand: "2.26",
                 demandLevel: "Low",
                 originalPrice: "Tier 1 Safes",
                 seasonReward: "—",
@@ -1093,7 +1168,6 @@
                 name: "Fiasco",
                 currentValue: "$250,000",
                 dupedValue: "$100,000",
-                demand: "2.34",
                 demandLevel: "Low",
                 originalPrice: "Tier 1 Safes",
                 seasonReward: "—",
@@ -1106,7 +1180,6 @@
                 name: "Laviolette",
                 currentValue: "$250,000",
                 dupedValue: "$100,000",
-                demand: "2.43",
                 demandLevel: "Low",
                 originalPrice: "Tier 2 Safes",
                 seasonReward: "—",
@@ -1116,49 +1189,9 @@
                 hp: "100"
             },
             {
-                name: "NASCAR 75th",
-                currentValue: "$250,000",
-                dupedValue: "$100,000",
-                demand: "2.81",
-                demandLevel: "Medium",
-                originalPrice: "NASCAR Event",
-                seasonReward: "—",
-                distribution: "3,144",
-                trades: "8,837",
-                topSpeed: "~ 150 MPH",
-                hp: "100"
-            },
-            {
-                name: "OG Matador",
-                currentValue: "$250,000",
-                dupedValue: "$100,000",
-                demand: "2.94",
-                demandLevel: "Medium",
-                originalPrice: "OG Live Event",
-                seasonReward: "—",
-                distribution: "4,305",
-                trades: "12,678",
-                topSpeed: "~ 215 MPH",
-                hp: "100"
-            },
-            {
-                name: "Posh",
-                currentValue: "$250,000",
-                dupedValue: "$100,000",
-                demand: "2.52",
-                demandLevel: "Medium",
-                originalPrice: "$70,000",
-                seasonReward: "—",
-                distribution: "3,350",
-                trades: "8,441",
-                topSpeed: "~ 165 MPH",
-                hp: "100"
-            },
-            {
                 name: "Sentinel",
                 currentValue: "$250,000",
                 dupedValue: "Unavailable",
-                demand: "2.99",
                 demandLevel: "Medium",
                 originalPrice: "$250,000",
                 seasonReward: "—",
@@ -1171,7 +1204,6 @@
                 name: "Speed Yacht",
                 currentValue: "$250,000",
                 dupedValue: "Unavailable",
-                demand: "2.30",
                 demandLevel: "Low",
                 originalPrice: "$250,000",
                 seasonReward: "—",
@@ -1181,36 +1213,9 @@
                 hp: "100"
             },
             {
-                name: "Steed",
-                currentValue: "$250,000",
-                dupedValue: "$100,000",
-                demand: "2.22",
-                demandLevel: "Low",
-                originalPrice: "$50,000",
-                seasonReward: "—",
-                distribution: "1,561",
-                trades: "3,463",
-                topSpeed: "~ 150 MPH",
-                hp: "100"
-            },
-            {
-                name: "SUV",
-                currentValue: "$250,000",
-                dupedValue: "$100,000",
-                demand: "2.20",
-                demandLevel: "Low",
-                originalPrice: "$40,000",
-                seasonReward: "—",
-                distribution: "2,592",
-                trades: "5,698",
-                topSpeed: "~ 145 MPH",
-                hp: "125"
-            },
-            {
                 name: "Crawler",
                 currentValue: "$229,000",
                 dupedValue: "Unavailable",
-                demand: "3.12",
                 demandLevel: "Medium",
                 originalPrice: "$229,000",
                 seasonReward: "—",
@@ -1223,7 +1228,6 @@
                 name: "Stallion",
                 currentValue: "$200,000",
                 dupedValue: "Unavailable",
-                demand: "3.29",
                 demandLevel: "Medium",
                 originalPrice: "$200,000",
                 seasonReward: "—",
@@ -1236,7 +1240,6 @@
                 name: "Ray 9",
                 currentValue: "$199,000",
                 dupedValue: "Unavailable",
-                demand: "3.09",
                 demandLevel: "Medium",
                 originalPrice: "$199,000",
                 seasonReward: "—",
@@ -1249,7 +1252,6 @@
                 name: "Little Bird",
                 currentValue: "$190,000",
                 dupedValue: "Unavailable",
-                demand: "2.76",
                 demandLevel: "Medium",
                 originalPrice: "$190,000",
                 seasonReward: "—",
@@ -1262,7 +1264,6 @@
                 name: "DeLorean",
                 currentValue: "$175,000",
                 dupedValue: "Unavailable",
-                demand: "2.70",
                 demandLevel: "Medium",
                 originalPrice: "$175,000",
                 seasonReward: "—",
@@ -1275,7 +1276,6 @@
                 name: "Firetruck",
                 currentValue: "$175,000",
                 dupedValue: "Unavailable",
-                demand: "2.28",
                 demandLevel: "Low",
                 originalPrice: "$175,000",
                 seasonReward: "—",
@@ -1288,7 +1288,6 @@
                 name: "Falcon S",
                 currentValue: "$150,000",
                 dupedValue: "Unavailable",
-                demand: "2.65",
                 demandLevel: "Medium",
                 originalPrice: "$150,000",
                 seasonReward: "—",
@@ -1301,7 +1300,6 @@
                 name: "Prison Bus",
                 currentValue: "$150,000",
                 dupedValue: "Unavailable",
-                demand: "2.52",
                 demandLevel: "Medium",
                 originalPrice: "$150,000",
                 seasonReward: "—",
@@ -1314,7 +1312,6 @@
                 name: "Surus",
                 currentValue: "$109,000",
                 dupedValue: "Unavailable",
-                demand: "2.76",
                 demandLevel: "Medium",
                 originalPrice: "$109,000",
                 seasonReward: "—",
@@ -1327,7 +1324,6 @@
                 name: "Cybertruck",
                 currentValue: "$100,000",
                 dupedValue: "Unavailable",
-                demand: "2.80",
                 demandLevel: "Medium",
                 originalPrice: "$100,000",
                 seasonReward: "—",
@@ -1340,7 +1336,6 @@
                 name: "Escape Bot",
                 currentValue: "$100,000",
                 dupedValue: "Unavailable",
-                demand: "2.68",
                 demandLevel: "Medium",
                 originalPrice: "CEO Reward",
                 seasonReward: "—",
@@ -1353,7 +1348,6 @@
                 name: "La Matador",
                 currentValue: "$100,000",
                 dupedValue: "Unavailable",
-                demand: "3.03",
                 demandLevel: "Medium",
                 originalPrice: "$100,000",
                 seasonReward: "—",
@@ -1366,7 +1360,6 @@
                 name: "Semi Truck",
                 currentValue: "$100,000",
                 dupedValue: "Unavailable",
-                demand: "2.35",
                 demandLevel: "Low",
                 originalPrice: "$100,000",
                 seasonReward: "—",
@@ -1377,27 +1370,2242 @@
             }
         ];
 
+        const texturesData = [
+            {
+                name: "Checker",
+                currentValue: "$37,000,000",
+                dupedValue: "$32,000,000",
+                demandLevel: "Decent",
+                testingAccess: "25 Robux",
+                distribution: "718 Copies",
+                trades: "2,912 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "233/500 Score"
+            },
+            {
+                name: "Drip",
+                currentValue: "$19,000,000",
+                dupedValue: "N/A",
+                demandLevel: "High",
+                seasonReward: "Level 8 in S5",
+                distribution: "1,144 Copies",
+                trades: "4,316 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "344/500 Score"
+            },
+            {
+                name: "Snowstorm",
+                currentValue: "$6,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
+                seasonReward: "Level 5 in S1",
+                distribution: "231 Copies",
+                trades: "543 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "370/500 Score"
+            },
+            {
+                name: "Galactic", /* Kept original name for consistency */
+                currentValue: "$4,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 8 in S2",
+                distribution: "617 Copies",
+                trades: "1,708 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "395/500 Score"
+            },
+            {
+                name: "Fire",
+                currentValue: "$3,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 8 in S1",
+                distribution: "430 Copies",
+                trades: "1,249 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "353/500 Score"
+            },
+            {
+                name: "Blue Pixel",
+                currentValue: "$2,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 50 in S2",
+                distribution: "567 Copies",
+                trades: "1,517 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "348/500 Score"
+            },
+            {
+                name: "Winter Camo",
+                currentValue: "$2,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                seasonReward: "1% XP in S7",
+                distribution: "444 Copies",
+                trades: "1,238 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "352/500 Score"
+            },
+            {
+                name: "Black Ice",
+                currentValue: "$2,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Medium",
+                seasonReward: "Level 8 in S7",
+                distribution: "273 Copies",
+                trades: "610 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "361/500 Score"
+            },
+            {
+                name: "Earthquake",
+                currentValue: "$2,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 5 in S4",
+                distribution: "146 Copies",
+                trades: "289 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "373/500 Score"
+            },
+            {
+                name: "Old Town", /* Kept original name for consistency */
+                currentValue: "$2,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 10 in S9",
+                distribution: "124 Copies",
+                trades: "205 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "388/500 Score"
+            },
+            {
+                name: "Armor",
+                currentValue: "$1,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                requirement: "Event Code",
+                distribution: "307 Copies",
+                trades: "612 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "359/500 Score"
+            },
+            {
+                name: "Manga",
+                currentValue: "$1,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Medium",
+                seasonReward: "Level 8 in S15",
+                distribution: "1,868 Copies",
+                trades: "5,204 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "325/500 Score"
+            },
+            {
+                name: "Orange Pixel",
+                currentValue: "$1,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                seasonReward: "Level 50 in S2",
+                distribution: "802 Copies",
+                trades: "2,491 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "337/500 Score"
+            },
+            {
+                name: "Tiger",
+                currentValue: "$1,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Medium",
+                originalPrice: "$5,000",
+                distribution: "1,290 Copies",
+                trades: "3,647 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "329/500 Score"
+            },
+            {
+                name: "Pixel",
+                currentValue: "$1,250,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                requirement: "Played Beta",
+                distribution: "5,436 Copies",
+                trades: "19,225 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "179/500 Score"
+            },
+            {
+                name: "Berlin Graffiti",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 8 in S17",
+                distribution: "1,479 Copies",
+                trades: "3,191 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "327/500 Score"
+            },
+            {
+                name: "Circuits",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 8 in S8",
+                distribution: "383 Copies",
+                trades: "791 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "352/500 Score"
+            },
+            {
+                name: "Crimson Racer",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                seasonReward: "Level 8 in S6",
+                distribution: "649 Copies",
+                trades: "1,351 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "343/500 Score"
+            },
+            {
+                name: "Confetti", /* Kept original name for consistency */
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 4 in S3",
+                distribution: "1,068 Copies",
+                trades: "2,359 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "383/500 Score"
+            },
+            {
+                name: "Earth",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "$5,000",
+                distribution: "219 Copies",
+                trades: "379 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "363/500 Score"
+            },
+            {
+                name: "Lightning",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "$5,000",
+                distribution: "150 Copies",
+                trades: "250 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "369/500 Score"
+            },
+            {
+                name: "White Marble",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                seasonReward: "Level 8 in S10",
+                distribution: "1,005 Copies",
+                trades: "2,399 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "334/500 Score"
+            },
+            {
+                name: "Bacon",
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "$5,000",
+                distribution: "697 Copies",
+                trades: "1,223 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "341/500 Score"
+            },
+            {
+                name: "Field",
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "$20,000",
+                distribution: "239 Copies",
+                trades: "365 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "360/500 Score"
+            },
+            {
+                name: "Flaming",
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                seasonReward: "5% XP in S6",
+                distribution: "989 Copies",
+                trades: "2,259 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "333/500 Score"
+            },
+            {
+                name: "Yellow Glow", /* Kept original name for consistency */
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "$5,000",
+                distribution: "235 Copies",
+                trades: "339 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "383/500 Score"
+            },
+            {
+                name: "Hotdog",
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "$5,000",
+                distribution: "190 Copies",
+                trades: "323 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "363/500 Score"
+            },
+            {
+                name: "Money",
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "$5,000",
+                distribution: "296 Copies",
+                trades: "487 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "356/500 Score"
+            },
+            {
+                name: "Wavy",
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "$5,000",
+                distribution: "353 Copies",
+                trades: "562 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "354/500 Score"
+            },
+            {
+                name: "Aquatic",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 6 in S16",
+                distribution: "2,374 Copies",
+                trades: "5,544 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "315/500 Score"
+            },
+            {
+                name: "Bandana",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 8 in S18",
+                distribution: "983 Copies",
+                trades: "1,857 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "332/500 Score"
+            },
+            {
+                name: "Camo Radar",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 8 in S12",
+                distribution: "257 Copies",
+                trades: "445 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "351/500 Score"
+            },
+            {
+                name: "Gulf",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "10% XP in S6",
+                distribution: "1,396 Copies",
+                trades: "3,078 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "325/500 Score"
+            },
+            {
+                name: "Lava",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 8 in S13",
+                distribution: "462 Copies",
+                trades: "934 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "344/500 Score"
+            },
+            {
+                name: "Superstar",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "2% XP in S10",
+                distribution: "1,013 Copies",
+                trades: "1,935 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "327/500 Score"
+            },
+            {
+                name: "Carbon Fire",
+                currentValue: "$325,000",
+                dupedValue: "N/A",
+                demandLevel: "Unknown",
+                vaultReward: "Tier 5 Safes",
+                distribution: "1,434 Copies",
+                trades: "2,323 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "194/500 Score"
+            },
+            {
+                name: "Aurora",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 8 in S19",
+                distribution: "782 Copies",
+                trades: "1,591 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "331/500 Score"
+            },
+            {
+                name: "Comic Convict",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                requirement: "Graffiti Event",
+                distribution: "501 Copies",
+                trades: "724 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "213/500 Score"
+            },
+            {
+                name: "Ogre 2017",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 8 in S21",
+                distribution: "930 Copies",
+                trades: "1,778 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "333/500 Score"
+            },
+            {
+                name: "Retrowave",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 8 in S23",
+                distribution: "1,623 Copies",
+                trades: "2,966 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "320/500 Score"
+            },
+            {
+                name: "Road Hazard",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 8 in S20",
+                distribution: "790 Copies",
+                trades: "1,375 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "332/500 Score"
+            },
+            {
+                name: "Star Spangled", /* Kept original name for consistency */
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 8 in S22",
+                distribution: "1,973 Copies",
+                trades: "3,548 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "321/500 Score"
+            },
+            {
+                name: "Touchdown",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 4 in S14",
+                distribution: "1,297 Copies",
+                trades: "2,264 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "324/500 Score"
+            },
+            {
+                name: "Wooden Toy",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 6 in S11",
+                distribution: "854 Copies",
+                trades: "1,525 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "331/500 Score"
+            },
+            {
+                name: "Alpine Racer",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 6 in S24",
+                distribution: "2,296 Copies",
+                trades: "3,929 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "314/500 Score"
+            },
+            {
+                name: "Snake Skin",
+                currentValue: "250",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Blue Pixel Racer",
+                currentValue: "200,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Dragon Scales",
+                currentValue: "$100,000",
+                dupedValue: "N/A",
+                demandLevel: "Unknown",
+                obtainablePrice: "$100,000",
+                distribution: "214 Copies",
+                trades: "275 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "210/500 Score"
+            },
+            {
+                name: "Road Warrior",
+                currentValue: "$150,000",
+                dupedValue: "Unavailable",
+                demandLevel: "Very Low",
+                vaultReward: "Tier 4 Safes",
+                distribution: "336 Copies",
+                trades: "461 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "223/500 Score"
+            },
+            {
+                name: "Purple Flame",
+                currentValue: "$120,000",
+                dupedValue: "Unavailable",
+                demandLevel: "Low",
+                obtainablePrice: "$120,000",
+                distribution: "1,492 Copies",
+                trades: "2,270 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "232/500 Score"
+            },
+            {
+                name: "ClassicVar1",
+                currentValue: "$100,000",
+                dupedValue: "Unavailable",
+                demandLevel: "Very Low",
+                originalPrice: "$4,000",
+                distribution: "2,239 Copies",
+                trades: "3,065 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "188/500 Score"
+            },
+            {
+                name: "ClassicVar3",
+                currentValue: "$100,000",
+                dupedValue: "Unavailable",
+                demandLevel: "Very Low",
+                originalPrice: "$10,000",
+                distribution: "1,074 Copies",
+                trades: "1,374 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "201/500 Score"
+            },
+            {
+                name: "Ladybug",
+                currentValue: "$100,000",
+                dupedValue: "Unavailable",
+                demandLevel: "Very Low",
+                originalPrice: "$10,000",
+                distribution: "1,793 Copies",
+                trades: "2,522 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "192/500 Score"
+            },
+            {
+                name: "Peach",
+                currentValue: "$100,000",
+                dupedValue: "Unavailable",
+                demandLevel: "Very Low",
+                originalPrice: "$10,000",
+                distribution: "1,645 Copies",
+                trades: "2,286 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "193/500 Score"
+            },
+            {
+                name: "SWAT Graffiti",
+                currentValue: "$100,000",
+                dupedValue: "Unavailable",
+                demandLevel: "Close to none",
+                requirement: "Graffiti Event",
+                distribution: "❓ Not Available",
+                trades: "❓ Not Available",
+                seasonPass: "Not Applicable",
+                collectorRarity: "248/500 Score"
+            }
+        ];
+
+        const rimsData = [
+            {
+                name: "Void",
+                currentValue: "$40,000,000",
+                dupedValue: "$38,000,000",
+                demandLevel: "Medium",
+                seasonReward: "Level 9 in S1",
+                distribution: "187 Copies",
+                trades: "853 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "375/500 Score"
+            },
+            {
+                name: "Laser Cannon",
+                currentValue: "$24,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
+                seasonReward: "Level 9 in S13",
+                distribution: "623 Copies",
+                trades: "2,038 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "359/500 Score"
+            },
+            {
+                name: "Spinner",
+                currentValue: "$16,500,000",
+                dupedValue: "$13,000,000",
+                demandLevel: "Decent",
+                vaultReward: "5/’17 to 6/’17",
+                distribution: "184 Copies",
+                trades: "748 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "250/500 Score"
+            },
+            {
+                name: "RTX",
+                currentValue: "$14,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
+                seasonReward: "Level 9 in S5",
+                distribution: "169 Copies",
+                trades: "506 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "378/500 Score"
+            },
+            {
+                name: "Snow Face",
+                currentValue: "$6,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 9 in S7",
+                distribution: "74 Copies",
+                trades: "115 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "391/500 Score"
+            },
+            {
+                name: "Icicle",
+                currentValue: "$3,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 5 in S7",
+                distribution: "136 Copies",
+                trades: "292 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "377/500 Score"
+            },
+            {
+                name: "Ionize",
+                currentValue: "$3,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
+                seasonReward: "Level 7 in S8",
+                distribution: "227 Copies",
+                trades: "411 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "368/500 Score"
+            },
+            {
+                name: "Hypno",
+                currentValue: "$3,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                vaultReward: "06/’18 to 6/’18",
+                distribution: "296 Copies",
+                trades: "721 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "239/500 Score"
+            },
+            {
+                name: "Snowflake",
+                currentValue: "$3,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                vaultReward: "5/’17 to 6/’17",
+                distribution: "150 Copies",
+                trades: "313 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "252/500 Score"
+            },
+            {
+                name: "Brickset",
+                currentValue: "$2,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                requirement: "Redeem Code",
+                distribution: "164 Copies",
+                trades: "393 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "231/500 Score"
+            },
+            {
+                name: "Planetary",
+                currentValue: "$2,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 3 in S2",
+                distribution: "203 Copies",
+                trades: "396 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "369/500 Score"
+            },
+            {
+                name: "Blue Eyes",
+                currentValue: "$2,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                seasonReward: "Level 40 in S3",
+                distribution: "97 Copies",
+                trades: "177 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "381/500 Score"
+            },
+            {
+                name: "Track Toy",
+                currentValue: "$2,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 5 in S11",
+                distribution: "757 Copies",
+                trades: "1,660 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "344/500 Score"
+            },
+            {
+                name: "Iron Rock",
+                currentValue: "$1,750,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 5 in S9",
+                distribution: "101 Copies",
+                trades: "157 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "379/500 Score"
+            },
+            {
+                name: "Center Lock",
+                currentValue: "$1,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 7 in S6",
+                distribution: "101 Copies",
+                trades: "152 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "380/500 Score"
+            },
+            {
+                name: "Engraved", /* Renamed to match the new input for "Diamond Engrave" */
+                currentValue: "$1,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 9 in S10",
+                distribution: "230 Copies",
+                trades: "407 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "388/500 Score"
+            },
+            {
+                name: "Radar",
+                currentValue: "$1,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 9 in S12",
+                distribution: "114 Copies",
+                trades: "195 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "377/500 Score"
+            },
+            {
+                name: "Sakura",
+                currentValue: "$1,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Medium",
+                seasonReward: "Level 9 in S15",
+                distribution: "183 Copies",
+                trades: "335 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "365/500 Score"
+            },
+            {
+                name: "Stance",
+                currentValue: "$1,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Medium",
+                seasonReward: "Level 7 in S15",
+                distribution: "288 Copies",
+                trades: "540 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "360/500 Score"
+            },
+            {
+                name: "Wagon Wheel",
+                currentValue: "$1,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 9 in S18",
+                distribution: "120 Copies",
+                trades: "185 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "374/500 Score"
+            },
+            {
+                name: "Blue Portal",
+                currentValue: "$1,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                requirement: "Walmart Event",
+                distribution: "2,246 Copies",
+                trades: "5,850 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "197/500 Score"
+            },
+            {
+                name: "Bull",
+                currentValue: "$1,250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 6 in S1",
+                distribution: "388 Copies",
+                trades: "708 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "353/500 Score"
+            },
+            {
+                name: "Frostburn",
+                currentValue: "$1,250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 9 in S19",
+                distribution: "146 Copies",
+                trades: "228 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "370/500 Score"
+            },
+            {
+                name: "Red Eyes",
+                currentValue: "$1,250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 40 in S3",
+                distribution: "133 Copies",
+                trades: "209 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "373/500 Score"
+            },
+            {
+                name: "Spider Leg",
+                currentValue: "$1,250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 10 in S1",
+                distribution: "128 Copies",
+                trades: "227 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "373/500 Score"
+            },
+            {
+                name: "Star Badge",
+                currentValue: "$1,250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 10 in S1",
+                distribution: "144 Copies",
+                trades: "245 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "371/500 Score"
+            },
+            {
+                name: "Daytona",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                requirement: "NASCAR Event",
+                distribution: "111 Copies",
+                trades: "169 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "253/500 Score"
+            },
+            {
+                name: "Distorted",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                seasonReward: "Level 20 in S3",
+                distribution: "214 Copies",
+                trades: "393 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "363/500 Score"
+            },
+            {
+                name: "Doubloon",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                vaultReward: "Tier 4 Safes",
+                distribution: "86 Copies",
+                trades: "122 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "253/500 Score"
+            },
+            {
+                name: "Energized",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                seasonReward: "2% XP in S8",
+                distribution: "429 Copies",
+                trades: "813 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "351/500 Score"
+            },
+            {
+                name: "Nemesis",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                seasonReward: "Level 20 in S3",
+                distribution: "260 Copies",
+                trades: "501 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "359/500 Score"
+            },
+            {
+                name: "Retrowave",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 9 in S23",
+                distribution: "296 Copies",
+                trades: "475 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "357/500 Score"
+            },
+            {
+                name: "Rubber Ducky",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                seasonReward: "Level 7 in S16",
+                distribution: "206 Copies",
+                trades: "339 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "364/500 Score"
+            },
+            {
+                name: "Soccer",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                soccerGoal: "3/’19 to 4/’20",
+                distribution: "129 Copies",
+                trades: "213 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "250/500 Score"
+            },
+            {
+                name: "Sparkler",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 9 in S22",
+                distribution: "276 Copies",
+                trades: "450 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "359/500 Score"
+            },
+            {
+                name: "Tumbleweed", /* Kept original name for consistency */
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 7 in S18",
+                distribution: "106 Copies",
+                trades: "158 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "372/500 Score"
+            },
+            {
+                name: "Pixeltary",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                seasonReward: "Level 9 in S25",
+                distribution: "331 Copies",
+                trades: "585 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "356/500 Score"
+            },
+            {
+                name: "Storm",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "$333,000",
+                distribution: "691 Copies",
+                trades: "1,171 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "220/500 Score"
+            },
+            {
+                name: "Baller",
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 3 in S14",
+                distribution: "152 Copies",
+                trades: "227 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "366/500 Score"
+            },
+            {
+                name: "Biohazard",
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 3 in S20",
+                distribution: "160 Copies",
+                trades: "233 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "360/500 Score"
+            },
+            {
+                name: "Cloverleaf", /* Kept original name for consistency */
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 7 in S17",
+                distribution: "172 Copies",
+                trades: "257 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "381/500 Score"
+            },
+            {
+                name: "Fore",
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 7 in S14",
+                distribution: "139 Copies",
+                trades: "207 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "367/500 Score"
+            },
+            {
+                name: "Handcuff",
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 6 in S21",
+                distribution: "191 Copies",
+                trades: "304 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "361/500 Score"
+            },
+            {
+                name: "Hatch Voids", /* Kept original name for consistency */
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                requirement: "Hatch Event",
+                distribution: "❓ Not Available",
+                trades: "❓ Not Available",
+                seasonPass: "Not Applicable",
+                collectorRarity: "259/500 Score"
+            },
+            {
+                name: "Sled Void",
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 5 in S24",
+                distribution: "511 Copies",
+                trades: "919 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "346/500 Score"
+            },
+            {
+                name: "Beadlock",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 6 in S9",
+                distribution: "254 Copies",
+                trades: "407 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "356/500 Score"
+            },
+            {
+                name: "Bonded",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                soccerGoal: "5/’21 to 1/’22",
+                distribution: "190 Copies",
+                trades: "226 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "236/500 Score"
+            },
+            {
+                name: "Compass",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 8 in S4",
+                distribution: "210 Copies",
+                trades: "363 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "359/500 Score"
+            },
+            {
+                name: "Live 2020",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                requirement: "2020 Live Event",
+                distribution: "435 Copies",
+                trades: "796 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "227/500 Score"
+            },
+            {
+                name: "Marshmallow",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 3 in S19",
+                distribution: "119 Copies",
+                trades: "162 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "366/500 Score"
+            },
+            {
+                name: "Roll-X",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 4 in S10",
+                distribution: "1,086 Copies",
+                trades: "1,881 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "331/500 Score"
+            },
+            {
+                name: "Sawblade", /* Kept original name for consistency */
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "2% XP in S13",
+                distribution: "861 Copies",
+                trades: "1,475 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "335/500 Score"
+            },
+            {
+                name: "Forged",
+                currentValue: "$300,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                obtainablePrice: "$300,000*",
+                distribution: "378 Copies",
+                trades: "517 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "208/500 Score"
+            },
+            {
+                name: "Boom Speaker", /* Kept original name for consistency */
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                vaultReward: "Tier 5 Safes",
+                distribution: "2,382 Copies",
+                trades: "3,334 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "254/500 Score"
+            },
+            {
+                name: "Dino",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "$50,000",
+                distribution: "143 Copies",
+                trades: "200 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "240/500 Score"
+            },
+            {
+                name: "Peppermint",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 6 in S19",
+                distribution: "747 Copies",
+                trades: "1,174 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "334/500 Score"
+            },
+            {
+                name: "Piggy",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                requirement: "Piggy Event",
+                distribution: "2,630 Copies",
+                trades: "4,246 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "190/500 Score"
+            },
+            {
+                name: "Retro Racer",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 2 in S6",
+                distribution: "1,252 Copies",
+                trades: "1,968 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "325/500 Score"
+            },
+            {
+                name: "Ice Crystal", /* Kept original name for consistency */
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 2 in S24",
+                distribution: "7,355 Copies",
+                trades: "12,020 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "295/500 Score"
+            },
+            {
+                name: "Abstracts",
+                currentValue: "$120,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                obtainablePrice: "$120,000",
+                distribution: "1,492 Copies",
+                trades: "2,270 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "232/500 Score"
+            },
+            {
+                name: "Beachball",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Shutter Shade",
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Ship Wheel",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "UK Heritage",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Spixel",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Jungle Palm",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low"
+            },
+            {
+                name: "Dragon Chaser",
+                currentValue: "$200,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "RFX",
+                currentValue: "$150,000",
+                dupedValue: "N/A",
+                demandLevel: "Unknown"
+            },
+            {
+                name: "Scope",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Spyglass",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Teddy Bear",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Tesseract",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Trion",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Unknown Signal",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Evil Eye", /* Added from previous data, as it was missed in the initial rimsData construction */
+                currentValue: "$250,000",
+                dupedValue: "$100,000",
+                demandLevel: "Very Low",
+                vaultReward: "Tier 5 Safes",
+                distribution: "2,688 Copies",
+                trades: "3,957 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "191/500 Score"
+            },
+            {
+                name: "EXP-1", /* Added from previous data, as it was missed in the initial rimsData construction */
+                currentValue: "$250,000",
+                dupedValue: "$100,000",
+                demandLevel: "Very Low",
+                soccerGoal: "3/’23 to 4/’24",
+                distribution: "996 Copies",
+                trades: "1,377 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "208/500 Score"
+            }
+        ];
+
+        const spoilersData = [
+            {
+                name: "Thrusters",
+                currentValue: "$32,000,000",
+                dupedValue: "$29,000,000",
+                demandLevel: "Decent",
+                seasonReward: "Level 9 in S2",
+                distribution: "323 Copies",
+                trades: "1,698 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "361/500 Score"
+            },
+            {
+                name: "2 Billion",
+                currentValue: "$8,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Decent",
+                requirement: "2 Billion Event",
+                distribution: "133 Copies",
+                trades: "255 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "260/500 Score"
+            },
+            {
+                name: "Snow Shovel",
+                currentValue: "$7,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Medium",
+                seasonReward: "Level 7 in S7",
+                distribution: "92 Copies",
+                trades: "143 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "388/500 Score"
+            },
+            {
+                name: "Bicycle Rack",
+                currentValue: "$6,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 9 in S9",
+                distribution: "97 Copies",
+                trades: "198 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "387/500 Score"
+            },
+            {
+                name: "Volt Wing",
+                currentValue: "$4,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 9 in S3",
+                distribution: "77 Copies",
+                trades: "142 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "388/500 Score"
+            },
+            {
+                name: "5 Star",
+                currentValue: "$3,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 45 in S4",
+                distribution: "118 Copies",
+                trades: "227 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "380/500 Score"
+            },
+            {
+                name: "Eight Leg",
+                currentValue: "$3,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 45 in S1",
+                distribution: "113 Copies",
+                trades: "207 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "382/500 Score"
+            },
+            {
+                name: "Velocity",
+                currentValue: "$3,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 5 in S6",
+                distribution: "125 Copies",
+                trades: "208 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "379/500 Score"
+            },
+            {
+                name: "Cash Spitter",
+                currentValue: "$2,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Medium",
+                seasonReward: "Level 7 in S10",
+                distribution: "606 Copies",
+                trades: "1,471 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "349/500 Score"
+            },
+            {
+                name: "Clickbait",
+                currentValue: "$2,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 3 in S5",
+                distribution: "114 Copies",
+                trades: "197 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "381/500 Score"
+            },
+            {
+                name: "Glider",
+                currentValue: "$2,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                seasonReward: "Level 7 in S9",
+                distribution: "81 Copies",
+                trades: "126 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "386/500 Score"
+            },
+            {
+                name: "Tiki Torch",
+                currentValue: "$2,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                seasonReward: "Level 9 in S4",
+                distribution: "72 Copies",
+                trades: "104 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "389/500 Score"
+            },
+            {
+                name: "Brickset",
+                currentValue: "$2,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                requirement: "Redeem Code",
+                distribution: "145 Copies",
+                trades: "320 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "234/500 Score"
+            },
+            {
+                name: "Dual Rockets",
+                currentValue: "$2,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                seasonReward: "Level 50 in S4",
+                distribution: "1,215 Copies",
+                trades: "3,691 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "332/500 Score"
+            },
+            {
+                name: "Colors of Italy",
+                currentValue: "$1,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 9 in S17",
+                distribution: "241 Copies",
+                trades: "428 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "364/500 Score"
+            },
+            {
+                name: "Endurance Wing",
+                currentValue: "$1,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 9 in S14",
+                distribution: "145 Copies",
+                trades: "221 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "390/500 Score"
+            },
+            {
+                name: "Flamethrower",
+                currentValue: "$1,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 5 in S13",
+                distribution: "267 Copies",
+                trades: "530 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "361/500 Score"
+            },
+            {
+                name: "Jetpack",
+                currentValue: "$1,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 9 in S11",
+                distribution: "247 Copies",
+                trades: "507 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "362/500 Score"
+            },
+            {
+                name: "Mecha Arm",
+                currentValue: "$1,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 5 in S8",
+                distribution: "149 Copies",
+                trades: "295 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "372/500 Score"
+            },
+            {
+                name: "Water Gun",
+                currentValue: "$1,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 7 in S11",
+                distribution: "553 Copies",
+                trades: "1,255 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "347/500 Score"
+            },
+            {
+                name: "After Burner",
+                currentValue: "$1,250,000",
+                dupedValue: "N/A",
+                demandLevel: "Low",
+                seasonReward: "Level 7 in S12", // From first dataset
+                distribution: "165 Copies", // From first dataset
+                trades: "293 Trades", // From first dataset
+                seasonPass: "Pass Exclusive", // From first dataset
+                collectorRarity: "367/500 Score" // From first dataset
+            },
+            {
+                name: "Blue Chute",
+                currentValue: "$1,250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 25 in S4",
+                distribution: "259 Copies",
+                trades: "583 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "359/500 Score"
+            },
+            {
+                name: "Death Ray",
+                currentValue: "$1,250,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                seasonReward: "Level 3 in S13",
+                distribution: "280 Copies",
+                trades: "555 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "359/500 Score"
+            },
+            {
+                name: "Dual Flags",
+                currentValue: "$1,250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                soccerGoal: "7/’18 to 3/’19",
+                distribution: "262 Copies",
+                trades: "446 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "238/500 Score"
+            },
+            {
+                name: "Shell Speaker",
+                currentValue: "$1,250,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                seasonReward: "Level 9 in S16",
+                distribution: "171 Copies",
+                trades: "315 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "369/500 Score"
+            },
+            {
+                name: "UFO",
+                currentValue: "$1,250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 50 in S4",
+                distribution: "735 Copies",
+                trades: "1,812 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "339/500 Score"
+            },
+            {
+                name: "JDM",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                seasonReward: "Level 6 in S6",
+                distribution: "728 Copies",
+                trades: "1,337 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "342/500 Score"
+            },
+            {
+                name: "Snow Cannon",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 5 in S19",
+                distribution: "204 Copies",
+                trades: "382 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "361/500 Score"
+            },
+            {
+                name: "Spare",
+                currentValue: "$1,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                requirement: "Storage Pass",
+                distribution: "347 Copies",
+                trades: "671 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "232/500 Score"
+            },
+            {
+                name: "Guitar Riff",
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low",
+                seasonReward: "Level 7 in S23",
+                distribution: "397 Copies",
+                trades: "696 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "351/500 Score"
+            },
+            {
+                name: "Orange Chute",
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 25 in S4",
+                distribution: "476 Copies",
+                trades: "1,039 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "346/500 Score"
+            },
+            {
+                name: "Overdrive",
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 4 in S8",
+                distribution: "923 Copies",
+                trades: "1,920 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "335/500 Score"
+            },
+            {
+                name: "Star Wing",
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 4 in S2",
+                distribution: "636 Copies",
+                trades: "1,168 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "343/500 Score"
+            },
+            {
+                name: "Surfboard Rack",
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 3 in S16", // From first dataset
+                distribution: "149 Copies", // From first dataset
+                trades: "206 Trades", // From first dataset
+                seasonPass: "Pass Exclusive", // From first dataset
+                collectorRarity: "383/500 Score" // From first dataset
+            },
+            {
+                name: "Triple Fin",
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 15 in S4",
+                distribution: "367 Copies",
+                trades: "620 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "352/500 Score"
+            },
+            {
+                name: "Bamboo Shooters",
+                currentValue: "$750,000",
+                dupedValue: "N/A",
+                demandLevel: "Very Low"
+            },
+            {
+                name: "3 Billion",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "$30,000",
+                distribution: "1,124 Copies",
+                trades: "2,208 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "210/500 Score"
+            },
+            {
+                name: "Bull",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 5 in S18", // From first dataset (Bull Horns)
+                distribution: "94 Copies", // From first dataset (Bull Horns)
+                trades: "163 Trades", // From first dataset (Bull Horns)
+                seasonPass: "Pass Exclusive", // From first dataset (Bull Horns)
+                collectorRarity: "381/500 Score" // From first dataset (Bull Horns)
+            },
+            {
+                name: "Death Trap",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 6 in S4",
+                distribution: "359 Copies",
+                trades: "658 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "349/500 Score"
+            },
+            {
+                name: "Glider Shop",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 7 in S21",
+                distribution: "213 Copies",
+                trades: "345 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "359/500 Score"
+            },
+            {
+                name: "Japanese Lantern",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Live Glider",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                requirement: "2022 Live Event",
+                distribution: "476 Copies",
+                trades: "785 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "226/500 Score"
+            },
+            {
+                name: "OG Rocket Thrusters",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 4 in S21",
+                distribution: "5,120 Copies",
+                trades: "11,308 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "381/500 Score"
+            },
+            {
+                name: "Robo Wing",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 15 in S4",
+                distribution: "687 Copies",
+                trades: "1,204 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "339/500 Score"
+            },
+            {
+                name: "SawBlade",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Snow Log",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 4 in S7",
+                distribution: "463 Copies",
+                trades: "774 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "346/500 Score"
+            },
+            {
+                name: "Tuner",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 6 in S5",
+                distribution: "186 Copies",
+                trades: "263 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "363/500 Score"
+            },
+            {
+                name: "Turning Key",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "2% XP in S11",
+                distribution: "448 Copies",
+                trades: "820 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "346/500 Score"
+            },
+            {
+                name: "Waving Flag",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Windmill",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 3 in S18",
+                distribution: "116 Copies",
+                trades: "193 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "369/500 Score"
+            },
+            {
+                name: "Hazards",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 3 in S24",
+                distribution: "298 Copies",
+                trades: "459 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "354/500 Score"
+            },
+            {
+                name: "Arcade Racer",
+                currentValue: "$500,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 5 in S25",
+                distribution: "256 Copies",
+                trades: "386 Trades",
+                seasonPass: "Pass Exclusive",
+                collectorRarity: "352/500 Score"
+            },
+            {
+                name: "5B Flags",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                originalPrice: "$50,000",
+                distribution: "308 Copies",
+                trades: "471 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "227/500 Score"
+            },
+            {
+                name: "6 Billion",
+                currentValue: "$250,000",
+                dupedValue: "$100,000",
+                demandLevel: "Very Low",
+                originalPrice: "$10,000",
+                distribution: "307 Copies",
+                trades: "422 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "227/500 Score"
+            },
+            {
+                name: "DoYouLift",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 6 in S14",
+                distribution: "474 Copies",
+                trades: "766 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "341/500 Score"
+            },
+            {
+                name: "Leaning Wing Of Pisa",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Laser Wire",
+                currentValue: "$250,000",
+                dupedValue: "$100,000",
+                demandLevel: "Very Low",
+                soccerGoal: "4/’24 to 3/’25",
+                distribution: "861 Copies",
+                trades: "1,209 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "210/500 Score"
+            },
+            {
+                name: "RC Antenna",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 4 in S11",
+                distribution: "1,001 Copies",
+                trades: "1,613 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "329/500 Score"
+            },
+            {
+                name: "Tank Wing",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Torii Gate",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Trade Sail",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                requirement: "Trading Release",
+                distribution: "293 Copies",
+                trades: "392 Trades",
+                seasonPass: "Not Applicable",
+                collectorRarity: "233/500 Score"
+            },
+            {
+                name: "Travel Case",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Trophy Wings",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Vintage Wings",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Rally Spotlight",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none",
+                seasonReward: "Level 8 in S24",
+                distribution: "882 Copies",
+                trades: "1,414 Trades",
+                seasonPass: "Free Reward",
+                collectorRarity: "336/500 Score"
+            },
+            {
+                name: "Snake Guard",
+                currentValue: "$250,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "Skull",
+                currentValue: "$200,000",
+                dupedValue: "N/A",
+                demandLevel: "Close to none"
+            },
+            {
+                name: "King",
+                currentValue: "$150,000",
+                dupedValue: "N/A",
+                demandLevel: "Unknown"
+            },
+            {
+                name: "Spares",
+                currentValue: "$150,000",
+                dupedValue: "N/A",
+                demandLevel: "Unknown"
+            }
+        ];
+
+        const hyperchromesData = [
+            {
+                name: "HyperShift",
+                currentValue: "$340,000,000",
+                dupedValue: "$305,000,000",
+                demandLevel: "Medium"
+            },
+            {
+                name: "HyperShift Level 4",
+                currentValue: "$250,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Medium"
+            },
+            {
+                name: "HyperDiamond Level 5",
+                currentValue: "$70,000,000",
+                dupedValue: "$60,000,000",
+                demandLevel: "Decent"
+            },
+            {
+                name: "HyperBlue Level 5",
+                currentValue: "$67,500,000",
+                dupedValue: "$50,000,000",
+                demandLevel: "Low"
+            },
+            {
+                name: "HyperBlue Level 4",
+                currentValue: "$60,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Decent"
+            },
+            {
+                name: "HyperDiamond Level 4",
+                currentValue: "$47,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Decent"
+            },
+            {
+                name: "HyperPink Level 5",
+                currentValue: "$46,000,000",
+                dupedValue: "$42,000,000",
+                demandLevel: "Decent"
+            },
+            {
+                name: "HyperRed Level 5",
+                currentValue: "$46,000,000",
+                dupedValue: "$42,000,000",
+                demandLevel: "Decent"
+            },
+            {
+                name: "HyperPurple Level 5",
+                currentValue: "$40,000,000",
+                dupedValue: "$38,000,000",
+                demandLevel: "Decent"
+            },
+            {
+                name: "HyperPink Level 4",
+                currentValue: "$36,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Decent"
+            },
+            {
+                name: "HyperRed Level 4",
+                currentValue: "$35,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Decent"
+            },
+            {
+                name: "HyperBlue Level 3",
+                currentValue: "$29,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Decent"
+            },
+            {
+                name: "HyperOrange Level 5",
+                currentValue: "$27,500,000",
+                dupedValue: "$26,500,000",
+                demandLevel: "Decent"
+            },
+            {
+                name: "HyperPurple Level 4",
+                currentValue: "$27,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Decent"
+            },
+            {
+                name: "HyperGreen Level 5",
+                currentValue: "$25,000,000",
+                dupedValue: "$22,500,000",
+                demandLevel: "Medium"
+            },
+            {
+                name: "HyperDiamond Level 3",
+                currentValue: "$22,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Decent"
+            },
+            {
+                name: "HyperGreen Level 4",
+                currentValue: "$18,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Medium"
+            },
+            {
+                name: "HyperOrange Level 4",
+                currentValue: "$18,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Decent"
+            },
+            {
+                name: "HyperYellow Level 5",
+                currentValue: "$17,500,000",
+                dupedValue: "$16,000,000",
+                demandLevel: "Decent"
+            },
+            {
+                name: "HyperYellow Level 4",
+                currentValue: "$12,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Medium"
+            },
+            {
+                name: "HyperPink Level 3",
+                currentValue: "$11,500,000",
+                dupedValue: "N/A",
+                demandLevel: "Medium"
+            },
+            {
+                name: "HyperRed Level 3",
+                currentValue: "$11,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Medium"
+            },
+            {
+                name: "HyperPurple Level 3",
+                currentValue: "$10,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Medium"
+            },
+            {
+                name: "HyperGreen Level 3",
+                currentValue: "$8,000,000",
+                dupedValue: "N/A",
+                demandLevel: "Medium"
+            }
+        ];
+
         // Get DOM elements
-        const vehicleContainer = document.getElementById('vehicle-container');
+        const itemContainer = document.getElementById('item-container');
+        const searchBar = document.getElementById('search-bar');
+        const categoryTitle = document.getElementById('category-title');
+        const vehiclesButton = document.getElementById('vehicles-button');
+        const texturesButton = document.getElementById('textures-button');
+        const rimsButton = document.getElementById('rims-button');
+        const spoilersButton = document.getElementById('spoilers-button'); // Get the new button
+        const hyperchromesButton = document.getElementById('hyperchromes-button');
 
-        // Function to create a single vehicle card
-        function createVehicleCard(vehicle) {
+        let currentActiveData = vehiclesData; // Default to vehicles
+        let currentCategoryName = "Vehicle"; // Default category title
+
+        // Function to create a single item card (can be vehicle or texture or hyperchrome or rim or spoiler)
+        function createItemCard(item) {
             const card = document.createElement('div');
-            // Assign a unique ID to each card for easy updates
-            card.id = `vehicle-${vehicle.name.replace(/\s/g, '-')}`;
-            card.classList.add('vehicle-card');
+            card.id = `item-${item.name.replace(/\s/g, '-')}`;
+            card.classList.add('item-card');
 
-            // Add vehicle name as a heading
             const name = document.createElement('h2');
-            name.textContent = vehicle.name;
+            name.textContent = item.name;
             card.appendChild(name);
 
-            // Current Value Block
+            // Current Value / Cash Value Block
+            const currentValueLabel = (currentCategoryName === "Hyperchrome" || currentCategoryName === "Rim" || currentCategoryName === "Spoiler") ? "Cash Value" : "Current Value";
             const currentValueBlock = document.createElement('div');
             currentValueBlock.classList.add('value-block');
             currentValueBlock.innerHTML = `
-                <span class="value-block-label">Current Value</span>
-                <span class="value-block-amount current-value-display">${vehicle.currentValue}</span>
+                <span class="value-block-label">${currentValueLabel}</span>
+                <span class="value-block-amount current-value-display">${item.currentValue}</span>
             `;
             card.appendChild(currentValueBlock);
 
@@ -1406,64 +3614,199 @@
             dupedValueBlock.classList.add('value-block');
             dupedValueBlock.innerHTML = `
                 <span class="value-block-label">Duped Value</span>
-                <span class="value-block-amount duped-value-display">${vehicle.dupedValue}</span>
+                <span class="value-block-amount duped-value-display">${item.dupedValue}</span>
             `;
             card.appendChild(dupedValueBlock);
 
             // Demand Block
             const demandBlock = document.createElement('div');
             demandBlock.classList.add('demand-block');
-            // Normalize demand level for CSS class (e.g., "Very High" -> "very-high")
-            const demandLevelClass = vehicle.demandLevel ? vehicle.demandLevel.toLowerCase().replace(/\s/g, '-') : 'unknown';
+            const demandLevelClass = item.demandLevel ? item.demandLevel.toLowerCase().replace(/\s/g, '-') : 'unknown';
             demandBlock.innerHTML = `
                 <span class="demand-label">Demand</span>
-                <span class="demand-level-pill demand-level-${demandLevelClass}">${vehicle.demandLevel}</span>
+                <span class="demand-level-pill demand-level-${demandLevelClass}">${item.demandLevel}</span>
             `;
             card.appendChild(demandBlock);
 
-            // Separator
-            const separator = document.createElement('div');
-            separator.classList.add('separator');
-            card.appendChild(separator);
+            // Only add separator and details section if not a Hyperchrome
+            if (currentCategoryName !== "Hyperchrome") {
+                const separator = document.createElement('div');
+                separator.classList.add('separator');
+                card.appendChild(separator);
 
-            // Condensed Details Section
-            const detailsSection = document.createElement('div');
-            detailsSection.classList.add('details-section');
+                const detailsSection = document.createElement('div');
+                detailsSection.classList.add('details-section');
 
-            // Function to create a detail item
-            const createDetailItem = (label, value) => {
-                const item = document.createElement('div');
-                item.classList.add('detail-item');
-                item.innerHTML = `
-                    <span class="detail-label">${label}:</span>
-                    <span class="detail-value">${value}</span>
-                `;
-                return item;
-            };
+                // Helper to create a detail item
+                const createDetailItem = (label, value) => {
+                    if (value === undefined || value === null || value === "—" || value === "❓ Not Available" || value === "N/A") {
+                        return null; // Don't create item if value is empty or specific placeholders
+                    }
+                    const itemDiv = document.createElement('div');
+                    itemDiv.classList.add('detail-item');
+                    itemDiv.innerHTML = `
+                        <span class="detail-label">${label}:</span>
+                        <span class="detail-value">${value}</span>
+                    `;
+                    return itemDiv;
+                };
 
-            detailsSection.appendChild(createDetailItem("Original Price", vehicle.originalPrice));
-            detailsSection.appendChild(createDetailItem("Season Reward", vehicle.seasonReward));
-            detailsSection.appendChild(createDetailItem("Distribution", vehicle.distribution));
-            detailsSection.appendChild(createDetailItem("Trades", vehicle.trades));
-            detailsSection.appendChild(createDetailItem("Top Speed", vehicle.topSpeed));
-            detailsSection.appendChild(createDetailItem("HP", vehicle.hp));
-            // Removed Repair Time: detailsSection.appendChild(createDetailItem("Repair Time", vehicle.repairTime));
-            card.appendChild(detailsSection);
+                // Dynamically add details based on item properties for Vehicles/Textures/Rims/Spoilers
+                let acquisitionDetailItem = null;
+                if (item.originalPrice) {
+                    acquisitionDetailItem = createDetailItem("Original Price", item.originalPrice);
+                } else if (item.obtainablePrice) {
+                    acquisitionDetailItem = createDetailItem("Obtainable Price", item.obtainablePrice);
+                } else if (item.testingAccess) {
+                    acquisitionDetailItem = createDetailItem("Testing Access", item.testingAccess);
+                } else if (item.vaultReward) {
+                    acquisitionDetailItem = createDetailItem("Vault Reward", item.vaultReward);
+                } else if (item.requirement) {
+                    acquisitionDetailItem = createDetailItem("Requirement", item.requirement);
+                }
+                if (acquisitionDetailItem) detailsSection.appendChild(acquisitionDetailItem);
+
+                let seasonInfoItem = null;
+                if (item.seasonReward) {
+                    seasonInfoItem = createDetailItem("Season Reward", item.seasonReward);
+                } else if (item.seasonPass) {
+                    seasonInfoItem = createDetailItem("Season Pass", item.seasonPass);
+                }
+                if (seasonInfoItem) detailsSection.appendChild(seasonInfoItem);
+
+                const distributionItem = createDetailItem("Distribution", item.distribution);
+                if (distributionItem) detailsSection.appendChild(distributionItem);
+
+                const tradesItem = createDetailItem("Trades", item.trades);
+                if (tradesItem) detailsSection.appendChild(tradesItem);
+
+                if (item.topSpeed !== undefined) {
+                    const topSpeedItem = createDetailItem("Top Speed", item.topSpeed);
+                    if (topSpeedItem) detailsSection.appendChild(topSpeedItem);
+                }
+                if (item.hp !== undefined) {
+                    const hpItem = createDetailItem("HP", item.hp);
+                    if (hpItem) detailsSection.appendChild(hpItem);
+                }
+
+                if (item.collectorRarity !== undefined) {
+                    const collectorRarityItem = createDetailItem("Collector Rarity", item.collectorRarity);
+                    if (collectorRarityItem) detailsSection.appendChild(collectorRarityItem);
+                }
+                if (item.soccerGoal !== undefined) {
+                    const soccerGoalItem = createDetailItem("Soccer Goal", item.soccerGoal);
+                    if (soccerGoalItem) detailsSection.appendChild(soccerGoalItem);
+                }
+                card.appendChild(detailsSection);
+            }
 
             return card;
         }
 
-        // Function to render all vehicle cards
-        function renderVehicleCards() {
-            vehicleContainer.innerHTML = ''; // Clear existing cards
-            vehicles.forEach(vehicle => {
-                const card = createVehicleCard(vehicle);
-                vehicleContainer.appendChild(card);
+        // Function to render items based on the active data array
+        function renderItems(itemsToRender) {
+            itemContainer.innerHTML = ''; // Clear existing cards
+            if (itemsToRender.length === 0) {
+                itemContainer.innerHTML = '<p style="text-align: center; width: 100%; margin-top: 2rem; color: #cbd5e0;">No items found matching your search.</p>';
+                return;
+            }
+            itemsToRender.forEach(item => {
+                const card = createItemCard(item);
+                itemContainer.appendChild(card);
             });
         }
 
-        // Initial render of cards when the page loads
-        document.addEventListener('DOMContentLoaded', renderVehicleCards);
+        // Function to filter items based on search term
+        function filterItems(searchTerm) {
+            const lowerCaseSearchTerm = searchTerm.toLowerCase();
+            return currentActiveData.filter(item =>
+                item.name.toLowerCase().includes(lowerCaseSearchTerm) ||
+                (item.demandLevel && item.demandLevel.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                (item.currentValue && item.currentValue.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                (item.dupedValue && item.dupedValue.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                // Include other fields for filtering only if they exist for the current item type
+                (currentCategoryName !== "Hyperchrome" && item.originalPrice && item.originalPrice.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                (currentCategoryName !== "Hyperchrome" && item.seasonReward && item.seasonReward.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                (currentCategoryName !== "Hyperchrome" && item.testingAccess && item.testingAccess.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                (currentCategoryName !== "Hyperchrome" && item.obtainablePrice && item.obtainablePrice.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                (currentCategoryName !== "Hyperchrome" && item.vaultReward && item.vaultReward.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                (currentCategoryName !== "Hyperchrome" && item.requirement && item.requirement.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                (currentCategoryName !== "Hyperchrome" && item.seasonPass && item.seasonPass.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                (currentCategoryName !== "Hyperchrome" && item.collectorRarity && item.collectorRarity.toLowerCase().includes(lowerCaseSearchTerm)) ||
+                (currentCategoryName !== "Hyperchrome" && item.soccerGoal && item.soccerGoal.toLowerCase().includes(lowerCaseSearchTerm))
+            );
+        }
+
+        // Function to set active button
+        function setActiveButton(activeButton) {
+            vehiclesButton.classList.remove('active');
+            texturesButton.classList.remove('active');
+            rimsButton.classList.remove('active');
+            spoilersButton.classList.remove('active'); // Deactivate new button
+            hyperchromesButton.classList.remove('active');
+            activeButton.classList.add('active');
+        }
+
+        // Event listener for the search bar
+        searchBar.addEventListener('input', (event) => {
+            const filteredItems = filterItems(event.target.value);
+            renderItems(filteredItems);
+        });
+
+        // Event listener for Vehicles button
+        vehiclesButton.addEventListener('click', () => {
+            currentActiveData = vehiclesData;
+            currentCategoryName = "Vehicle";
+            categoryTitle.textContent = "Vehicle Collection";
+            searchBar.value = ''; // Clear search bar
+            renderItems(currentActiveData);
+            setActiveButton(vehiclesButton);
+        });
+
+        // Event listener for Textures button
+        texturesButton.addEventListener('click', () => {
+            currentActiveData = texturesData;
+            currentCategoryName = "Texture";
+            categoryTitle.textContent = "Texture Collection";
+            searchBar.value = ''; // Clear search bar
+            renderItems(currentActiveData);
+            setActiveButton(texturesButton);
+        });
+
+        // Event listener for Rims button
+        rimsButton.addEventListener('click', () => {
+            currentActiveData = rimsData;
+            currentCategoryName = "Rim";
+            categoryTitle.textContent = "Rim Collection";
+            searchBar.value = ''; // Clear search bar
+            renderItems(currentActiveData);
+            setActiveButton(rimsButton);
+        });
+
+        // Event listener for Spoilers button
+        spoilersButton.addEventListener('click', () => {
+            currentActiveData = spoilersData;
+            currentCategoryName = "Spoiler";
+            categoryTitle.textContent = "Spoiler Collection";
+            searchBar.value = ''; // Clear search bar
+            renderItems(currentActiveData);
+            setActiveButton(spoilersButton);
+        });
+
+        // Event listener for Hyperchromes button
+        hyperchromesButton.addEventListener('click', () => {
+            currentActiveData = hyperchromesData;
+            currentCategoryName = "Hyperchrome";
+            categoryTitle.textContent = "Hyperchrome Collection";
+            searchBar.value = ''; // Clear search bar
+            renderItems(currentActiveData);
+            setActiveButton(hyperchromesButton);
+        });
+
+        // Initial render of cards when the page loads (default to vehicles)
+        document.addEventListener('DOMContentLoaded', () => {
+            renderItems(currentActiveData);
+        });
     </script>
 </body>
 </html>
