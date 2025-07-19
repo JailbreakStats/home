@@ -762,7 +762,7 @@
             {
                 name: "Javelin",
                 currentValue: "$44,000,000",
-                dupedValue: "N/A",
+                dupedValue: "$48,000,000", // UPDATED
                 demandLevel: "Decent",
                 originalPrice: "$929,929",
                 seasonReward: "—",
@@ -774,7 +774,7 @@
             },
             {
                 name: "Beignet",
-                currentValue: "$38,500,000",
+                currentValue: "$37,000,000", // UPDATED
                 dupedValue: "$35,000,000",
                 demandLevel: "High",
                 originalPrice: "—",
@@ -787,8 +787,8 @@
             },
             {
                 name: "Celsior",
-                currentValue: "$32,500,000",
-                dupedValue: "$30,000,000",
+                currentValue: "$31,000,000", // UPDATED
+                dupedValue: "$29,000,000", // UPDATED
                 demandLevel: "Medium",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S8",
@@ -801,7 +801,7 @@
             {
                 name: "Proto-08",
                 currentValue: "$30,000,000",
-                dupedValue: "N/A",
+                dupedValue: "$35,000,000", // UPDATED
                 demandLevel: "High",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S14",
@@ -813,7 +813,7 @@
             },
             {
                 name: "Arachnid",
-                currentValue: "$24,500,000",
+                currentValue: "$25,000,000", // UPDATED
                 dupedValue: "$20,000,000",
                 demandLevel: "Decent",
                 originalPrice: "$750,000",
@@ -878,7 +878,7 @@
             },
             {
                 name: "Crew Capsule",
-                currentValue: "$14,000,000",
+                currentValue: "$16,000,000", // UPDATED
                 dupedValue: "N/A",
                 demandLevel: "High",
                 originalPrice: "—",
@@ -917,9 +917,9 @@
             },
             {
                 name: "Volt 4x4",
-                currentValue: "$11,500,000",
+                currentValue: "$11,000,000", // UPDATED
                 dupedValue: "N/A",
-                demandLevel: "Medium",
+                demandLevel: "Low", // UPDATED
                 originalPrice: "—",
                 seasonReward: "Level 10 in S3",
                 distribution: "1,484",
@@ -1921,7 +1921,7 @@
         const texturesData = [
             {
                 name: "Checker",
-                currentValue: "$37,000,000",
+                currentValue: "$38,000,000", // UPDATED
                 dupedValue: "$32,000,000",
                 demandLevel: "Decent",
                 testingAccess: "25 Robux",
@@ -2120,7 +2120,7 @@
                 distribution: "383 Copies",
                 trades: "791 Trades",
                 seasonPass: "Free Reward",
-                collectorRarity: "352/500 Score",
+                collectorRarity: "351/500 Score",
                 avoided: "false"
             },
             {
@@ -2586,7 +2586,7 @@
             },
             {
                 name: "Laser Cannon",
-                currentValue: "$24,000,000",
+                currentValue: "$25,000,000", // UPDATED
                 dupedValue: "N/A",
                 demandLevel: "Decent",
                 seasonReward: "Level 9 in S13",
@@ -4221,21 +4221,21 @@
             {
                 name: "HyperPink Level 5",
                 currentValue: "$46,000,000",
-                dupedValue: "$42,000,000",
+                dupedValue: "$43,000,000", // UPDATED
                 demandLevel: "Decent",
                 avoided: "false"
             },
             {
                 name: "HyperRed Level 5",
-                currentValue: "$46,000,000",
-                dupedValue: "$42,000,000",
+                currentValue: "$45,000,000", // UPDATED
+                dupedValue: "$41,000,000", // UPDATED
                 demandLevel: "Decent",
                 avoided: "false"
             },
             {
                 name: "HyperPurple Level 5",
-                currentValue: "$40,000,000",
-                dupedValue: "$38,000,000",
+                currentValue: "$46,000,000", // UPDATED
+                dupedValue: "$40,000,000", // UPDATED
                 demandLevel: "Decent",
                 avoided: "false"
             },
@@ -4262,8 +4262,8 @@
             },
             {
                 name: "HyperOrange Level 5",
-                currentValue: "$27,500,000",
-                dupedValue: "$26,500,000",
+                currentValue: "$30,000,000", // UPDATED
+                dupedValue: "$27,500,000", // UPDATED
                 demandLevel: "Decent",
                 avoided: "false"
             },
@@ -4707,7 +4707,7 @@
 
             const offeringTotal = calculateTotal(offeringItems);
             const requestingTotal = calculateTotal(requestingItems);
-            const difference = offeringTotal - requestingTotal;
+            const difference = requestingTotal - offeringTotal; // UPDATED: Requesting - Offering
 
             offeringTotalSpan.textContent = `$${offeringTotal.toLocaleString()}`;
             requestingTotalSpan.textContent = `$${requestingTotal.toLocaleString()}`;
