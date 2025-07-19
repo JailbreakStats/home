@@ -647,6 +647,109 @@
                 max-width: 90%; /* Make difference section responsive */
             }
         }
+
+        /* Custom Modal Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001; /* Above other content */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: #2d3748;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 25rem;
+            width: 90%;
+            color: #ffffff;
+            border: 1px solid #63b3ed;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .modal-overlay.visible .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-content h3 {
+            font-size: 1.5rem;
+            color: #63b3ed;
+            margin-bottom: 1rem;
+        }
+
+        .modal-content p {
+            font-size: 1rem;
+            color: #e2e8f0;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .modal-button {
+            background-color: #f97316;
+            color: #1a202c;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+        }
+
+        .modal-button:hover {
+            background-color: #ea580c;
+            transform: translateY(-2px);
+        }
+
+        .modal-button.cancel {
+            background-color: #4a5568;
+            color: #e2e8f0;
+        }
+
+        .modal-button.cancel:hover {
+            background-color: #6b7280;
+        }
+
+        /* Custom Message Box (for non-confirm alerts) */
+        #custom-message-box {
+            position: fixed;
+            top: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            z-index: 9999;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            font-size: 1rem;
+            font-weight: bold;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -743,6 +846,21 @@
         <img src="https://static.vecteezy.com/system/resources/previews/018/930/718/non_2x/discord-logo-discord-icon-transparent-free-png.png" alt="Discord Icon">
     </button>
 
+    <!-- Custom Modal for Clean/Duped Value Selection -->
+    <div id="value-selection-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="modal-item-name"></h3>
+            <p>Select the value for this item:</p>
+            <div class="modal-buttons">
+                <button id="modal-clean-button" class="modal-button"></button>
+                <button id="modal-duped-button" class="modal-button"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Message Box -->
+    <div id="custom-message-box"></div>
+
     <script>
         // Data arrays for different categories
         const vehiclesData = [
@@ -762,7 +880,7 @@
             {
                 name: "Javelin",
                 currentValue: "$44,000,000",
-                dupedValue: "$48,000,000", // UPDATED
+                dupedValue: "$48,000,000",
                 demandLevel: "Decent",
                 originalPrice: "$929,929",
                 seasonReward: "—",
@@ -774,7 +892,7 @@
             },
             {
                 name: "Beignet",
-                currentValue: "$37,000,000", // UPDATED
+                currentValue: "$37,000,000",
                 dupedValue: "$35,000,000",
                 demandLevel: "High",
                 originalPrice: "—",
@@ -787,8 +905,8 @@
             },
             {
                 name: "Celsior",
-                currentValue: "$31,000,000", // UPDATED
-                dupedValue: "$29,000,000", // UPDATED
+                currentValue: "$31,000,000",
+                dupedValue: "$29,000,000",
                 demandLevel: "Medium",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S8",
@@ -801,7 +919,7 @@
             {
                 name: "Proto-08",
                 currentValue: "$30,000,000",
-                dupedValue: "$35,000,000", // UPDATED
+                dupedValue: "$35,000,000",
                 demandLevel: "High",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S14",
@@ -813,7 +931,7 @@
             },
             {
                 name: "Arachnid",
-                currentValue: "$25,000,000", // UPDATED
+                currentValue: "$25,000,000",
                 dupedValue: "$20,000,000",
                 demandLevel: "Decent",
                 originalPrice: "$750,000",
@@ -878,7 +996,7 @@
             },
             {
                 name: "Crew Capsule",
-                currentValue: "$16,000,000", // UPDATED
+                currentValue: "$16,000,000",
                 dupedValue: "N/A",
                 demandLevel: "High",
                 originalPrice: "—",
@@ -917,9 +1035,9 @@
             },
             {
                 name: "Volt 4x4",
-                currentValue: "$11,000,000", // UPDATED
+                currentValue: "$11,000,000",
                 dupedValue: "N/A",
-                demandLevel: "Low", // UPDATED
+                demandLevel: "Low",
                 originalPrice: "—",
                 seasonReward: "Level 10 in S3",
                 distribution: "1,484",
@@ -1921,7 +2039,7 @@
         const texturesData = [
             {
                 name: "Checker",
-                currentValue: "$38,000,000", // UPDATED
+                currentValue: "$38,000,000",
                 dupedValue: "$32,000,000",
                 demandLevel: "Decent",
                 testingAccess: "25 Robux",
@@ -2586,7 +2704,7 @@
             },
             {
                 name: "Laser Cannon",
-                currentValue: "$25,000,000", // UPDATED
+                currentValue: "$25,000,000",
                 dupedValue: "N/A",
                 demandLevel: "Decent",
                 seasonReward: "Level 9 in S13",
@@ -3344,8 +3462,7 @@
             {
                 name: "RFX",
                 currentValue: "$150,000",
-                dupedValue: "N/A",
-                demandLevel: "Unknown",
+                dupedValue: "Unknown",
                 avoided: "false"
             },
             {
@@ -4221,21 +4338,21 @@
             {
                 name: "HyperPink Level 5",
                 currentValue: "$46,000,000",
-                dupedValue: "$43,000,000", // UPDATED
+                dupedValue: "$43,000,000",
                 demandLevel: "Decent",
                 avoided: "false"
             },
             {
                 name: "HyperRed Level 5",
-                currentValue: "$45,000,000", // UPDATED
-                dupedValue: "$41,000,000", // UPDATED
+                currentValue: "$45,000,000",
+                dupedValue: "$41,000,000",
                 demandLevel: "Decent",
                 avoided: "false"
             },
             {
                 name: "HyperPurple Level 5",
-                currentValue: "$46,000,000", // UPDATED
-                dupedValue: "$40,000,000", // UPDATED
+                currentValue: "$46,000,000",
+                dupedValue: "$40,000,000",
                 demandLevel: "Decent",
                 avoided: "false"
             },
@@ -4262,8 +4379,8 @@
             },
             {
                 name: "HyperOrange Level 5",
-                currentValue: "$30,000,000", // UPDATED
-                dupedValue: "$27,500,000", // UPDATED
+                currentValue: "$30,000,000",
+                dupedValue: "$27,500,000",
                 demandLevel: "Decent",
                 avoided: "false"
             },
@@ -4357,7 +4474,7 @@
 
         // Helper function to parse currency strings into numbers for sorting and calculation
         function parseCurrencyToNumber(currencyString) {
-            if (!currencyString || currencyString === "N/A" || currencyString === "Unavailable" || currencyString === "—") {
+            if (!currencyString || currencyString === "N/A" || currencyString === "Unavailable" || currencyString === "—" || currencyString === "Unknown") {
                 return 0; // Treat N/A or unavailable as 0 for sorting purposes
             }
             // Remove '$' and commas, then parse as integer
@@ -4404,6 +4521,14 @@
         const clearAllButton = document.getElementById('clear-all-button');
         const calculatorSearchBar = document.getElementById('calculator-search-bar');
         const calculatorItemContainer = document.getElementById('calculator-item-container');
+
+        // Custom Modal elements
+        const valueSelectionModal = document.getElementById('value-selection-modal');
+        const modalItemName = document.getElementById('modal-item-name');
+        const modalCleanButton = document.getElementById('modal-clean-button');
+        const modalDupedButton = document.getElementById('modal-duped-button');
+        const customMessageBox = document.getElementById('custom-message-box');
+
 
         // Calculator state
         let offeringItems = [];
@@ -4500,7 +4625,7 @@
 
                 // Helper to create a detail item
                 const createDetailItem = (label, value) => {
-                    if (value === undefined || value === null || value === "—" || value === "❓ Not Available" || value === "N/A") {
+                    if (value === undefined || value === null || value === "—" || value === "❓ Not Available" || value === "N/A" || value === "Unknown") {
                         return null; // Don't create item if value is empty or specific placeholders
                     }
                     const itemDiv = document.createElement('div');
@@ -4568,11 +4693,11 @@
 
                 const offerButton = document.createElement('button');
                 offerButton.textContent = 'Offer';
-                offerButton.addEventListener('click', () => addItemToSide(item, 'offering'));
+                offerButton.addEventListener('click', () => handleAddItemClick(item, 'offering'));
 
                 const requestButton = document.createElement('button');
                 requestButton.textContent = 'Request';
-                requestButton.addEventListener('click', () => addItemToSide(item, 'requesting'));
+                requestButton.addEventListener('click', () => handleAddItemClick(item, 'requesting'));
 
                 actionButtons.appendChild(offerButton);
                 actionButtons.appendChild(requestButton);
@@ -4639,25 +4764,60 @@
         }
 
         // Calculator Functions
-        function addItemToSide(item, side) {
+
+        // Helper to check if a value string is "valid" (not N/A, Unavailable, —, Unknown)
+        function isValidValue(valueString) {
+            return valueString && valueString !== "N/A" && valueString !== "Unavailable" && valueString !== "—" && valueString !== "Unknown";
+        }
+
+        // Handles the click on "Offer" or "Request" buttons
+        async function handleAddItemClick(item, side) {
+            let selectedValue = null;
+            let isDuped = false;
+
+            // Check if the item is already in either list (by name)
+            const isAlreadyInOffering = offeringItems.some(i => i.name === item.name);
+            const isAlreadyInRequesting = requestingItems.some(i => i.name === item.name);
+
+            if (isAlreadyInOffering || isAlreadyInRequesting) {
+                showCustomMessage('This item is already in one of the trade lists!');
+                return;
+            }
+
+            // Check if there's a valid duped value
+            if (isValidValue(item.dupedValue)) {
+                // Show modal to choose clean or duped
+                const choice = await showValueSelectionModal(item.name, item.currentValue, item.dupedValue);
+                if (choice === 'clean') {
+                    selectedValue = item.currentValue;
+                    isDuped = false;
+                } else if (choice === 'duped') {
+                    selectedValue = item.dupedValue;
+                    isDuped = true;
+                } else {
+                    // User cancelled the modal, do not add item
+                    return;
+                }
+            } else {
+                // No duped value, use current value directly
+                selectedValue = item.currentValue;
+                isDuped = false;
+            }
+
+            // Proceed to add the item with the selected value
+            addItemToSide(item, side, selectedValue, isDuped);
+        }
+
+        function addItemToSide(item, side, selectedValue, isDuped) {
             let targetArray = side === 'offering' ? offeringItems : requestingItems;
             
             if (targetArray.length < MAX_ITEMS_PER_SIDE) {
-                // Check if the item is already in either list
-                const isAlreadyInOffering = offeringItems.some(i => i.name === item.name);
-                const isAlreadyInRequesting = requestingItems.some(i => i.name === item.name);
-
-                if (isAlreadyInOffering || isAlreadyInRequesting) {
-                    // Custom modal/message box instead of alert
-                    showCustomMessage('This item is already in one of the trade lists!');
-                    return;
-                }
-
-                targetArray.push(item);
+                // Create a copy of the item and add selectedPrice and isDuped
+                const itemToAdd = { ...item, selectedValue: selectedValue, isDuped: isDuped };
+                targetArray.push(itemToAdd);
                 renderSelectedItems(side);
                 updateCalculatorTotals();
             } else {
-                // Custom modal/message box instead of alert
                 showCustomMessage(`You can only add up to ${MAX_ITEMS_PER_SIDE} items per side.`);
             }
         }
@@ -4687,7 +4847,14 @@
             targetArray.forEach(item => {
                 const pill = document.createElement('span');
                 pill.classList.add('selected-item-pill');
-                pill.textContent = item.name;
+                // Display item name and its selected value, indicating if duped
+                let displayValue = item.selectedValue;
+                if (item.isDuped) {
+                    displayValue = `${item.selectedValue} (Duped)`;
+                } else if (isValidValue(item.dupedValue)) { // If it has a duped value but clean was chosen
+                    displayValue = `${item.selectedValue} (Clean)`;
+                }
+                pill.textContent = `${item.name} - ${displayValue}`;
 
                 const removeBtn = document.createElement('button');
                 removeBtn.classList.add('remove-item-btn');
@@ -4702,12 +4869,12 @@
 
         function updateCalculatorTotals() {
             const calculateTotal = (items) => {
-                return items.reduce((sum, item) => sum + parseCurrencyToNumber(item.currentValue), 0);
+                return items.reduce((sum, item) => sum + parseCurrencyToNumber(item.selectedValue), 0);
             };
 
             const offeringTotal = calculateTotal(offeringItems);
             const requestingTotal = calculateTotal(requestingItems);
-            const difference = requestingTotal - offeringTotal; // UPDATED: Requesting - Offering
+            const difference = requestingTotal - offeringTotal; // Requesting - Offering (positive if getting more, negative if offering more)
 
             offeringTotalSpan.textContent = `$${offeringTotal.toLocaleString()}`;
             requestingTotalSpan.textContent = `$${requestingTotal.toLocaleString()}`;
@@ -4739,31 +4906,58 @@
             updateCalculatorTotals();
         }
 
-        // Custom Message Box (instead of alert)
+        // Custom Modal Logic for Clean/Duped selection
+        function showValueSelectionModal(itemName, cleanValue, dupedValue) {
+            return new Promise((resolve) => {
+                modalItemName.textContent = itemName;
+                modalCleanButton.textContent = `Clean (${cleanValue})`;
+                modalDupedButton.textContent = `Duped (${dupedValue})`;
+
+                // Add event listeners for the buttons
+                const cleanHandler = () => {
+                    valueSelectionModal.classList.remove('visible');
+                    valueSelectionModal.removeEventListener('click', overlayClickHandler);
+                    modalCleanButton.removeEventListener('click', cleanHandler);
+                    modalDupedButton.removeEventListener('click', dupedHandler);
+                    resolve('clean');
+                };
+
+                const dupedHandler = () => {
+                    valueSelectionModal.classList.remove('visible');
+                    valueSelectionModal.removeEventListener('click', overlayClickHandler);
+                    modalCleanButton.removeEventListener('click', cleanHandler);
+                    modalDupedButton.removeEventListener('click', dupedHandler);
+                    resolve('duped');
+                };
+
+                // Allow clicking outside the modal to close it (and cancel selection)
+                const overlayClickHandler = (event) => {
+                    if (event.target === valueSelectionModal) {
+                        valueSelectionModal.classList.remove('visible');
+                        valueSelectionModal.removeEventListener('click', overlayClickHandler);
+                        modalCleanButton.removeEventListener('click', cleanHandler);
+                        modalDupedButton.removeEventListener('click', dupedHandler);
+                        resolve(null); // Resolve with null if cancelled
+                    }
+                };
+
+                modalCleanButton.addEventListener('click', cleanHandler);
+                modalDupedButton.addEventListener('click', dupedHandler);
+                valueSelectionModal.addEventListener('click', overlayClickHandler);
+
+                valueSelectionModal.classList.add('visible');
+            });
+        }
+
+        // Custom Message Box (for non-confirm alerts)
         function showCustomMessage(message) {
-            // This is a placeholder. In a real app, you'd create a modal div,
-            // add the message to it, and show it. For now, we'll just log.
-            console.log("Custom Message:", message);
-            // Example of a simple temporary message display (requires HTML element for it)
-            // let messageBox = document.getElementById('custom-message-box');
-            // if (!messageBox) {
-            //     messageBox = document.createElement('div');
-            //     messageBox.id = 'custom-message-box';
-            //     messageBox.style.cssText = `
-            //         position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            //         background-color: #333; color: white; padding: 15px; border-radius: 8px;
-            //         z-index: 9999; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            //         display: none; opacity: 0; transition: opacity 0.3s ease-in-out;
-            //     `;
-            //     document.body.appendChild(messageBox);
-            // }
-            // messageBox.textContent = message;
-            // messageBox.style.display = 'block';
-            // setTimeout(() => { messageBox.style.opacity = 1; }, 10); // Small delay for transition
-            // setTimeout(() => {
-            //     messageBox.style.opacity = 0;
-            //     messageBox.addEventListener('transitionend', () => { messageBox.style.display = 'none'; }, { once: true });
-            // }, 3000); // Hide after 3 seconds
+            customMessageBox.textContent = message;
+            customMessageBox.style.display = 'block';
+            setTimeout(() => { customMessageBox.style.opacity = 1; }, 10); // Small delay for transition
+            setTimeout(() => {
+                customMessageBox.style.opacity = 0;
+                customMessageBox.addEventListener('transitionend', () => { customMessageBox.style.display = 'none'; }, { once: true });
+            }, 3000); // Hide after 3 seconds
         }
 
 
